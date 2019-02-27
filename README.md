@@ -1,0 +1,2 @@
+### EPIC MAIL
+Epic Mail is a web app that helps people exchange messages/information
