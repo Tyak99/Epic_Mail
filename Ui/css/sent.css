@@ -1,13 +1,16 @@
 body {
   margin: 0;
+  padding: 0;
 }
 
-.nav {
-  overflow: hidden;
+header {
   background-color: #49738c;
-  position: fixed;
-  top: 0;
   width: 100%;
+  color: white;
+  padding-top: 20px;
+  min-height: 70px;
+  border-bottom: 2px solid blueviolet;
+  overflow: hidden;
 }
 
 .nav img {
@@ -18,27 +21,43 @@ body {
   margin: 10px;
 }
 
-.nav-brand {
+header .nav-brand {
   float: left;
   margin: 22px 10px;
   color: #061324;
   text-transform: uppercase;
 }
 
-.nav a.icon {
+header .nav a.icon {
   display: none;
   margin: 20px 10px;
 }
 
-.nav .logout {
+header .nav .logout {
   float: right;
   color: #061324;
   margin-top: 5px;
 }
-.nav .logout a {
+header .nav .logout a {
   text-decoration: none;
   color: #061324;
 }
-.container {
-  margin-top: 72px;
+
+.section1 {
+  width: 100%;
+  background-color: darkgrey;
+  display: block;
+}
+.section1 a {
+  display: inline-block;
+  padding: 5px 30px;
+  text-decoration: none;
+  text-align: center;
+  color: #49738c;
+  width: 15%;
+  cursor: pointer;
+}
+.section1 a:hover,
+header .logout a:hover {
+  color: #db5756;
 }
