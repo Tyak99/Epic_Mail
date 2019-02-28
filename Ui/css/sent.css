@@ -1,8 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Ubuntu', sans-serif;
-
+  font-family: "Ubuntu", sans-serif;
 }
 
 header {
@@ -134,6 +133,16 @@ header .logout a:hover {
   text-align: right;
 }
 
+.btn-retract {
+  padding: 7px;
+  background-color: #49738c;
+  color: white;
+  cursor: pointer;
+  border-radius: 0.5em;
+}
+.btn-retract:hover {
+  background-color: #db5756;
+}
 @media screen and (max-width: 750px) {
   .aside-section {
     display: none;
@@ -151,6 +160,6 @@ header .logout a:hover {
     width: 32%;
     display: block;
     height: 85vh;
-    background-color: #F1F1F1;
+    background-color: #f1f1f1;
   }
 }
