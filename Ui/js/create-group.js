@@ -9,7 +9,6 @@ const add = e => {
     if (inputedMember.value == "") {
       return;
     } else if (!inputedMember.value.includes("@")) {
-      console.log("string must include an @ to be an email");
       return;
     }
     let allMembers = listMember;
