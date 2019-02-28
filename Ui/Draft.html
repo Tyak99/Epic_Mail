@@ -16,10 +16,11 @@
       href="https://fonts.googleapis.com/css?family=Ubuntu"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./css/draft.css">
+    <link rel="stylesheet" href="./css/draft.css" />
     <title>Draft</title>
   </head>
   <body>
+    <!-- Navigation -->
     <header>
       <div class="nav" id="myNav">
         <a href="javascript:void(0);" class="icon" onclick="sidebarFunction()">
@@ -38,6 +39,36 @@
         </div>
       </div>
     </header>
+    <!-- End of Navigation -->
+    <!-- aside section -->
+    <aside class="aside-section" id="mySidebar">
+      <div class="pages">
+        <ul>
+          <a href="./compose.html">
+            <li>
+              <i class="fa fa-plus" style="padding-right: 10px"></i> Compose
+            </li>
+          </a>
+          <a href="./inbox.html">
+            <li>
+              <i class="fa fa-inbox" style="padding-right: 10px"></i> Inbox
+            </li>
+          </a>
+          <a href="#">
+            <li>
+              <i class="fa fa-angle-double-up" style="padding-right: 10px"></i>
+              Sent
+            </li>
+          </a>
+          <a href="./draft.html">
+            <li class="active">
+              <i class="fa fa-th-large" style="padding-right: 10px"></i> Draft
+            </li>
+          </a>
+        </ul>
+      </div>
+    </aside>
+    <!-- end of aside section -->
   </body>
   <script src="./js/main.js"></script>
 </html>
