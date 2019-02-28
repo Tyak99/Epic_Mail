@@ -59,7 +59,10 @@ header .nav .logout a:hover {
 }
 .section1 a:hover,
 header .logout a:hover {
-  color: #db5756;
+  color: #3F96CF;
+}
+.section1 a.active {
+    color: #3F96CF
 }
 
 .aside-section {
