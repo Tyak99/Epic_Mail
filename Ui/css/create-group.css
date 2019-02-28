@@ -61,3 +61,35 @@ header .nav .logout a:hover {
 header .logout a:hover {
   color: #db5756;
 }
+
+.aside-section {
+  width: 26%;
+  float: left;
+  height: 85vh;
+}
+
+.aside-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.aside-section li {
+  padding: 10px;
+  margin: 14px 0px;
+  border-radius: 26px;
+  border-bottom: 1px solid maroon;
+}
+
+.aside-section a {
+  text-decoration: none;
+  color: black;
+}
+
+.aside-section li.active {
+  background-color: #49738c;
+}
+
+.aside-section li:hover:not(.active) {
+  background-color: darkgrey;
+}
+
