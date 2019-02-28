@@ -1,5 +1,7 @@
 body {
   margin: 0;
+  font-family: 'Ubuntu', sans-serif;
+
 }
 
 .nav {
@@ -8,6 +10,7 @@ body {
   position: fixed;
   top: 0;
   width: 100%;
+  border-bottom: 2px solid blueviolet;
 }
 
 .nav img {
