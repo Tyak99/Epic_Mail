@@ -1,0 +1,165 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Ubuntu", sans-serif;
+}
+
+header {
+  background-color: #49738c;
+  width: 100%;
+  color: white;
+  min-height: 70px;
+  border-bottom: 2px solid blueviolet;
+  overflow: hidden;
+}
+
+.nav img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  float: right;
+  margin: 10px;
+}
+
+header .nav-brand {
+  float: left;
+  margin: 22px 10px;
+  color: #061324;
+  text-transform: uppercase;
+}
+
+header .nav a.icon {
+  display: none;
+  margin: 20px 10px;
+}
+
+header .nav .logout {
+  float: right;
+  color: #061324;
+  margin-top: 5px;
+}
+header .nav .logout a {
+  text-decoration: none;
+  color: #061324;
+}
+
+.section1 {
+  width: 100%;
+  background-color: darkgrey;
+  display: block;
+}
+.section1 a {
+  display: inline-block;
+  padding: 5px 30px;
+  text-decoration: none;
+  text-align: center;
+  color: #49738c;
+  width: 15%;
+  cursor: pointer;
+}
+.section1 a:hover,
+header .logout a:hover {
+  color: #db5756;
+}
+
+.aside-section {
+  width: 26%;
+  float: left;
+}
+
+.aside-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.aside-section li {
+  padding: 10px;
+  margin: 14px 0px;
+  border-radius: 26px;
+  border-bottom: 1px solid maroon;
+}
+
+.aside-section a {
+  text-decoration: none;
+  color: black;
+}
+
+.aside-section li.active {
+  background-color: #49738c;
+}
+
+.aside-section li:hover:not(.active) {
+  background-color: darkgrey;
+}
+
+.main-section {
+  float: right;
+  width: 74%;
+  margin-top: 10px;
+  background-color: whitesmoke;
+  height: 85vh;
+}
+
+.main-section ul {
+  list-style-type: none;
+  height: 80vh;
+  overflow: scroll;
+  padding: 0;
+}
+
+.main-section li {
+  color: #111;
+  border: 1px solid black;
+  border-left: 0;
+  padding: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.main-section li:hover {
+  box-shadow: 10px 3px 5px rgb(211, 173, 103);
+}
+.main-section a {
+  text-decoration: none;
+}
+
+.main-section li span.sender {
+  color: maroon;
+  padding-right: 30px;
+}
+.main-section li span.status {
+  padding-left: 50px;
+  font-style: italic;
+  color: grey;
+  text-align: right;
+}
+
+.btn-retract {
+  padding: 7px;
+  background-color: #49738c;
+  color: white;
+  cursor: pointer;
+  border-radius: 0.5em;
+}
+.btn-retract:hover {
+  background-color: #db5756;
+}
+@media screen and (max-width: 750px) {
+  .aside-section {
+    display: none;
+  }
+  .main-section {
+    width: unset;
+  }
+  header .nav a.icon {
+    display: block;
+  }
+}
+@media screen and (max-width: 750px) {
+  .aside-section.responsive {
+    position: absolute;
+    width: 32%;
+    display: block;
+    height: 85vh;
+    background-color: #f1f1f1;
+  }
+}

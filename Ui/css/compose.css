@@ -1,0 +1,171 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+header {
+  background-color: #49738c;
+  width: 100%;
+  color: white;
+  min-height: 70px;
+  border-bottom: 2px solid blueviolet;
+  overflow: hidden;
+}
+
+.nav img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  float: right;
+  margin: 10px;
+}
+
+header .nav-brand {
+  float: left;
+  margin: 22px 10px;
+  color: #061324;
+  text-transform: uppercase;
+}
+
+header .nav a.icon {
+  display: none;
+  margin: 20px 10px;
+}
+
+header .nav .logout {
+  float: right;
+  color: #061324;
+  margin-top: 5px;
+}
+header .nav .logout a {
+  text-decoration: none;
+  color: #061324;
+}
+header .nav .logout a:hover {
+    color: #DB5756;
+  }
+
+.section1 {
+  width: 100%;
+  background-color: darkgrey;
+  display: block;
+}
+.section1 a {
+  display: inline-block;
+  padding: 5px 30px;
+  text-decoration: none;
+  text-align: center;
+  color: #49738c;
+  width: 15%;
+  cursor: pointer;
+}
+.section1 a:hover{
+  color: #0E79D1;
+}
+
+.aside-section {
+  width: 26%;
+  float: left;
+}
+
+.aside-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.aside-section li {
+  padding: 10px;
+  margin: 14px 0px;
+  border-radius: 26px;
+  border-bottom: 1px solid maroon;
+}
+
+.aside-section a {
+  text-decoration: none;
+  color: black;
+}
+
+.aside-section li.active {
+  background-color: #49738c;
+}
+
+.aside-section li:hover:not(.active) {
+  background-color: darkgrey;
+}
+
+.section-2 {
+    float: right;
+    width: 74%;
+    text-align: center;
+}
+form {
+    max-width: 600px;
+    padding: 30px;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+}
+
+input[type = text], input[type=email] {
+    padding: 9px;
+    border-radius: 7px;
+    margin-bottom: 10px;
+    font-size: unset;
+    width: 80%;
+    font-weight: 500;
+}
+input[type=email] {
+    background-color:aliceblue;
+    font-weight: 400;
+    font-size: 13px;
+    font-style: italic;
+}
+textarea {
+    height: 220px;
+    width: 80%;
+    border: 1px solid cadetblue;
+    border-radius: 3px;
+    font-size: 14px;
+    padding: 10px
+}
+
+.btn {
+    padding: 12px 22px;
+    color: white;
+    background-color: dodgerblue;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.btn-draft {
+    background-color: #DB5756;
+    margin-right: 12px;
+}
+
+.btn:hover {
+    background-color: #0E79D1
+}
+.btn-draft:hover {
+    background-color: #FC6463
+}
+@media screen and (max-width: 750px) {
+  .aside-section {
+    display: none;
+  }
+  .section-2 {
+      float: none;
+      width: 80%;
+      margin: 0 auto;
+  }
+  header .nav a.icon {
+    display: block;
+  }
+}
+@media screen and (max-width: 750px) {
+  .aside-section.responsive {
+    position: absolute;
+    width: 32%;
+    display: block;
+    height: 85vh;
+    background-color: #f1f1f1;
+  }
+}

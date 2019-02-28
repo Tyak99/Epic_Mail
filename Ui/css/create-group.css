@@ -1,0 +1,215 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Ubuntu', sans-serif;
+
+}
+
+header {
+  background-color: #49738c;
+  width: 100%;
+  color: white;
+  min-height: 70px;
+  border-bottom: 2px solid blueviolet;
+  overflow: hidden;
+}
+
+.nav img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  float: right;
+  margin: 10px;
+}
+
+header .nav-brand {
+  float: left;
+  margin: 22px 10px;
+  color: #061324;
+  text-transform: uppercase;
+}
+
+header .nav a.icon {
+  display: none;
+  margin: 20px 10px;
+}
+
+header .nav .logout {
+  float: right;
+  margin-top: 5px;
+}
+header .nav .logout a {
+  text-decoration: none;
+  color: #061324;
+}
+header .nav .logout a:hover {
+  color: #eb5d5c;
+}
+.section1 {
+  width: 100%;
+  background-color: darkgrey;
+  display: block;
+}
+.section1 a {
+  display: inline-block;
+  padding: 5px 30px;
+  text-decoration: none;
+  text-align: center;
+  color: #49738c;
+  width: 15%;
+  cursor: pointer;
+}
+.section1 a:hover,
+header .logout a:hover {
+  color: #3F96CF;
+}
+.section1 a.active {
+    color: #3F96CF
+}
+
+.aside-section {
+  width: 26%;
+  float: left;
+  height: 85vh;
+}
+
+.aside-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.aside-section li {
+  padding: 10px;
+  margin: 14px 0px;
+  border-radius: 26px;
+  border-bottom: 1px solid maroon;
+}
+
+.aside-section a {
+  text-decoration: none;
+  color: black;
+}
+
+.aside-section li.active {
+  background-color: #49738c;
+}
+
+.aside-section li:hover:not(.active) {
+  background-color: darkgrey;
+}
+
+.section-1 {
+  float: right;
+  width: 74%;
+}
+.section-2 {
+    width: 74%;
+    float: right;
+}
+form {
+  max-width: 500px;
+  margin: 10px auto;
+  padding: 30px;
+  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin: 1rem;
+}
+
+.form-title {
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  width: 85%;
+  padding: 7px;
+  font-size: 1em;
+  font-weight: 400;
+  border: 1px solid #ced4da;
+  border-radius: 0.25em;
+}
+
+.add-btn {
+    padding: 7px;
+    background-color: cornflowerblue;
+    color: white;
+    cursor: pointer;
+}
+.add-btn:hover {
+    background-color: #3D92C9
+}
+.list-members {
+    margin: 1rem;
+    background-color: lightgrey;
+    padding: 8px;
+    line-height: 1.5rem;
+    width: 80%;
+    display: grid;
+}
+.list-members p {
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid grey;
+    border-radius: 14px;
+    padding: 1px 8px;
+    margin: 2px;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  background-color: #49738c;
+  color: white;
+  cursor: pointer;
+  border-radius: 0.5em;
+  margin: 1rem;
+}
+.submit-btn:hover {
+  background-color: #db5756;
+}
+
+hr {
+  height: 10px;
+  border: 0;
+  box-shadow: 0 10px 10px -10px #8c8b8b inset;
+}
+
+.list-groups ul {
+    margin: 1rem;
+    list-style: none;
+}
+.list-groups li {
+    float: left;
+    margin-right: 10px;
+    font-size: 20px;
+    border: 1px solid burlywood;
+    padding: 10px;
+}
+@media screen and (max-width: 750px) {
+  .aside-section {
+    display: none;
+  }
+  .section-1 {
+    width: 80%;
+    float: none;
+    margin: 0 auto;
+  }
+  header .nav a.icon {
+    display: block;
+  }
+}
+@media screen and (max-width: 750px) {
+  .aside-section.responsive {
+    position: absolute;
+    width: 39%;
+    display: block;
+    height: 91vh;
+    background-color: #f1f1f1;
+  }
+}
