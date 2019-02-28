@@ -43,3 +43,21 @@ header .nav .logout a {
 header .nav .logout a:hover {
   color: #eb5d5c;
 }
+.section1 {
+  width: 100%;
+  background-color: darkgrey;
+  display: block;
+}
+.section1 a {
+  display: inline-block;
+  padding: 5px 30px;
+  text-decoration: none;
+  text-align: center;
+  color: #49738c;
+  width: 15%;
+  cursor: pointer;
+}
+.section1 a:hover,
+header .logout a:hover {
+  color: #db5756;
+}
