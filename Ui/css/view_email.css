@@ -77,3 +77,69 @@ header .nav .logout a:hover {
   background-color: darkgrey;
 }
 
+.section-2 {
+  width: 74%;
+  float: right;
+}
+.thread-group {
+  height: 90vh;
+  overflow: scroll;
+  padding: 0 30px;
+}
+
+.thread-body {
+  margin-top: 20px;
+  line-height: 1.7rem;
+}
+
+.from {
+    color: darkorchid;
+}
+.to {
+    color: firebrick;
+}
+.icons a {
+  text-decoration: none;
+}
+.icons .reply,
+.delete {
+  padding: 6px;
+  margin-right: 10px;
+  border: 2px solid whitesmoke;
+  cursor: pointer;
+  color: darkred;
+}
+.icons .reply:hover,
+.delete:hover {
+  background-color: #f1f1f1;
+}
+
+hr.style13 {
+  height: 10px;
+  border: 0;
+  box-shadow: 0 10px 10px -10px #8c8b8b inset;
+}
+
+@media screen and (max-width: 750px) {
+  .aside-section {
+    display: none;
+  }
+  .section-2 {
+    float: none;
+    width: 90%;
+    margin: 0 auto;
+  }
+  header .nav a.icon {
+    display: block;
+    float: left;
+  }
+}
+@media screen and (max-width: 750px) {
+  .aside-section.responsive {
+    position: absolute;
+    width: 32%;
+    display: block;
+    height: 85vh;
+    background-color: #f1f1f1;
+  }
+}
