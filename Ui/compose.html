@@ -29,11 +29,7 @@
           </div>
         </a>
         <h2 class="nav-brand">Epic Mail</h2>
-        <img
-          src="https://avatars.io/twitter/tundenasri
-                                      "
-          alt="profile image"
-        />
+        <img src="https://avatars.io/twitter/tundenasri" alt="profile image" />
         <div class="logout">
           <a href="#"> <h4>Sign out</h4> </a>
         </div>
@@ -42,7 +38,7 @@
 
     <!-- End of navigation -->
     <!-- section 1 -->
-    <div class="section1">
+    <section class="section1">
       <div>
         <a href="#">
           <i class="fas fa-redo-alt" style="font-size: 30px"></i>
@@ -61,8 +57,53 @@
           <p>Create group</p>
         </a>
       </div>
-    </div>
+    </section>
     <!-- end of section 1 -->
+    <!-- aside section -->
+    <aside class="aside-section" id="mySidebar">
+      <div class="pages">
+        <ul>
+          <a href="./compose.html">
+            <li class="active">
+              <i class="fa fa-plus" style="padding-right: 10px"></i> Compose
+            </li>
+          </a>
+          <a href="./inbox.html">
+            <li>
+              <i class="fa fa-inbox" style="padding-right: 10px"></i> Inbox
+            </li>
+          </a>
+          <a href="./sent.html">
+            <li>
+              <i class="fa fa-angle-double-up" style="padding-right: 10px"></i>
+              Sent
+            </li>
+          </a>
+          <a href="./draft.html">
+            <li>
+              <i class="fa fa-th-large" style="padding-right: 10px"></i> Draft
+            </li>
+          </a>
+        </ul>
+      </div>
+    </aside>
+    <!-- end of aside section -->
+    <section class="section-2">
+      <h2>New Message</h2>
+      <form action="">
+        <div class="form-group">
+          <input type="email" placeholder="To" />
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="Subject" />
+        </div>
+        <div class="form-group">
+          <textarea name="email-body" id="" cols="30" rows="10"></textarea>
+        </div>
+        <button class="btn btn-draft">Save to draft</button>
+        <button class="btn btn-send">Send</button>
+      </form>
+    </section>
   </body>
   <script src="./js/main.js"></script>
 </html>
