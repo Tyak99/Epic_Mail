@@ -158,7 +158,6 @@ textarea {
   }
   header .nav a.icon {
     display: block;
-    float: left;
   }
 }
 @media screen and (max-width: 750px) {
