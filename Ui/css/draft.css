@@ -34,13 +34,15 @@ header .nav a.icon {
 
 header .nav .logout {
   float: right;
-  color: #061324;
   margin-top: 5px;
 }
 header .nav .logout a {
   text-decoration: none;
   color: #061324;
 }
+header .nav .logout a:hover {
+    color: #EB5D5C;
+  }
 
 .aside-section {
   width: 26%;
