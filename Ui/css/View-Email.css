@@ -114,7 +114,7 @@ header .nav .logout a:hover {
   background-color: #f1f1f1;
 }
 
-hr.style13 {
+hr {
   height: 10px;
   border: 0;
   box-shadow: 0 10px 10px -10px #8c8b8b inset;
