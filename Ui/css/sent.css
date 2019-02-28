@@ -65,8 +65,6 @@ header .logout a:hover {
 .aside-section {
   width: 26%;
   float: left;
-  height: 73vh;
-  background-color: whitesmoke;
 }
 
 .aside-section ul {
@@ -94,9 +92,53 @@ header .logout a:hover {
   background-color: darkgrey;
 }
 
+.main-section {
+  float: right;
+  width: 74%;
+  margin-top: 10px;
+  background-color: whitesmoke;
+  height: 85vh;
+}
+
+.main-section ul {
+  list-style-type: none;
+  height: 80vh;
+  overflow: scroll;
+  padding: 0;
+}
+
+.main-section li {
+  color: #111;
+  border: 1px solid black;
+  border-left: 0;
+  padding: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.main-section li:hover {
+  box-shadow: 10px 3px 5px rgb(211, 173, 103);
+}
+.main-section a {
+  text-decoration: none;
+}
+
+.main-section li span.sender {
+  color: maroon;
+  padding-right: 30px;
+}
+.main-section li span.status {
+  padding-left: 50px;
+  font-style: italic;
+  color: grey;
+  text-align: right;
+}
+
 @media screen and (max-width: 750px) {
   .aside-section {
     display: none;
+  }
+  .main-section {
+    width: unset;
   }
   header .nav a.icon {
     display: block;
