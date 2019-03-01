@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Ubuntu", sans-serif;
+  font-family: 'Ubuntu', sans-serif;
 }
 
 header {
@@ -42,6 +42,9 @@ header .nav .logout a {
   text-decoration: none;
   color: #061324;
 }
+header .nav .logout a:hover {
+    color: #DB5756;
+  }
 
 .section1 {
   width: 100%;
@@ -57,9 +60,8 @@ header .nav .logout a {
   width: 15%;
   cursor: pointer;
 }
-.section1 a:hover,
-header .logout a:hover {
-  color: #db5756;
+.section1 a:hover{
+  color: #0E79D1;
 }
 
 .aside-section {
@@ -92,63 +94,67 @@ header .logout a:hover {
   background-color: darkgrey;
 }
 
-.main-section {
-  float: right;
-  width: 74%;
-  margin-top: 10px;
-  background-color: whitesmoke;
-  height: 85vh;
+.section-2 {
+    float: right;
+    width: 74%;
+    text-align: center;
+}
+form {
+    max-width: 600px;
+    padding: 30px;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
 }
 
-.main-section ul {
-  list-style-type: none;
-  height: 80vh;
-  overflow: scroll;
-  padding: 0;
+input[type = text], input[type=email] {
+    padding: 9px;
+    border-radius: 7px;
+    margin-bottom: 10px;
+    font-size: unset;
+    width: 80%;
+    font-weight: 500;
+}
+input[type=email] {
+    background-color:aliceblue;
+    font-weight: 400;
+    font-size: 13px;
+    font-style: italic;
+}
+textarea {
+    height: 220px;
+    width: 80%;
+    border: 1px solid cadetblue;
+    border-radius: 3px;
+    font-size: 14px;
+    padding: 10px
 }
 
-.main-section li {
-  color: #111;
-  border: 1px solid black;
-  border-left: 0;
-  padding: 10px;
-  cursor: pointer;
-  margin-right: 10px;
+.btn {
+    padding: 12px 22px;
+    color: white;
+    background-color: dodgerblue;
+    border-radius: 8px;
+    cursor: pointer;
 }
-.main-section li:hover {
-  box-shadow: 10px 3px 5px rgb(211, 173, 103);
-}
-.main-section a {
-  text-decoration: none;
+.btn-draft {
+    background-color: #DB5756;
+    margin-right: 12px;
 }
 
-.main-section li span.sender {
-  color: maroon;
-  padding-right: 30px;
+.btn:hover {
+    background-color: #0E79D1
 }
-.main-section li span.status {
-  padding-left: 50px;
-  font-style: italic;
-  color: grey;
-  text-align: right;
-}
-
-.btn-retract {
-  padding: 7px;
-  background-color: #49738c;
-  color: white;
-  cursor: pointer;
-  border-radius: 0.5em;
-}
-.btn-retract:hover {
-  background-color: #db5756;
+.btn-draft:hover {
+    background-color: #FC6463
 }
 @media screen and (max-width: 750px) {
   .aside-section {
     display: none;
   }
-  .main-section {
-    width: unset;
+  .section-2 {
+      float: none;
+      width: 80%;
+      margin: 0 auto;
   }
   header .nav a.icon {
     display: block;

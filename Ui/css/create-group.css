@@ -1,7 +1,8 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Ubuntu", sans-serif;
+  font-family: 'Ubuntu', sans-serif;
+
 }
 
 header {
@@ -35,14 +36,15 @@ header .nav a.icon {
 
 header .nav .logout {
   float: right;
-  color: #061324;
   margin-top: 5px;
 }
 header .nav .logout a {
   text-decoration: none;
   color: #061324;
 }
-
+header .nav .logout a:hover {
+  color: #eb5d5c;
+}
 .section1 {
   width: 100%;
   background-color: darkgrey;
@@ -59,12 +61,16 @@ header .nav .logout a {
 }
 .section1 a:hover,
 header .logout a:hover {
-  color: #db5756;
+  color: #3F96CF;
+}
+.section1 a.active {
+    color: #3F96CF
 }
 
 .aside-section {
   width: 26%;
   float: left;
+  height: 85vh;
 }
 
 .aside-section ul {
@@ -92,63 +98,107 @@ header .logout a:hover {
   background-color: darkgrey;
 }
 
-.main-section {
+.section-1 {
   float: right;
   width: 74%;
-  margin-top: 10px;
-  background-color: whitesmoke;
-  height: 85vh;
+}
+.section-2 {
+    width: 74%;
+    float: right;
+}
+form {
+  max-width: 500px;
+  margin: 10px auto;
+  padding: 30px;
+  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
 }
 
-.main-section ul {
-  list-style-type: none;
-  height: 80vh;
-  overflow: scroll;
-  padding: 0;
+.form-group {
+  margin: 1rem;
 }
 
-.main-section li {
-  color: #111;
-  border: 1px solid black;
-  border-left: 0;
-  padding: 10px;
-  cursor: pointer;
-  margin-right: 10px;
-}
-.main-section li:hover {
-  box-shadow: 10px 3px 5px rgb(211, 173, 103);
-}
-.main-section a {
-  text-decoration: none;
+.form-title {
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 0;
 }
 
-.main-section li span.sender {
-  color: maroon;
-  padding-right: 30px;
-}
-.main-section li span.status {
-  padding-left: 50px;
-  font-style: italic;
-  color: grey;
-  text-align: right;
+label {
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
-.btn-retract {
+.form-control {
+  width: 85%;
   padding: 7px;
+  font-size: 1em;
+  font-weight: 400;
+  border: 1px solid #ced4da;
+  border-radius: 0.25em;
+}
+
+.add-btn {
+    padding: 7px;
+    background-color: cornflowerblue;
+    color: white;
+    cursor: pointer;
+}
+.add-btn:hover {
+    background-color: #3D92C9
+}
+.list-members {
+    margin: 1rem;
+    background-color: lightgrey;
+    padding: 8px;
+    line-height: 1.5rem;
+    width: 80%;
+    display: grid;
+}
+.list-members p {
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid grey;
+    border-radius: 14px;
+    padding: 1px 8px;
+    margin: 2px;
+}
+
+.submit-btn {
+  padding: 10px 20px;
   background-color: #49738c;
   color: white;
   cursor: pointer;
   border-radius: 0.5em;
+  margin: 1rem;
 }
-.btn-retract:hover {
+.submit-btn:hover {
   background-color: #db5756;
+}
+
+hr {
+  height: 10px;
+  border: 0;
+  box-shadow: 0 10px 10px -10px #8c8b8b inset;
+}
+
+.list-groups ul {
+    margin: 1rem;
+    list-style: none;
+}
+.list-groups li {
+    float: left;
+    margin-right: 10px;
+    font-size: 20px;
+    border: 1px solid burlywood;
+    padding: 10px;
 }
 @media screen and (max-width: 750px) {
   .aside-section {
     display: none;
   }
-  .main-section {
-    width: unset;
+  .section-1 {
+    width: 80%;
+    float: none;
+    margin: 0 auto;
   }
   header .nav a.icon {
     display: block;
@@ -157,9 +207,9 @@ header .logout a:hover {
 @media screen and (max-width: 750px) {
   .aside-section.responsive {
     position: absolute;
-    width: 32%;
+    width: 39%;
     display: block;
-    height: 85vh;
+    height: 91vh;
     background-color: #f1f1f1;
   }
 }

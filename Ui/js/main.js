@@ -1,17 +1,18 @@
-var myNav = document.getElementById('myNav');
-var sidebar = document.getElementById('mySidebar');
-function myFunction() {
-    if(myNav.className == 'nav') {
-        myNav.className += ' responsive'
-    } else {
-        myNav.className = 'nav'
-    }
-}
+let navbar = document.getElementById("myNav");
+let sidebar = document.getElementById("mySidebar");
 
-function sidebarFunction() {
-    if(sidebar.className == 'aside-section') {
-        sidebar.className += ' responsive'
-    } else {
-        sidebar.className = 'aside-section'
-    }
-}
+const navbarFunction = () => {
+  if (navbar.className == "nav") {
+    navbar.className += " responsive";
+  } else {
+    navbar.className = "nav";
+  }
+};
+
+const sidebarFunction = () => {
+  if (sidebar.className == "aside-section") {
+    sidebar.className += " responsive";
+  } else {
+    sidebar.className = "aside-section";
+  }
+};
