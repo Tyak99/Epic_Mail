@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Ubuntu', sans-serif;
+  font-family: "Ubuntu", sans-serif;
 }
 
 header {
@@ -43,8 +43,8 @@ header .nav .logout a {
   color: #061324;
 }
 header .nav .logout a:hover {
-    color: #DB5756;
-  }
+  color: #db5756;
+}
 
 .section1 {
   width: 100%;
@@ -60,8 +60,8 @@ header .nav .logout a:hover {
   width: 15%;
   cursor: pointer;
 }
-.section1 a:hover{
-  color: #0E79D1;
+.section1 a:hover {
+  color: #0e79d1;
 }
 
 .aside-section {
@@ -95,66 +95,82 @@ header .nav .logout a:hover {
 }
 
 .section-2 {
-    float: right;
-    width: 74%;
-    text-align: center;
+  float: right;
+  width: 74%;
+  text-align: center;
 }
 form {
-    max-width: 600px;
-    padding: 30px;
-    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-    margin: 0 auto;
+  max-width: 600px;
+  padding: 30px;
+  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
 }
 
-input[type = text], input[type=email] {
-    padding: 9px;
-    border-radius: 7px;
-    margin-bottom: 10px;
-    font-size: unset;
-    width: 80%;
-    font-weight: 500;
+input[type="text"],
+input[type="email"] {
+  padding: 9px;
+  border-radius: 7px;
+  margin-bottom: 10px;
+  font-size: unset;
+  width: 80%;
+  font-weight: 500;
 }
-input[type=email] {
-    background-color:aliceblue;
-    font-weight: 400;
-    font-size: 13px;
-    font-style: italic;
+input[type="email"] {
+  background-color: aliceblue;
+  font-weight: 400;
+  font-size: 13px;
+  font-style: italic;
 }
 textarea {
-    height: 220px;
-    width: 80%;
-    border: 1px solid cadetblue;
-    border-radius: 3px;
-    font-size: 14px;
-    padding: 10px
+  height: 220px;
+  width: 80%;
+  border: 1px solid cadetblue;
+  border-radius: 3px;
+  font-size: 14px;
+  padding: 10px;
 }
 
 .btn {
-    padding: 12px 22px;
-    color: white;
-    background-color: dodgerblue;
-    border-radius: 8px;
-    cursor: pointer;
+  padding: 12px 22px;
+  color: white;
+  background-color: dodgerblue;
+  border-radius: 8px;
+  cursor: pointer;
 }
 .btn-draft {
-    background-color: #DB5756;
-    margin-right: 12px;
+  background-color: #db5756;
+  margin-right: 12px;
 }
 
 .btn:hover {
-    background-color: #0E79D1
+  background-color: #0e79d1;
 }
 .btn-draft:hover {
-    background-color: #FC6463
+  background-color: #fc6463;
+}
+
+/* modal styles  */
+.modal-button {
+  padding: 6px 20px;
+  color: white;
+  border-radius: 6px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.yes-modal {
+  background-color: #3f96cf;
+}
+.yes-modal:hover {
+  background-color: dodgerblue;
 }
 @media screen and (max-width: 750px) {
   .aside-section {
     display: none;
   }
   .section-2 {
-      float: none;
-      width: 80%;
-      margin: 0 auto;
+    float: none;
+    width: 80%;
+    margin: 0 auto;
   }
   header .nav a.icon {
     display: block;
