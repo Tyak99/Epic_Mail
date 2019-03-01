@@ -1,7 +1,6 @@
 let addMemberBtn = document.querySelector(".add-member");
 let listMember = document.querySelector(".list-members");
 let inputedMember = document.getElementById("member-input");
-let removeMemberButton = document.querySelector('.remove-member')
 
 const addMember = e => {
   e.preventDefault();
