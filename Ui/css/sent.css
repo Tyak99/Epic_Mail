@@ -146,6 +146,24 @@ header .logout a:hover {
 .btn-retract:hover {
   background-color: #db5756;
 }
+/* modal styles  */
+.modal-button {
+  padding: 6px 20px;
+  color: white;
+  border-radius: 6px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.yes-modal {
+  background-color: #3f96cf;
+}
+.yes-modal:hover {
+  background-color: dodgerblue
+}
+.no-modal {
+  background-color: maroon;
+}
+/* media queries */
 @media screen and (max-width: 750px) {
   .aside-section {
     display: none;
