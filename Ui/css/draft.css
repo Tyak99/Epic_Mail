@@ -35,7 +35,6 @@ header .nav a.icon {
 
 header .nav .logout {
   float: right;
-  color: #061324;
   margin-top: 5px;
 }
 header .nav .logout a {
@@ -43,7 +42,7 @@ header .nav .logout a {
   color: #061324;
 }
 header .nav .logout a:hover {
-  color: #db5756;
+  color: #eb5d5c;
 }
 
 .aside-section {
@@ -77,69 +76,97 @@ header .nav .logout a:hover {
   background-color: darkgrey;
 }
 
-.section-2 {
-  width: 74%;
+.main-section {
   float: right;
+  width: 74%;
+  height: 85vh;
 }
-.thread-group {
-  height: 90vh;
+
+.main-section ul {
+  list-style-type: none;
+  height: 80vh;
   overflow: scroll;
-  padding: 0 30px;
+  padding: 0;
 }
 
-.thread-body {
-  margin-top: 20px;
-  line-height: 1.7rem;
+.main-section li {
+  color: #111;
+  border: 1px solid black;
+  border-left: 0;
+  border-right: 0;
+  padding: 10px;
+  cursor: pointer;
+  margin: 0 10px;
+  background-color: whitesmoke;
 }
-
-.from {
-    color: darkorchid;
+.main-section li:hover {
+  box-shadow: 10px 3px 5px rgb(211, 173, 103);
 }
-.to {
-    color: firebrick;
-}
-.icons a {
+.main-section a {
   text-decoration: none;
 }
-.icons .reply,
-.delete {
-  padding: 6px;
-  margin-right: 10px;
-  border: 2px solid whitesmoke;
+
+.main-section li span.subject {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.main-section li span.status {
+  padding-right: 10px;
+  font-style: italic;
+  color: grey;
+  text-align: right;
+}
+.main-section li .btn {
   cursor: pointer;
-  color: darkred;
+  padding: 8px 13px;
+  margin-right: 10px;
+  color: white;
+  background-color: #0a51c9;
+  border-radius: 5px;
 }
-.icons .reply:hover,
-.delete:hover {
-  background-color: #f1f1f1;
+.main-section li .btn-delete {
+  background-color: maroon;
+}
+.main-section li .btn-delete:hover {
+  background-color: #eb5d5c;
+}
+.main-section li .btn-send:hover {
+  background-color: #1193ff;
 }
 
-hr.style13 {
-  height: 10px;
-  border: 0;
-  box-shadow: 0 10px 10px -10px #8c8b8b inset;
+/* modal styles  */
+.modal-button {
+  padding: 6px 20px;
+  color: white;
+  border-radius: 6px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.yes-modal {
+  background-color: #3f96cf;
+}
+.yes-modal:hover {
+  background-color: dodgerblue;
 }
 
+/* media queries */
 @media screen and (max-width: 750px) {
   .aside-section {
     display: none;
   }
-  .section-2 {
-    float: none;
-    width: 90%;
-    margin: 0 auto;
+  .main-section {
+    width: unset;
   }
   header .nav a.icon {
     display: block;
-    float: left;
   }
 }
 @media screen and (max-width: 750px) {
   .aside-section.responsive {
     position: absolute;
-    width: 32%;
+    width: 39%;
     display: block;
-    height: 85vh;
+    height: 91vh;
     background-color: #f1f1f1;
   }
 }
