@@ -1,8 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Ubuntu', sans-serif;
-
+  font-family: "Ubuntu", sans-serif;
 }
 
 header {
@@ -43,8 +42,8 @@ header .nav .logout a {
   color: #061324;
 }
 header .nav .logout a:hover {
-    color: #EB5D5C;
-  }
+  color: #eb5d5c;
+}
 
 .aside-section {
   width: 26%;
@@ -97,7 +96,7 @@ header .nav .logout a:hover {
   border-right: 0;
   padding: 10px;
   cursor: pointer;
-  margin:0 10px;
+  margin: 0 10px;
   background-color: whitesmoke;
 }
 .main-section li:hover {
@@ -126,21 +125,37 @@ header .nav .logout a:hover {
   border-radius: 5px;
 }
 .main-section li .btn-delete {
-    background-color: maroon;
+  background-color: maroon;
 }
 .main-section li .btn-delete:hover {
-  background-color: #EB5D5C;
+  background-color: #eb5d5c;
 }
 .main-section li .btn-send:hover {
   background-color: #1193ff;
 }
 
+/* modal styles  */
+.modal-button {
+  padding: 6px 20px;
+  color: white;
+  border-radius: 6px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.yes-modal {
+  background-color: #3f96cf;
+}
+.yes-modal:hover {
+  background-color: dodgerblue;
+}
+
+/* media queries */
 @media screen and (max-width: 750px) {
   .aside-section {
     display: none;
   }
   .main-section {
-      width: unset;
+    width: unset;
   }
   header .nav a.icon {
     display: block;
