@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/Tyak99/Epic_Mail/issues"
   },
-  "homepage": "https://github.com/Tyak99/Epic_Mail#readme"
+  "homepage": "https://github.com/Tyak99/Epic_Mail#readme",
+  "devDependencies": {
+    "eslint": "^5.14.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  }
 }
