@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!-- awsome font icons -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <!-- google fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Ubuntu"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/draft.css" />
+    <link rel="stylesheet" href="./css/modal.css">
+    <title>Drafts</title>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <header>
+      <div class="nav" id="myNav">
+        <a href="javascript:void(0);" class="icon" onclick="sidebarFunction()">
+          <div style="font-size: 30px;">
+            <i class="fa fa-bars" style="color: black"></i>
+          </div>
+        </a>
+        <h2 class="nav-brand">Epic Mail</h2>
+        <img
+          src="https://avatars.io/twitter/tundenasri
+                                          "
+          alt="profile image"
+        />
+        <div class="logout">
+          <a href="#"> <h4>Sign out</h4> </a>
+        </div>
+      </div>
+    </header>
+    <!-- End of Navigation -->
+    <!-- aside section -->
+    <aside class="aside-section" id="mySidebar">
+      <div class="pages">
+        <ul>
+          <a href="./compose.html">
+            <li>
+              <i class="fa fa-plus" style="padding-right: 10px"></i> Compose
+            </li>
+          </a>
+          <a href="./inbox.html">
+            <li>
+              <i class="fa fa-inbox" style="padding-right: 10px"></i> Inbox
+            </li>
+          </a>
+          <a href="./sent.html">
+            <li>
+              <i class="fa fa-angle-double-up" style="padding-right: 10px"></i>
+              Sent
+            </li>
+          </a>
+          <a href="./draft.html">
+            <li class="active">
+              <i class="fa fa-th-large" style="padding-right: 10px"></i> Drafts
+            </li>
+          </a>
+        </ul>
+      </div>
+    </aside>
+    <!-- end of aside section -->
+     <!-- Modal -->
+     <div class="modal" id="id-modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <p>Are you sure to delete draft?</p>
+        <button class="modal-button yes-modal"> Yes </button>
+      </div>
+    </div>
+    <!-- main section -->
+    <div class="main-section">
+      <ul>
+        <li>
+          <div class="message-header">
+            <span class="status">Drafted at 2:30pm </span>
+            <span class="subject">
+              Application for the role of front end dev</span
+            >
+          </div>
+
+          <p class="message-body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum
+            dolor sit amet, consectetur adipiscing...
+          </p>
+          <button class="btn btn-send">View</button>
+          <button class="btn btn-delete">Delete</button>
+        </li>
+        <li>
+          <div class="message-header">
+            <span class="status">Drafted at 2:30pm </span>
+            <span class="subject">
+              Application for the role of front end dev</span
+            >
+          </div>
+
+          <p class="message-body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum
+            dolor sit amet, consectetur adipiscing...
+          </p>
+          <button class="btn btn-send">View</button>
+          <button class="btn btn-delete">Delete</button>
+        </li>
+        <li>
+          <div class="message-header">
+            <span class="status">Drafted at 2:30pm </span>
+            <span class="subject">
+              Application for the role of front end dev</span
+            >
+          </div>
+
+          <p class="message-body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum
+            dolor sit amet, consectetur adipiscing...
+          </p>
+          <button class="btn btn-send">View</button>
+          <button class="btn btn-delete">Delete</button>
+        </li>
+      </ul>
+    </div>
+    <!-- end of main section -->
+  </body>
+  <script src="./js/main.js"></script>
+  <script src="./js/modal.js"></script>
+</html>

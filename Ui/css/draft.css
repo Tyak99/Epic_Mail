@@ -35,39 +35,20 @@ header .nav a.icon {
 
 header .nav .logout {
   float: right;
-  color: #061324;
   margin-top: 5px;
 }
 header .nav .logout a {
   text-decoration: none;
   color: #061324;
 }
-
-.section1 {
-  width: 100%;
-  background-color: darkgrey;
-  display: block;
-}
-.section1 a {
-  display: inline-block;
-  padding: 5px 30px;
-  text-decoration: none;
-  text-align: center;
-  color: #49738c;
-  width: 15%;
-  cursor: pointer;
-}
-
-.section1 a:hover {
-  color: #0e79d1;
-}
-header .logout a:hover {
-  color: #db5756;
+header .nav .logout a:hover {
+  color: #eb5d5c;
 }
 
 .aside-section {
   width: 26%;
   float: left;
+  height: 85vh;
 }
 
 .aside-section ul {
@@ -98,8 +79,6 @@ header .logout a:hover {
 .main-section {
   float: right;
   width: 74%;
-  margin-top: 10px;
-  background-color: whitesmoke;
   height: 85vh;
 }
 
@@ -114,9 +93,11 @@ header .logout a:hover {
   color: #111;
   border: 1px solid black;
   border-left: 0;
+  border-right: 0;
   padding: 10px;
   cursor: pointer;
-  margin-right: 10px;
+  margin: 0 10px;
+  background-color: whitesmoke;
 }
 .main-section li:hover {
   box-shadow: 10px 3px 5px rgb(211, 173, 103);
@@ -125,27 +106,34 @@ header .logout a:hover {
   text-decoration: none;
 }
 
-.main-section li span.sender {
-  color: maroon;
-  padding-right: 30px;
+.main-section li span.subject {
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 .main-section li span.status {
-  padding-left: 50px;
+  padding-right: 10px;
   font-style: italic;
   color: grey;
   text-align: right;
 }
-
-.btn-retract {
-  padding: 7px;
-  background-color: #49738c;
-  color: white;
+.main-section li .btn {
   cursor: pointer;
-  border-radius: 0.5em;
+  padding: 8px 13px;
+  margin-right: 10px;
+  color: white;
+  background-color: #0a51c9;
+  border-radius: 5px;
 }
-.btn-retract:hover {
-  background-color: #db5756;
+.main-section li .btn-delete {
+  background-color: maroon;
 }
+.main-section li .btn-delete:hover {
+  background-color: #eb5d5c;
+}
+.main-section li .btn-send:hover {
+  background-color: #1193ff;
+}
+
 /* modal styles  */
 .modal-button {
   padding: 6px 20px;
@@ -158,11 +146,9 @@ header .logout a:hover {
   background-color: #3f96cf;
 }
 .yes-modal:hover {
-  background-color: dodgerblue
+  background-color: dodgerblue;
 }
-.no-modal {
-  background-color: maroon;
-}
+
 /* media queries */
 @media screen and (max-width: 750px) {
   .aside-section {
@@ -178,9 +164,9 @@ header .logout a:hover {
 @media screen and (max-width: 750px) {
   .aside-section.responsive {
     position: absolute;
-    width: 32%;
+    width: 39%;
     display: block;
-    height: 85vh;
+    height: 91vh;
     background-color: #f1f1f1;
   }
 }

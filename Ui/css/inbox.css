@@ -1,5 +1,7 @@
 body {
   margin: 0;
+  font-family: 'Ubuntu', sans-serif;
+
 }
 
 .nav {
@@ -8,6 +10,7 @@ body {
   position: fixed;
   top: 0;
   width: 100%;
+  border-bottom: 2px solid blueviolet;
 }
 
 .nav img {
@@ -142,7 +145,6 @@ body {
   }
   .nav a.icon {
     display: block;
-    float: left;
   }
 }
 @media screen and (max-width: 750px) {
