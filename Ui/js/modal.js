@@ -16,15 +16,13 @@ const handleClick = event => {
 
   while (element) {
     if (
-      element.nodeName === "BUTTON" &&
-      /btn-delete/.test(element.className)
+      (element.nodeName === "BUTTON" || element.nodeName === "SPAN") && /btn-delete/.test(element.className)
     ) {
       toggleModal();
       break;
     }
 
     element = element.parentNode;
-    console.log(element);
   }
 };
 
