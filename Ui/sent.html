@@ -17,6 +17,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./css/sent.css" />
+    <link rel="stylesheet" href="./css/modal.css">
     <title>Sent</title>
   </head>
   <body>
@@ -92,6 +93,14 @@
       </div>
     </aside>
     <!-- end of aside section -->
+    <!-- Modal -->
+    <div class="modal" id="id-modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <p>Are you sure to revoke sent message?</p>
+        <button class="modal-button yes-modal"> Yes </button>
+      </div>
+    </div>
     <!-- main section -->
     <div class="main-section">
       <ul>
@@ -154,4 +163,5 @@
     <!-- end of main section -->
   </body>
   <script src="./js/main.js"></script>
+  <script src='./js/sent-email.js'></script>
 </html>
