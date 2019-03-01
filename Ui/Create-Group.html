@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!-- awsome font icons -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <!-- google fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Ubuntu"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/create-group.css" />
+    <title>Create Group</title>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <header>
+      <div class="nav" id="myNav">
+        <a href="javascript:void(0);" class="icon" onclick="sidebarFunction()">
+          <div style="font-size: 30px;">
+            <i class="fa fa-bars" style="color: black"></i>
+          </div>
+        </a>
+        <h2 class="nav-brand">Nasri</h2>
+        <img
+          src="https://avatars.io/twitter/tundenasri
+                                                "
+          alt="profile image"
+        />
+        <div class="logout">
+          <a href="#"> <h4>Sign out</h4> </a>
+        </div>
+      </div>
+    </header>
+    <!-- End of Navigation -->
+    <!-- section 1 -->
+    <section class="section1">
+      <div>
+        <a href="">
+          <i class="fas fa-redo-alt" style="font-size: 30px"></i>
+          <p>Refresh</p>
+        </a>
+        <a href="./compose.html">
+          <i class="fas fa-plus" style="font-size: 30px"></i>
+          <p>Compose</p>
+        </a>
+        <a href="">
+          <i class="fas fa-layer-group" style="font-size: 30px"></i>
+          <p>Groups</p>
+        </a>
+        <a href="" class="active">
+          <i class="fas fa-box" style="font-size: 30px"></i>
+          <p>Create group</p>
+        </a>
+      </div>
+    </section>
+    <!-- end of section 1 -->
+    <!-- aside section -->
+    <aside class="aside-section" id="mySidebar">
+      <div class="pages">
+        <ul>
+          <a href="./compose.html">
+            <li>
+              <i class="fa fa-plus" style="padding-right: 10px"></i> Compose
+            </li>
+          </a>
+          <a href="./inbox.html">
+            <li>
+              <i class="fa fa-inbox" style="padding-right: 10px"></i> Inbox
+            </li>
+          </a>
+          <a href="./sent.html">
+            <li>
+              <i class="fa fa-angle-double-up" style="padding-right: 10px"></i>
+              Sent
+            </li>
+          </a>
+          <a href="./draft.html">
+            <li>
+              <i class="fa fa-th-large" style="padding-right: 10px"></i> Drafts
+            </li>
+          </a>
+        </ul>
+      </div>
+    </aside>
+    <!-- end of aside section -->
+    <section class="section-1">
+      <form action="">
+        <h2 class="form-title">
+          Create group
+        </h2>
+        <div class="form-group">
+          <label for=""> Group Name </label>
+          <input type="text" placeholder="Name" class="form-control" required/>
+        </div>
+        <div class="form-group">
+          <label for=""> Add Member </label>
+          <input
+            type="email"
+            placeholder="Enter Email"
+            class="form-control"
+            id="member-input"
+          />
+          <!-- <span class="icon icon-plus"> <i class="fa fa-plus"></i></span> -->
+          <span class="add-member"> <button class="add-btn">Add</button> </span>
+        </div>
+        <div class="list-members">
+          <p>tunde@mail.com  <span>x</span></p>
+        </div>
+        <!-- <button class="submit-btn">Create</button> -->
+        <input type="submit" value="Submit" class="submit-btn" />
+      </form>
+      <hr />
+      <div class="list-groups">
+        <h2>Groups you are in</h2>
+        <ul>
+          <li>Akasuki</li>
+          <li>Team 7</li>
+        </ul>
+      </div>
+    </section>
+  </body>
+  <script src="./js/main.js"></script>
+  <script src="./js/create-group.js"></script>
+</html>
