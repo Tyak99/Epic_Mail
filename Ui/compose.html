@@ -17,6 +17,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./css/compose.css" />
+    <link rel="stylesheet" href="./css/modal.css">
     <title>Compose</title>
   </head>
   <body>
@@ -59,6 +60,7 @@
       </div>
     </section>
     <!-- end of section 1 -->
+
     <!-- aside section -->
     <aside class="aside-section" id="mySidebar">
       <div class="pages">
@@ -88,11 +90,21 @@
       </div>
     </aside>
     <!-- end of aside section -->
+    <!-- Modal -->
+    <div class="modal" id="id-modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <p>Error! Add at least one receiver </p>
+        <button class="modal-button yes-modal">Okay</button>
+      </div>
+    </div>
+    <!-- end of modal -->
+    <!-- section 2 -->
     <section class="section-2">
       <h2>New Message</h2>
       <form action="">
         <div class="form-group">
-          <input type="email" placeholder="To - email / group name" />
+          <input type="email" placeholder="To - email / group name" class="email-to"/>
         </div>
         <div class="form-group">
           <input type="text" placeholder="Subject" />
@@ -106,4 +118,5 @@
     </section>
   </body>
   <script src="./js/main.js"></script>
+  <script src="./js/compose.js"></script>
 </html>

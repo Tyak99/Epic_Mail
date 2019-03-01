@@ -22,11 +22,9 @@
     <!-- Navigation -->
     <div class="nav" id="myNav">
       <h2 class="nav-brand">Epic Mail</h2>
-      <a href="#">Home</a>
-      <a href="#">About</a>
-      <a href="./login">Sign In</a>
+      <a href="./Login.html">Sign In</a>
       <a href="#" class="active"> Sign Up </a>
-      <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+      <a href="javascript:void(0);" class="icon" onclick="navbarFunction()">
         <i class="fa fa-bars"></i>
       </a>
     </div>
@@ -36,7 +34,7 @@
         <h2 class="form-title">Sign Up</h2>
         <div class="form-group">
           <label for=""> Username </label>
-          <input type="text" class="form-control" placeholder="Username" />
+          <input type="text" class="form-control" placeholder="Username" required/>
         </div>
         <div class="form-group">
           <label for=""> Email </label>
@@ -44,11 +42,12 @@
             type="email"
             class="form-control"
             placeholder="Email Address"
+            required
           />
         </div>
         <div class="form-group">
           <label for=""> Password</label>
-          <input type="password" class="form-control" placeholder="Password" />
+          <input type="password" class="form-control" placeholder="Password" required/>
         </div>
         <div class="form-group">
           <label for=""> Confirm Password</label>
@@ -56,6 +55,7 @@
             type="password"
             class="form-control"
             placeholder="Confirm Password"
+            required
           />
         </div>
         <div class="form-check">

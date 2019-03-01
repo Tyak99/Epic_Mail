@@ -108,7 +108,7 @@ body {
   }
 
   .icons .reply,
-  .delete {
+  .btn-delete {
     padding: 6px;
     margin-right: 10px;
     border: 2px solid #A8C9DA;
@@ -117,7 +117,7 @@ body {
   }
 
   .icons .reply:hover,
-  .delete:hover {
+  .btn-delete:hover {
     background-color: #A8C9DA;
   }
   
@@ -126,7 +126,21 @@ body {
     border: 0;
     box-shadow: 0 10px 10px -10px #8c8b8b inset;
   }
-  
+
+  /* modal styles  */
+.modal-button {
+  padding: 6px 20px;
+  color: white;
+  border-radius: 6px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.yes-modal {
+  background-color: #3f96cf;
+}
+.yes-modal:hover {
+  background-color: dodgerblue
+}
   @media screen and (max-width: 750px) {
     .aside-section {
       display: none;
