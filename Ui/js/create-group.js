@@ -15,7 +15,7 @@ const addMember = e => {
     let NewMember = document.createTextNode(inputedMember.value);
     let paragraph = document.createElement("p");
     paragraph.appendChild(NewMember);
-    allMembers.appendChild(span);
+    allMembers.appendChild(paragraph);
     inputedMember.value = "";
   };
   
