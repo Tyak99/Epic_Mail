@@ -57,7 +57,10 @@ header .nav .logout a {
   width: 15%;
   cursor: pointer;
 }
-.section1 a:hover,
+
+.section1 a:hover {
+  color: #0e79d1;
+}
 header .logout a:hover {
   color: #db5756;
 }
