@@ -1,8 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Ubuntu', sans-serif;
-
+  font-family: "Ubuntu", sans-serif;
 }
 
 header {
@@ -61,10 +60,10 @@ header .nav .logout a:hover {
 }
 .section1 a:hover,
 header .logout a:hover {
-  color: #3F96CF;
+  color: #3f96cf;
 }
 .section1 a.active {
-    color: #3F96CF
+  color: #3f96cf;
 }
 
 .aside-section {
@@ -103,8 +102,8 @@ header .logout a:hover {
   width: 74%;
 }
 .section-2 {
-    width: 74%;
-    float: right;
+  width: 74%;
+  float: right;
 }
 form {
   max-width: 500px;
@@ -138,28 +137,37 @@ label {
 }
 
 .add-btn {
-    padding: 7px;
-    background-color: cornflowerblue;
-    color: white;
-    cursor: pointer;
+  padding: 7px;
+  background-color: cornflowerblue;
+  color: white;
+  cursor: pointer;
 }
 .add-btn:hover {
-    background-color: #3D92C9
+  background-color: #3d92c9;
 }
 .list-members {
-    margin: 1rem;
-    background-color: lightgrey;
-    padding: 8px;
-    line-height: 1.5rem;
-    width: 80%;
-    display: grid;
+  margin: 1rem;
+  background-color: lightgrey;
+  padding: 8px;
+  line-height: 1.5rem;
+  width: 80%;
+  display: grid;
 }
 .list-members p {
-    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-    border: 1px solid grey;
-    border-radius: 14px;
-    padding: 1px 8px;
-    margin: 2px;
+  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid grey;
+  border-radius: 14px;
+  padding: 1px 8px;
+  margin: 2px;
+}
+
+.list-members p span {
+  font-size: 1rem;
+  cursor: pointer;
+  float: right;
+}
+.list-members p span:hover {
+  color: maroon;
 }
 
 .submit-btn {
@@ -181,16 +189,17 @@ hr {
 }
 
 .list-groups ul {
-    margin: 1rem;
-    list-style: none;
+  margin: 1rem;
+  list-style: none;
 }
 .list-groups li {
-    float: left;
-    margin-right: 10px;
-    font-size: 20px;
-    border: 1px solid burlywood;
-    padding: 10px;
+  float: left;
+  margin-right: 10px;
+  font-size: 20px;
+  border: 1px solid burlywood;
+  padding: 10px;
 }
+
 @media screen and (max-width: 750px) {
   .aside-section {
     display: none;
@@ -211,5 +220,8 @@ hr {
     display: block;
     height: 91vh;
     background-color: #f1f1f1;
+  }
+  .list-members {
+    width: 90%;
   }
 }
