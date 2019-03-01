@@ -1,33 +1,32 @@
-const modal = document.getElementById("id-modal");
-const modalCloseButton = document.querySelector(".close-button");
+const modal = document.getElementById('id-modal');
+const modalCloseButton = document.querySelector('.close-button');
 
 const toggleModal = () => {
-  modal.classList.toggle("show-modal");
+  modal.classList.toggle('show-modal');
 };
 
-const onClickWindow = event => {
+const onClickWindow = (event) => {
   if (event.target === modal) {
-    modal.classList.remove("show-modal");
+    modal.classList.remove('show-modal');
   }
 };
 
-const handleClick = event => {
+const handleClick = (event) => {
   let element = event.target;
 
   while (element) {
     if (
-      element.nodeName === "BUTTON" &&
-      /btn-retract/.test(element.className)
+      element.nodeName === 'BUTTON'
+      && /btn-retract/.test(element.className)
     ) {
       toggleModal();
       break;
     }
 
     element = element.parentNode;
-    console.log(element);
   }
 };
 
-document.addEventListener("click", handleClick);
-modalCloseButton.addEventListener("click", toggleModal);
-window.addEventListener("click", onClickWindow);
+document.addEventListener('click', handleClick);
+modalCloseButton.addEventListener('click', toggleModal);
+window.addEventListener('click', onClickWindow);
