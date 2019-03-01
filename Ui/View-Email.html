@@ -17,6 +17,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./css/view-email.css" />
+    <link rel="stylesheet" href="./css/modal.css">
     <title>View Email</title>
   </head>
   <body>
@@ -35,12 +36,20 @@
       </div>
     </header>
     <!-- End of navigation -->
+    <!-- Modal -->
+    <div class="modal" id="id-modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <p>Are you sure to delete?</p>
+        <button class="modal-button yes-modal">Yes</button>
+      </div>
+    </div>
     <!-- aside section -->
     <aside class="aside-section" id="mySidebar">
       <div class="pages">
         <ul>
           <a href="./compose.html">
-            <li class="active">
+            <li>
               <i class="fa fa-plus" style="padding-right: 10px"></i> Compose
             </li>
           </a>
@@ -85,7 +94,7 @@
                 <span class="reply"> <i class="fa fa-reply"></i> Reply </span>
               </a>
               <a href="#">
-                <span class="delete">
+                <span class="btn-delete">
                   <i class="fa fa-trash-alt"></i> Delete
                 </span>
               </a>
@@ -123,7 +132,7 @@
                 <span class="reply"> <i class="fa fa-reply"></i> Reply </span>
               </a>
               <a href="#">
-                <span class="delete">
+                <span class="btn-delete">
                   <i class="fa fa-trash-alt"></i> Delete
                 </span>
               </a>
@@ -154,4 +163,5 @@
     </section>
   </body>
   <script src="./js/main.js"></script>
+  <script src="./js/modal.js"></script>
 </html>

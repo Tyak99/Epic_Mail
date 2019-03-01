@@ -1,13 +1,13 @@
 body {
   margin: 0;
   padding: 0;
+  font-family: "Ubuntu", sans-serif;
 }
 
 header {
   background-color: #49738c;
   width: 100%;
   color: white;
-  padding-top: 20px;
   min-height: 70px;
   border-bottom: 2px solid blueviolet;
   overflow: hidden;
@@ -57,7 +57,10 @@ header .nav .logout a {
   width: 15%;
   cursor: pointer;
 }
-.section1 a:hover,
+
+.section1 a:hover {
+  color: #0e79d1;
+}
 header .logout a:hover {
   color: #db5756;
 }
@@ -133,6 +136,34 @@ header .logout a:hover {
   text-align: right;
 }
 
+.btn-retract {
+  padding: 7px;
+  background-color: #49738c;
+  color: white;
+  cursor: pointer;
+  border-radius: 0.5em;
+}
+.btn-retract:hover {
+  background-color: #db5756;
+}
+/* modal styles  */
+.modal-button {
+  padding: 6px 20px;
+  color: white;
+  border-radius: 6px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.yes-modal {
+  background-color: #3f96cf;
+}
+.yes-modal:hover {
+  background-color: dodgerblue
+}
+.no-modal {
+  background-color: maroon;
+}
+/* media queries */
 @media screen and (max-width: 750px) {
   .aside-section {
     display: none;
@@ -142,7 +173,6 @@ header .logout a:hover {
   }
   header .nav a.icon {
     display: block;
-    float: left;
   }
 }
 @media screen and (max-width: 750px) {
@@ -151,6 +181,6 @@ header .logout a:hover {
     width: 32%;
     display: block;
     height: 85vh;
-    background-color: #F1F1F1;
+    background-color: #f1f1f1;
   }
 }

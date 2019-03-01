@@ -4,7 +4,7 @@ let inputedMember = document.getElementById("member-input");
 
 
 
-const add = e => {
+const addMember = e => {
     e.preventDefault();
     if (inputedMember.value == "") {
       return;
@@ -13,10 +13,10 @@ const add = e => {
     }
     let allMembers = listMember;
     let NewMember = document.createTextNode(inputedMember.value);
-    let span = document.createElement("p");
-    span.appendChild(NewMember);
+    let paragraph = document.createElement("p");
+    paragraph.appendChild(NewMember);
     allMembers.appendChild(span);
     inputedMember.value = "";
   };
   
-  addMemberBtn.addEventListener("click", add);
+  addMemberBtn.addEventListener("click", addMember);
