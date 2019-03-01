@@ -1,0 +1,24 @@
+{
+  "name": "epic_mail",
+  "version": "1.0.0",
+  "description": "An email messaging app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tyak99/Epic_Mail.git"
+  },
+  "author": "Nasri",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tyak99/Epic_Mail/issues"
+  },
+  "homepage": "https://github.com/Tyak99/Epic_Mail#readme",
+  "devDependencies": {
+    "eslint": "^5.14.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  }
+}
