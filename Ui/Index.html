@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!-- google fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Ubuntu"
+      rel="stylesheet"
+    />
+    <!-- font awesome icon -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/login.css" />
+    <title>Log in</title>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <div class="nav" id="myNav">
+      <h2 class="nav-brand">Epic Mail</h2>
+      <a href="#" class="active">Sign In</a>
+      <a href="./Signup.html"> Sign Up </a>
+      <a href="javascript:void(0);" class="icon" onclick="navbarFunction()">
+        <i class="fa fa-bars"></i>
+      </a>
+    </div>
+    <!-- End of Naviagtion -->
+    <div class="container">
+      <form action="inbox.html">
+        <h2 class="form-title">
+          Sign In
+        </h2>
+        <div class="form-group">
+          <label for=""> Email </label>
+          <input
+            type="email"
+            class="form-control"
+            placeholder="Email Address"
+          />
+        </div>
+        <div class="form-group">
+          <label for=""> Password</label>
+          <input type="password" class="form-control" placeholder="Password" />
+        </div>
+        <div style="text-align: center">
+          <button type="submit" class="submit-btn">Submit</button>
+        </div>
+      </form>
+    </div>
+  </body>
+  <script src="./js/main.js"></script>
+</html>
