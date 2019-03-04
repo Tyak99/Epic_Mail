@@ -21,4 +21,11 @@ export default class UserService {
       return user;
     });
   }
+
+  createUser(data) {
+    const allUser = this.fetchAll();
+    const newUser = { id: allUser.length + 1, ...data };
+    allUser.push(newUser);
+    return newUser;
+  }
 }

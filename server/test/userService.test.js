@@ -18,7 +18,7 @@ describe('Test user signup services', () => {
     expect(newUser).to.have.property('id');
     expect(newUser).to.have.property('firstName');
     expect(newUser).to.have.property('lastName');
-    expect(newUser).to.have.property('emai');
+    expect(newUser).to.have.property('email');
     expect(newUser).to.have.property('password');
     done();
   });
