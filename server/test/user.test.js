@@ -143,4 +143,15 @@ describe('Test user sign in route', () => {
         expect(res.body).to.have.property('error');
       });
   });
+  it('should return success and token when correct details are passed along', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send({ email: 'superuser@mail.com', password: 'secret' })
+      .end((err, res) => {
+        expect(res.body.status).to.eql(200);
+        expect(res.body).to.have.property('token');
+        done();
+      });
+  });
 });
