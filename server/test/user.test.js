@@ -74,3 +74,39 @@ describe('Test user signup route', () => {
       });
   });
 });
+
+describe('Test user sign in service', () => {
+  it('should return error if emails dont match', (done) => {
+    const data = {
+      email: 'tunde@mail.com',
+      password: 'secret',
+    };
+    const logInUser = userServices.loginUser(data);
+
+    expect(logInUser).to.eql('Email already in use');
+    done();
+  });
+  it('should return error if password dont match', (done) => {
+    const data = {
+      email: 'superuser@mail.com',
+      password: 'baseball',
+    };
+    const logInUser = userServices.loginUser(data);
+    expect(logInUser).to.eql('Invalid password');
+    done();
+  });
+  it('should return a user object when passed email and password', (done) => {
+    const user = {
+      email: 'superuser@mail.com',
+      password: 'secret',
+    };
+    const loggedInUser = userServices.loginUser(user);
+    expect(loggedInUser).to.be.an('object');
+    expect(loggedInUser).to.have.property('id');
+    expect(loggedInUser).to.have.property('firstName');
+    expect(loggedInUser).to.have.property('lastName');
+    expect(loggedInUser).to.have.property('email');
+    expect(loggedInUser).to.have.property('password');
+    done();
+  });
+});
