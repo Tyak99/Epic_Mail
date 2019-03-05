@@ -28,4 +28,16 @@ export default class UserService {
     allUser.push(newUser);
     return newUser;
   }
+
+  loginUser(data) {
+    const user = this.fetchAll()[0];
+
+    if (data.email !== user.email) {
+      return 'Email already in use';
+    }
+    if (data.password !== user.password) {
+      return 'Invalid password';
+    }
+    return user;
+  }
 }
