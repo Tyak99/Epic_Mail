@@ -75,7 +75,7 @@ describe('Test user signup route', () => {
   });
 });
 
-describe('Test user sign in service', () => {
+describe('Test user sign in service method', () => {
   it('should return error if emails dont match', (done) => {
     const data = {
       email: 'tunde@mail.com',
@@ -108,5 +108,39 @@ describe('Test user sign in service', () => {
     expect(loggedInUser).to.have.property('email');
     expect(loggedInUser).to.have.property('password');
     done();
+  });
+});
+
+describe('Test user sign in route', () => {
+  it('should return error when no email or password is avalilable', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send({})
+      .end((err, res) => {
+        expect(res.body.status).to.eql(400);
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return error if wrong email or password is passed along', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send({ email: 'tunde@mail.com', password: 'secret' })
+      .end((err, res) => {
+        expect(res.body.status).to.eql(400);
+        expect(res.body).to.have.property('error');
+        done();
+      });
+
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send({ email: 'superuser@mail.com', password: 'baseball' })
+      .end((err, res) => {
+        expect(res.body.status).to.eql(400);
+        expect(res.body).to.have.property('error');
+      });
   });
 });
