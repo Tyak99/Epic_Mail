@@ -61,7 +61,8 @@ describe('Test user signup route', () => {
       email: 'tunde@mail.com',
       password: 'secret',
     };
-    chai.request(server)
+    chai
+      .request(server)
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
