@@ -150,7 +150,7 @@ describe('Test user sign in route', () => {
       .send({ email: 'superuser@mail.com', password: 'secret' })
       .end((err, res) => {
         expect(res.body.status).to.eql(200);
-        expect(res.body).to.have.property('token');
+        expect(res.body.data).to.have.property('token');
         done();
       });
   });

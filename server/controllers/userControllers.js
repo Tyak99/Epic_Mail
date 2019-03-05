@@ -3,9 +3,7 @@ import UserService from '../services/userServices';
 const userServices = new UserService();
 
 exports.signup = (req, res) => {
-  const {
-    email, password, firstName, lastName,
-  } = req.body;
+  const { email, password, firstName, lastName } = req.body;
   if (email === 'superuser@mail.com') {
     return res.send({
       status: 400,
@@ -47,6 +45,8 @@ exports.login = (req, res) => {
   }
   return res.send({
     status: 200,
-    token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9',
+    data: {
+      token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9',
+    },
   });
 };
