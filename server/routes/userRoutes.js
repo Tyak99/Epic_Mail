@@ -5,7 +5,7 @@ const userServices = new UserService();
 
 const router = express.Router();
 
-router.post('/', (req, res) => {
+router.post('/signup', (req, res) => {
   const {
     email, password, firstName, lastName,
   } = req.body;
