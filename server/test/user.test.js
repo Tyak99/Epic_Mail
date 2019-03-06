@@ -17,9 +17,7 @@ describe('Test token generator function', () => {
       password: 'secret',
     };
     const token = tokenFunction(user);
-    const token2 = tokenFunction(user);
     expect(token).to.be.a('string');
-    expect(token).to.not.eql(token2);
     done();
   });
 });
