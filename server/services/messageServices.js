@@ -30,7 +30,7 @@ export default class MessageService {
   }
 
   AllReceivedMessage() {
-    this.receivedMessages = [{}, {}];
+    this.receivedMessages = [];
     return this.receivedMessages.map((message) => {
       const newReceivedMessage = new ReceivedMessage();
       newReceivedMessage.receiverId = message.receiverId;
@@ -38,6 +38,16 @@ export default class MessageService {
       newReceivedMessage.createdOn = message.createdOn;
       return newReceivedMessage;
     });
+  }
+
+  postReceivedMessage(data) {
+    const allReceivedMessage = this.AllReceivedMessage();
+    const { receiverId } = data;
+    if (!receiverId) {
+      return 'error';
+    }
+    allReceivedMessage.push(data);
+    return data;
   }
 
   postMessage(data) {
@@ -48,6 +58,11 @@ export default class MessageService {
       ...data,
     };
     allMessage.push(newMessage);
+    this.postReceivedMessage({
+      receiverId: newMessage.receiverId,
+      messageId: newMessage.id - 1,
+      createdOn: newMessage.createdOn,
+    });
     return allMessage[newMessage.id - 1];
   }
 }
