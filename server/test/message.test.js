@@ -133,15 +133,17 @@ describe('Test add received emails', () => {
 
 describe('Test get received emails method', () => {
   it('should return all recieved emails', (done) => {
-    const receivedMessages = messageServices.getReceivedMessaged();
+    const receivedMessages = messageServices.getReceivedMessage();
     expect(receivedMessages).to.be.an('array');
-    expect(receivedMessages).to.have.property('id');
-    expect(receivedMessages).to.have.property('subject');
-    expect(receivedMessages).to.have.property('message');
-    expect(receivedMessages).to.have.property('status');
-    expect(receivedMessages).to.have.property('createdOn');
-    expect(receivedMessages).to.have.property('receiverId');
-    expect(receivedMessages).to.have.property('senderId');
+    receivedMessages.forEach((message) => {
+      expect(message).to.have.property('id');
+      expect(message).to.have.property('subject');
+      expect(message).to.have.property('message');
+      expect(message).to.have.property('status');
+      expect(message).to.have.property('createdOn');
+      expect(message).to.have.property('receiverId');
+      expect(message).to.have.property('senderId');
+    });
     done();
   });
 });
