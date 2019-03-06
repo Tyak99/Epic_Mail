@@ -33,6 +33,7 @@
     "nyc": "^13.3.0"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "jwt-simple": "^0.5.5"
   }
 }
