@@ -1,7 +1,7 @@
 export default class Message {
   constructor() {
     this.id = null;
-    this.createdOn = null;
+    this.createdOn = new Date();
     this.subject = null;
     this.message = null;
     this.status = null;

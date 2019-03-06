@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import Message from '../models/Message';
 import ReceivedMessage from '../models/ReceivedMessage';
 
@@ -8,8 +9,7 @@ export default class MessageService {
         id: 1,
         subject: 'Hello',
         message: 'Thanks for coming',
-        createdOn: Date.now(),
-        status: null,
+        status: 'read',
         parentMessageId: null,
         senderId: 1,
         receiverId: 2,
@@ -18,11 +18,10 @@ export default class MessageService {
         id: 2,
         subject: 'Hi',
         message: 'Thanks for going',
-        createdOn: Date.now(),
         status: 'draft',
         parentMessageId: null,
-        senderId: false,
-        receiverId: false,
+        senderId: null,
+        receiverId: null,
       },
     ];
     return this.messages.map((message) => {
@@ -30,7 +29,6 @@ export default class MessageService {
       newMessage.id = message.id;
       newMessage.subject = message.subject;
       newMessage.message = message.message;
-      newMessage.createdOn = message.createdOn;
       newMessage.status = message.status;
       newMessage.senderId = message.senderId;
       newMessage.receiverId = message.receiverId;
@@ -57,33 +55,39 @@ export default class MessageService {
   }
 
   postReceivedMessage(data) {
-    const allReceivedMessage = this.AllReceivedMessage();
     const { receiverId } = data;
     if (!receiverId) {
       return 'error';
     }
-    allReceivedMessage.push(data);
-    return data;
+    const message = new ReceivedMessage();
+    message.receiverId = data.receiverId;
+    message.messageId = data.messageId;
+    return message;
   }
 
   getReceivedMessage() {
     const allMessage = this.AllMessage();
-    return allMessage.filter(message => message.receiverId !== false);
+    return allMessage.filter(message => message.receiverId !== null);
   }
 
   postMessage(data) {
     const allMessage = this.AllMessage();
-    const newMessage = {
-      id: allMessage.length + 1,
-      createdOn: Date.now(),
-      ...data,
-    };
-    allMessage.push(newMessage);
-    this.postReceivedMessage({
-      receiverId: newMessage.receiverId,
-      messageId: newMessage.id - 1,
-      createdOn: newMessage.createdOn,
-    });
-    return allMessage[newMessage.id - 1];
+
+    const newMessage = new Message();
+    newMessage.id = allMessage.length + 1;
+    newMessage.subject = data.subject;
+    newMessage.message = data.message;
+    newMessage.status = data.status || null;
+    newMessage.senderId = data.senderId || null;
+    newMessage.receiverId = data.receiverId || null;
+    newMessage.parentMessageId = data.parentMessageId || null;
+
+    if (newMessage.receiver !== null) {
+      this.postReceivedMessage({
+        receiverId: newMessage.receiverId,
+        messageId: newMessage.id,
+      });
+    }
+    return newMessage;
   }
 }
