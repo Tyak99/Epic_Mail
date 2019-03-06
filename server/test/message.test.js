@@ -118,12 +118,9 @@ describe('Test add received emails', () => {
   });
   it('should add an email to received emails if receiverId is present', (done) => {
     const dummyMessage = {
-      subject: 'Hello',
-      message: 'Thanks for coming',
-      status: 'sent',
-      parentMessageId: null,
-      senderId: 1,
       receiverId: 2,
+      messageId: 1,
+      createdOn: new Date(),
     };
     const receivedMessage = messageServices.postReceivedMessage(dummyMessage);
     expect(receivedMessage).to.be.an('object');
