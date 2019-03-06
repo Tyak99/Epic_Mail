@@ -1,9 +1,13 @@
 import UserService from '../services/userServices';
+import tokenFunction from '../utils/tokenHandler';
 
 const userServices = new UserService();
 
 exports.signup = (req, res) => {
-  const { email, password, firstName, lastName } = req.body;
+  const
+    {
+      email, password, firstName, lastName,
+    } = req.body;
   if (email === 'superuser@mail.com') {
     return res.send({
       status: 400,
@@ -18,12 +22,11 @@ exports.signup = (req, res) => {
     });
   }
   userServices.createUser(req.body);
-  const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9';
   return res.send({
     status: 201,
     data: {
       name: req.body.firstName,
-      token,
+      token: tokenFunction(req.body),
     },
   });
 };
@@ -46,7 +49,7 @@ exports.login = (req, res) => {
   return res.send({
     status: 200,
     data: {
-      token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9',
+      token: tokenFunction(req.body),
     },
   });
 };
