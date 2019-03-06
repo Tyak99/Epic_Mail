@@ -16,3 +16,11 @@ exports.postMessage = (req, res) => {
     data: postMessage,
   });
 };
+
+exports.getReceivedMessages = (req, res) => {
+  const messages = messageServices.getReceivedMessage();
+  res.send({
+    status: 200,
+    data: messages,
+  });
+};

@@ -1,4 +1,5 @@
 import Message from '../models/Message';
+import ReceivedMessage from '../models/ReceivedMessage';
 
 export default class MessageService {
   AllMessage() {
@@ -12,6 +13,16 @@ export default class MessageService {
         parentMessageId: null,
         senderId: 1,
         receiverId: 2,
+      },
+      {
+        id: 2,
+        subject: 'Hi',
+        message: 'Thanks for going',
+        createdOn: Date.now(),
+        status: 'draft',
+        parentMessageId: null,
+        senderId: false,
+        receiverId: false,
       },
     ];
     return this.messages.map((message) => {
@@ -28,6 +39,38 @@ export default class MessageService {
     });
   }
 
+  AllReceivedMessage() {
+    this.receivedMessages = [
+      {
+        receiverId: 4,
+        messageId: 1,
+        createdOn: 1551886333846,
+      },
+    ];
+    return this.receivedMessages.map((message) => {
+      const newReceivedMessage = new ReceivedMessage();
+      newReceivedMessage.receiverId = message.receiverId;
+      newReceivedMessage.messageId = message.messageId;
+      newReceivedMessage.createdOn = message.createdOn;
+      return newReceivedMessage;
+    });
+  }
+
+  postReceivedMessage(data) {
+    const allReceivedMessage = this.AllReceivedMessage();
+    const { receiverId } = data;
+    if (!receiverId) {
+      return 'error';
+    }
+    allReceivedMessage.push(data);
+    return data;
+  }
+
+  getReceivedMessage() {
+    const allMessage = this.AllMessage();
+    return allMessage.filter(message => message.receiverId !== false);
+  }
+
   postMessage(data) {
     const allMessage = this.AllMessage();
     const newMessage = {
@@ -36,6 +79,11 @@ export default class MessageService {
       ...data,
     };
     allMessage.push(newMessage);
+    this.postReceivedMessage({
+      receiverId: newMessage.receiverId,
+      messageId: newMessage.id - 1,
+      createdOn: newMessage.createdOn,
+    });
     return allMessage[newMessage.id - 1];
   }
 }

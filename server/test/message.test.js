@@ -103,3 +103,78 @@ describe('Test post a message route', () => {
       });
   });
 });
+
+describe('Test add received emails', () => {
+  it('should not add an email to received emails if no receiverId is present', (done) => {
+    const dummyMessage = {
+      subject: 'Hello',
+      message: 'Thanks for coming',
+      status: null,
+      parentMessageId: null,
+    };
+    const receivedMessage = messageServices.postReceivedMessage(dummyMessage);
+    expect(receivedMessage).to.be.eql('error');
+    done();
+  });
+  it('should add an email to received emails if receiverId is present', (done) => {
+    const dummyMessage = {
+      receiverId: 2,
+      messageId: 1,
+      createdOn: new Date(),
+    };
+    const receivedMessage = messageServices.postReceivedMessage(dummyMessage);
+    expect(receivedMessage).to.be.an('object');
+    expect(receivedMessage).to.have.property('receiverId');
+    expect(receivedMessage).to.have.property('messageId');
+    expect(receivedMessage).to.have.property('createdOn');
+    done();
+  });
+});
+
+describe('Test get received emails method', () => {
+  it('should return all recieved emails', (done) => {
+    const receivedMessages = messageServices.getReceivedMessage();
+    expect(receivedMessages).to.be.an('array');
+    receivedMessages.forEach((message) => {
+      expect(message).to.have.property('id');
+      expect(message).to.have.property('subject');
+      expect(message).to.have.property('message');
+      expect(message).to.have.property('status');
+      expect(message).to.have.property('createdOn');
+      expect(message).to.have.property('receiverId');
+      expect(message).to.have.property('senderId');
+    });
+    done();
+  });
+});
+
+describe('Test get received emails route', () => {
+  it('should return error on wrong api call', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/wrongapi')
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        done();
+      });
+  });
+  it('should return an array of received emails', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages')
+      .end((err, res) => {
+        expect(res.body.status).to.eql(200);
+        expect(res.body.data).to.be.an('array');
+        res.body.data.forEach((message) => {
+          expect(message).to.have.property('id');
+          expect(message).to.have.property('createdOn');
+          expect(message).to.have.property('message');
+          expect(message).to.have.property('subject');
+          expect(message).to.have.property('receiverId');
+          expect(message).to.have.property('senderId');
+          expect(message).to.have.property('status');
+        });
+        done();
+      });
+  });
+});
