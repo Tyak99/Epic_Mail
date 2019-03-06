@@ -5,7 +5,7 @@ import server from '../app';
 import MessageService from '../services/messageServices';
 
 const { expect } = chai;
-
+chai.use(chaiHttp);
 const messageServices = new MessageService();
 
 describe('Test post a message service method api/v1/messages', () => {
@@ -28,5 +28,67 @@ describe('Test post a message service method api/v1/messages', () => {
     expect(newMessage).to.have.property('senderId');
     expect(newMessage).to.have.property('receiverId');
     done();
+  });
+});
+
+describe('Test post a message route', () => {
+  it('should return error 404 on wrong api call', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/wrong')
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        done();
+      });
+  });
+  it('should return error if no data is passed along', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/messages')
+      .send({})
+      .end((err, res) => {
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return error if all the required fields arent passed along', (done) => {
+    const dummyMessage = {
+      subject: 'Hello',
+      message: 'Thanks for coming',
+      status: null,
+      parentMessageId: null,
+    };
+    chai
+      .request(server)
+      .post('/api/v1/messages')
+      .send(dummyMessage)
+      .end((err, res) => {
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('sould create message when the required fields are present', (done) => {
+    const dummyMessage = {
+      subject: 'Hello',
+      message: 'Thanks for coming',
+      status: null,
+      parentMessageId: null,
+      senderId: 1,
+      receiverId: 2,
+    };
+    chai
+      .request(server)
+      .post('/api/v1/messages')
+      .send(dummyMessage)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(201);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('id');
+        expect(res.body.data).to.have.property('subject');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data).to.have.property('createdOn');
+        expect(res.body.data).to.have.property('status');
+        done();
+      });
   });
 });
