@@ -8,7 +8,19 @@ const { expect } = chai;
 chai.use(chaiHttp);
 const messageServices = new MessageService();
 
-describe('Test post a message service method api/v1/messages', () => {
+describe('Test that an array exists in all message service method', () => {
+  it('should return an array when allmessage methis is called', (done) => {
+    const GetAllMessage = messageServices.AllMessage();
+    expect(GetAllMessage).to.be.an('array');
+    expect(GetAllMessage[0]).to.have.property('id');
+    expect(GetAllMessage[0]).to.have.property('subject');
+    expect(GetAllMessage[0]).to.have.property('message');
+    expect(GetAllMessage[0]).to.have.property('createdOn');
+    expect(GetAllMessage[0]).to.have.property('status');
+    done();
+  });
+});
+describe('Test post a message service method', () => {
   it('should return a message object when correct details are passed', (done) => {
     const dummyMessage = {
       subject: 'Hello',

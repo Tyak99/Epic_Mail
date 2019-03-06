@@ -2,7 +2,18 @@ import Message from '../models/Message';
 
 export default class MessageService {
   AllMessage() {
-    this.messages = [];
+    this.messages = [
+      {
+        id: 1,
+        subject: 'Hello',
+        message: 'Thanks for coming',
+        createdOn: Date.now(),
+        status: null,
+        parentMessageId: null,
+        senderId: 1,
+        receiverId: 2,
+      },
+    ];
     return this.messages.map((message) => {
       const newMessage = new Message();
       newMessage.id = message.id;
