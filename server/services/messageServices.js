@@ -23,6 +23,15 @@ export default class MessageService {
         senderId: null,
         receiverId: null,
       },
+      {
+        id: 3,
+        subject: 'Hello',
+        message: 'You are welcome',
+        status: 'read',
+        parentMessageId: null,
+        senderId: 3,
+        receiverId: 1,
+      },
     ];
     return this.messages.map((message) => {
       const newMessage = new Message();
@@ -67,7 +76,7 @@ export default class MessageService {
 
   getReceivedMessage() {
     const allMessage = this.AllMessage();
-    return allMessage.filter(message => message.receiverId !== null);
+    return allMessage.filter(message => message.receiverId == 1);
   }
 
   postMessage(data) {
