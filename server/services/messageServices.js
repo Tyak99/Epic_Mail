@@ -30,7 +30,13 @@ export default class MessageService {
   }
 
   AllReceivedMessage() {
-    this.receivedMessages = [];
+    this.receivedMessages = [
+      {
+        receiverId: 4,
+        messageId: 1,
+        createdOn: 1551886333846,
+      },
+    ];
     return this.receivedMessages.map((message) => {
       const newReceivedMessage = new ReceivedMessage();
       newReceivedMessage.receiverId = message.receiverId;
