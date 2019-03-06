@@ -3,10 +3,25 @@ import chaiHttp from 'chai-http';
 
 import server from '../app';
 import UserService from '../services/userServices';
+import tokenFunction from '../utils/tokenHandler';
 
 chai.use(chaiHttp);
 const userServices = new UserService();
 const { expect } = chai;
+
+describe('Test token generator function', () => {
+  it('should generate a unique token when user id is passed', (done) => {
+    const user = {
+      id: 1,
+      email: 'tunde@mail.com',
+      password: 'secret',
+    };
+    const token = tokenFunction(user);
+    const token2 = tokenFunction(user);
+    expect(token).to.be.a('string');
+    expect(token).to.not.eql(token2);
+  });
+});
 
 describe('Test user signup services', () => {
   it('should return a user object when email,password,firstName,lastName is passed along', (done) => {
