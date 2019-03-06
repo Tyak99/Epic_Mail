@@ -178,3 +178,19 @@ describe('Test get received emails route', () => {
       });
   });
 });
+
+describe('Test get sent emails method', () => {
+  it('should test get sent emails method ', (done) => {
+    const sentMessages = messageServices.getSentMessages();
+    expect(sentMessages).to.be.an('array');
+    sentMessages.forEach((message) => {
+      expect(message).to.have.property('id');
+      expect(message).to.have.property('subject');
+      expect(message).to.have.property('message');
+      expect(message).to.have.property('receiverId');
+      expect(message).to.have.property('senderId');
+      expect(message).to.have.property('status');
+      done();
+    });
+  });
+});
