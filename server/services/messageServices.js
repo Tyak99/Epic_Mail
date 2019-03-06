@@ -79,6 +79,11 @@ export default class MessageService {
     return allMessage.filter(message => message.receiverId == 1);
   }
 
+  getSentMessages() {
+    const allMessage = this.AllMessage();
+    return allMessage.filter(message => message.senderId === 1);
+  }
+
   postMessage(data) {
     const allMessage = this.AllMessage();
 
