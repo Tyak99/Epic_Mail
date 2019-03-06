@@ -18,6 +18,7 @@ describe('Test token generator function', () => {
     };
     const token = tokenFunction(user);
     expect(token).to.be.a('string');
+    expect(token).to.have.lengthOf.above(10);
     done();
   });
 });
