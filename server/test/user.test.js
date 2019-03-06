@@ -20,6 +20,7 @@ describe('Test token generator function', () => {
     const token2 = tokenFunction(user);
     expect(token).to.be.a('string');
     expect(token).to.not.eql(token2);
+    done();
   });
 });
 
