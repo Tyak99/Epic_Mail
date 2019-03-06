@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import Message from '../models/Message';
 import ReceivedMessage from '../models/ReceivedMessage';
+import SentMessage from '../models/SentMessages';
 
 export default class MessageService {
   AllMessage() {
@@ -63,6 +64,23 @@ export default class MessageService {
     });
   }
 
+  AllSentMessages() {
+    this.sentMessages = [
+      {
+        senderId: 1,
+        messageId: 1,
+        createdOn: 1551886333846,
+      },
+    ];
+    return this.sentMessages.map((message) => {
+      const newSentMessage = new SentMessage();
+      newSentMessage.receiverId = message.senderId;
+      newSentMessage.messageId = message.messageId;
+      newSentMessage.createdOn = message.createdOn;
+      return newSentMessage;
+    });
+  }
+
   postReceivedMessage(data) {
     const { receiverId } = data;
     if (!receiverId) {
@@ -76,12 +94,12 @@ export default class MessageService {
 
   getReceivedMessage() {
     const allMessage = this.AllMessage();
-    return allMessage.filter(message => message.receiverId == 1);
+    return allMessage.filter((message) => message.receiverId == 1);
   }
 
   getSentMessages() {
     const allMessage = this.AllMessage();
-    return allMessage.filter(message => message.senderId === 1);
+    return allMessage.filter((message) => message.senderId === 1);
   }
 
   postMessage(data) {
