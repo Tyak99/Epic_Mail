@@ -53,7 +53,6 @@ describe('Test post a message route', () => {
   });
   it('should return error if all the required fields arent passed along', (done) => {
     const dummyMessage = {
-      subject: 'Hello',
       message: 'Thanks for coming',
       status: null,
       parentMessageId: null,
