@@ -1,4 +1,5 @@
 import Message from '../models/Message';
+import ReceivedMessage from '../models/ReceivedMessage';
 
 export default class MessageService {
   AllMessage() {
@@ -25,6 +26,17 @@ export default class MessageService {
       newMessage.receiverId = message.receiverId;
       newMessage.parentMessageId = message.parentMessageId;
       return newMessage;
+    });
+  }
+
+  AllReceivedMessage() {
+    this.receivedMessages = [{}, {}];
+    return this.receivedMessages.map((message) => {
+      const newReceivedMessage = new ReceivedMessage();
+      newReceivedMessage.receiverId = message.receiverId;
+      newReceivedMessage.messageId = message.messageId;
+      newReceivedMessage.createdOn = message.createdOn;
+      return newReceivedMessage;
     });
   }
 
