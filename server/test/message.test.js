@@ -103,3 +103,33 @@ describe('Test post a message route', () => {
       });
   });
 });
+
+describe('Test add received emails', () => {
+  it('should not add an email to received emails if no receiverId is present', (done) => {
+    const dummyMessage = {
+      subject: 'Hello',
+      message: 'Thanks for coming',
+      status: null,
+      parentMessageId: null,
+    };
+    const receivedMessage = messageServices.postReceivedMessage(dummyMessage);
+    expect(receivedMessage).to.be.eql('error');
+    done();
+  });
+  it('should add an email to received emails if receiverId is present', (done) => {
+    const dummyMessage = {
+      subject: 'Hello',
+      message: 'Thanks for coming',
+      status: 'sent',
+      parentMessageId: null,
+      senderId: 1,
+      receiverId: 2,
+    };
+    const receivedMessage = messageServices.postReceivedMessage(dummyMessage);
+    expect(receivedMessage).to.be.an('object');
+    expect(receivedMessage).to.have.property('receiverId');
+    expect(receivedMessage).to.have.property('messageId');
+    expect(receivedMessage).to.have.property('createdOn');
+    done();
+  });
+});
