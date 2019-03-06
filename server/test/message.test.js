@@ -13,7 +13,6 @@ describe('Test post a message service method api/v1/messages', () => {
     const dummyMessage = {
       subject: 'Hello',
       message: 'Thanks for coming',
-      createdOn: Date.now(),
       status: null,
       parentMessageId: null,
       senderId: 1,
