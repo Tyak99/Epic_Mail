@@ -29,7 +29,7 @@ export default class MessageService {
         subject: 'Hello',
         message: 'You are welcome',
         status: 'read',
-        parentMessageId: null,
+        parentMessageId: 1,
         senderId: 3,
         receiverId: 1,
       },
@@ -105,12 +105,12 @@ export default class MessageService {
 
   getReceivedMessage() {
     const allMessage = this.AllMessage();
-    return allMessage.filter(message => message.receiverId === 1);
+    return allMessage.filter((message) => message.receiverId === 1);
   }
 
   getSentMessages() {
     const allMessage = this.AllMessage();
-    return allMessage.filter(message => message.senderId === 1);
+    return allMessage.filter((message) => message.senderId === 1);
   }
 
   postMessage(data) {
@@ -138,5 +138,15 @@ export default class MessageService {
       });
     }
     return newMessage;
+  }
+
+  getMessageById(id) {
+    const message = this.AllMessage()[id - 1];
+    if (!id) {
+      return 'error';
+    } if (!message) {
+      return 'error';
+    }
+    return message;
   }
 }

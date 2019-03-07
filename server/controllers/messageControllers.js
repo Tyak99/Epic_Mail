@@ -32,3 +32,17 @@ exports.getSentMessages = (req, res) => {
     data: messages,
   });
 };
+
+exports.getMessageById = (req, res) => {
+  const message = messageServices.getMessageById(req.params.id);
+  if (message === 'error') {
+    return res.send({
+      status: 400,
+      error: 'No message with that id found',
+    });
+  }
+  return res.send({
+    status: 200,
+    data: message,
+  });
+};
