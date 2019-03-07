@@ -261,3 +261,14 @@ describe('Test get sent messages route', () => {
       });
   });
 });
+
+describe('Test get email by id service method', () => {
+  it('it should return an email that correspond with the given id', (done) => {
+    const message = messageServices.getMessageById();
+    expect(message).to.be.an('object');
+    expect(message).to.have.property('id');
+    expect(message).to.have.property('subject');
+    expect(message).to.have.property('message');
+    done();
+  });
+});
