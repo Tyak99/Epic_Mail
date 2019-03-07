@@ -5,7 +5,7 @@ body {
   }
   
   header {
-    background-color: #49738c;
+    background-color: #3C91E6;
     width: 100%;
     color: white;
     min-height: 70px;
@@ -45,7 +45,7 @@ body {
   }
 
   header .nav .logout a:hover {
-    color: #db5756;
+    color: #FFACAA;
   }
   
   .aside-section {
@@ -63,7 +63,6 @@ body {
     padding: 10px;
     margin: 14px 0px;
     border-radius: 26px;
-    border-bottom: 1px solid maroon;
   }
   
   .aside-section a {

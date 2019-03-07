@@ -5,7 +5,7 @@ body {
 }
 
 header {
-  background-color: #49738c;
+  background-color: #3C91E6;
   width: 100%;
   color: white;
   min-height: 70px;
@@ -42,7 +42,7 @@ header .nav .logout a {
   color: #061324;
 }
 header .nav .logout a:hover {
-  color: #eb5d5c;
+  color: #FFACAA;
 }
 
 .aside-section {
@@ -60,7 +60,6 @@ header .nav .logout a:hover {
   padding: 10px;
   margin: 14px 0px;
   border-radius: 26px;
-  border-bottom: 1px solid maroon;
 }
 
 .aside-section a {
@@ -69,7 +68,7 @@ header .nav .logout a:hover {
 }
 
 .aside-section li.active {
-  background-color: #49738c;
+  background-color: #3C91E6;
 }
 
 .aside-section li:hover:not(.active) {
