@@ -142,6 +142,11 @@ export default class MessageService {
 
   getMessageById(id) {
     const message = this.AllMessage()[id - 1];
+    if (!id) {
+      return 'error';
+    } if (!message) {
+      return 'error';
+    }
     return message;
   }
 }

@@ -287,7 +287,7 @@ describe('Test get email by id route', () => {
   it('should return a message object when message is found', (done) => {
     chai
       .request(server)
-      .get('/api/v1/messages/:id')
+      .get('/api/v1/messages/1')
       .end((err, res) => {
         expect(res.body.status).to.eql(200);
         expect(res.body.data).to.be.an('object');
