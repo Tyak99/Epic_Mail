@@ -272,3 +272,32 @@ describe('Test get email by id service method', () => {
     done();
   });
 });
+
+describe('Test get email by id route', () => {
+  it('should return error when no email is found with the provided id', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/:id')
+      .end((err, res) => {
+        expect(res.body.status).to.eql(400);
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return a message object when message is found', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/:id')
+      .end((err, res) => {
+        expect(res.body.status).to.eql(200);
+        expect(res.body.data).to.be.an('object');
+        expect(res.body.data).to.has.property('id');
+        expect(res.body.data).to.has.property('message');
+        expect(res.body.data).to.has.property('subject');
+        expect(res.body.data).to.has.property('createdOn');
+        expect(res.body.data).to.has.property('senderId');
+        expect(res.body.data).to.has.property('receiverId');
+        done();
+      });
+  });
+});
