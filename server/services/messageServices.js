@@ -92,6 +92,17 @@ export default class MessageService {
     return message;
   }
 
+  postSentMessage(data) {
+    const { senderId, messageId } = data;
+    if (!senderId) {
+      return 'error';
+    }
+    const message = new SentMessage();
+    message.senderId = senderId;
+    message.messageId = messageId;
+    return message;
+  }
+
   getReceivedMessage() {
     const allMessage = this.AllMessage();
     return allMessage.filter((message) => message.receiverId == 1);
@@ -114,9 +125,15 @@ export default class MessageService {
     newMessage.receiverId = data.receiverId || null;
     newMessage.parentMessageId = data.parentMessageId || null;
 
-    if (newMessage.receiver !== null) {
+    if (newMessage.receiverId !== null) {
       this.postReceivedMessage({
         receiverId: newMessage.receiverId,
+        messageId: newMessage.id,
+      });
+    }
+    if (newMessage.senderId !== null) {
+      this.postSentMessage({
+        senderId: newMessage.senderId,
         messageId: newMessage.id,
       });
     }
