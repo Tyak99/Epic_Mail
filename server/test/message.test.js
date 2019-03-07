@@ -131,6 +131,14 @@ describe('Test add received emails', () => {
   });
 });
 
+describe('Test all received emails method', () => {
+  const messages = messageServices.AllReceivedMessage();
+  it('should return an array of objects', (done) => {
+    expect(messages).to.be.an('array');
+    done();
+  });
+});
+
 describe('Test get received emails method', () => {
   it('should return all recieved emails', (done) => {
     const receivedMessages = messageServices.getReceivedMessage();
@@ -174,6 +182,81 @@ describe('Test get received emails route', () => {
           expect(message).to.have.property('senderId');
           expect(message).to.have.property('status');
         });
+        done();
+      });
+  });
+});
+
+describe('Test get sent emails method', () => {
+  it('should test get sent emails method ', (done) => {
+    const sentMessages = messageServices.getSentMessages();
+    expect(sentMessages).to.be.an('array');
+    sentMessages.forEach((message) => {
+      expect(message).to.have.property('id');
+      expect(message).to.have.property('subject');
+      expect(message).to.have.property('message');
+      expect(message).to.have.property('receiverId');
+      expect(message).to.have.property('senderId');
+      expect(message).to.have.property('status');
+      done();
+    });
+  });
+});
+
+describe('Test post sent messages method', () => {
+  it('should return error when sender id isnt available', (done) => {
+    const message = {
+      subject: 'An email without a senderId',
+      message: 'i am an email without sender Id',
+    };
+    const newMessage = messageServices.postSentMessage(message);
+    expect(newMessage).to.eql('error');
+    done();
+  });
+  it('should create a new sent message if senderId is present', (done) => {
+    const message = {
+      senderId: 1,
+      messageId: 2,
+    };
+    const newMessage = messageServices.postSentMessage(message);
+    expect(newMessage).to.be.an('object');
+    expect(newMessage).to.have.property('senderId');
+    expect(newMessage).to.have.property('messageId');
+    expect(newMessage).to.have.property('createdOn');
+    done();
+  });
+});
+
+describe('Test all sent messages method', () => {
+  it('should return all sent messages', (done) => {
+    const messages = messageServices.AllSentMessages();
+    expect(messages).to.be.an('array');
+    messages.forEach((message) => {
+      expect(message).to.have.property('senderId');
+      expect(message).to.have.property('messageId');
+      expect(message).to.have.property('createdOn');
+      done();
+    });
+  });
+});
+
+describe('Test get sent messages route', () => {
+  it('should return error 404 on wrong api call', (done) => {
+    chai
+      .request(server)
+      .get('/wrongapi')
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        done();
+      });
+  });
+  it('should return an array of sent messages', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/sent')
+      .end((err, res) => {
+        expect(res.body.status).to.eql(200);
+        expect(res.body.data).to.be.an('array');
         done();
       });
   });

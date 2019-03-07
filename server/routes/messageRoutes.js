@@ -5,4 +5,5 @@ const router = express.Router();
 
 router.post('/', messageController.postMessage);
 router.get('/', messageController.getReceivedMessages);
+router.get('/sent', messageController.getSentMessages);
 export default router;

@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import Message from '../models/Message';
 import ReceivedMessage from '../models/ReceivedMessage';
+import SentMessage from '../models/SentMessages';
 
 export default class MessageService {
   AllMessage() {
@@ -22,6 +23,15 @@ export default class MessageService {
         parentMessageId: null,
         senderId: null,
         receiverId: null,
+      },
+      {
+        id: 3,
+        subject: 'Hello',
+        message: 'You are welcome',
+        status: 'read',
+        parentMessageId: null,
+        senderId: 3,
+        receiverId: 1,
       },
     ];
     return this.messages.map((message) => {
@@ -54,6 +64,23 @@ export default class MessageService {
     });
   }
 
+  AllSentMessages() {
+    this.sentMessages = [
+      {
+        senderId: 1,
+        messageId: 1,
+        createdOn: 1551886333846,
+      },
+    ];
+    return this.sentMessages.map((message) => {
+      const newSentMessage = new SentMessage();
+      newSentMessage.receiverId = message.senderId;
+      newSentMessage.messageId = message.messageId;
+      newSentMessage.createdOn = message.createdOn;
+      return newSentMessage;
+    });
+  }
+
   postReceivedMessage(data) {
     const { receiverId } = data;
     if (!receiverId) {
@@ -65,9 +92,25 @@ export default class MessageService {
     return message;
   }
 
+  postSentMessage(data) {
+    const { senderId, messageId } = data;
+    if (!senderId) {
+      return 'error';
+    }
+    const message = new SentMessage();
+    message.senderId = senderId;
+    message.messageId = messageId;
+    return message;
+  }
+
   getReceivedMessage() {
     const allMessage = this.AllMessage();
-    return allMessage.filter(message => message.receiverId !== null);
+    return allMessage.filter(message => message.receiverId === 1);
+  }
+
+  getSentMessages() {
+    const allMessage = this.AllMessage();
+    return allMessage.filter(message => message.senderId === 1);
   }
 
   postMessage(data) {
@@ -82,9 +125,15 @@ export default class MessageService {
     newMessage.receiverId = data.receiverId || null;
     newMessage.parentMessageId = data.parentMessageId || null;
 
-    if (newMessage.receiver !== null) {
+    if (newMessage.receiverId !== null) {
       this.postReceivedMessage({
         receiverId: newMessage.receiverId,
+        messageId: newMessage.id,
+      });
+    }
+    if (newMessage.senderId !== null) {
+      this.postSentMessage({
+        senderId: newMessage.senderId,
         messageId: newMessage.id,
       });
     }
