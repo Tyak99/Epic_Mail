@@ -24,3 +24,11 @@ exports.getReceivedMessages = (req, res) => {
     data: messages,
   });
 };
+
+exports.getSentMessages = (req, res) => {
+  const messages = messageServices.getSentMessages();
+  res.send({
+    status: 200,
+    data: messages,
+  });
+};
