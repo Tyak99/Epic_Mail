@@ -271,6 +271,11 @@ describe('Test get email by id service method', () => {
     expect(message).to.have.property('message');
     done();
   });
+  it('should return error when no id is passed along the request', (done) => {
+    const message = messageServices.getMessageById();
+    expect(message).to.be.eql('error');
+    done();
+  });
 });
 
 describe('Test get email by id route', () => {
