@@ -30,6 +30,8 @@ Epic mail will aid communication between individuals or groups of people
 
 [![Build Status](https://travis-ci.org/Tyak99/Epic_Mail.svg?branch=server)](https://travis-ci.org/Tyak99/Epic_Mail)
 [![Coverage Status](https://coveralls.io/repos/github/Tyak99/Epic_Mail/badge.svg?branch=ch-setup-travis-164393078)](https://coveralls.io/github/Tyak99/Epic_Mail?branch=server)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6e364ff913f4c2ec6580/maintainability)](https://codeclimate.com/github/Tyak99/Epic_Mail/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/6e364ff913f4c2ec6580/test_coverage)](https://codeclimate.com/github/Tyak99/Epic_Mail/test_coverage)
 
 **[Back to top](#table-of-contents)**
 
