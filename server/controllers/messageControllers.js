@@ -11,6 +11,12 @@ exports.postMessage = (req, res) => {
     });
   }
   const postMessage = messageServices.postMessage(req.body);
+  if (postMessage == 'NOT FOUND') {
+    return res.send({
+      status: 404,
+      error: 'Email not found',
+    });
+  }
   return res.send({
     status: 201,
     data: postMessage,
