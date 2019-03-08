@@ -67,7 +67,8 @@ npm test
 
 - Gh-Pages Url
   `https://tyak99.github.io/Epic_Mail/Ui/Index.html`
-
+- Api documentation 
+  `/docs`
 **[Back to top](#table-of-contents)**
 
 ## REST API
