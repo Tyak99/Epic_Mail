@@ -46,3 +46,25 @@ exports.getMessageById = (req, res) => {
     data: message,
   });
 };
+
+exports.deleteById = (req, res) => {
+  const message = messageServices.deleteMessage(req.params.id);
+  if (!req.params.id) {
+    return res.send({
+      status: 404,
+      error: 'No id present to locate resource',
+    });
+  }
+  if (message === 'error') {
+    return res.send({
+      status: 400,
+      error: 'No message with that id found',
+    });
+  }
+  return res.send({
+    status: 200,
+    data: {
+      message: 'Message deleted successfully',
+    },
+  });
+};
