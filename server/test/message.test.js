@@ -306,3 +306,21 @@ describe('Test get email by id route', () => {
       });
   });
 });
+
+describe('Test delete email service method', () => {
+  it('should return error if no message with the id is found', (done) => {
+    const message = messageServices.deleteMessage(654);
+    expect(message).to.eql('error');
+    done();
+  });
+  it('shohld return error if no id is passed along at all', (done) => {
+    const message = messageServices.deleteMessage();
+    expect(message).to.eql('error');
+    done();
+  });
+  it('should return true if mesage has been found and deleted', (done) => {
+    const message = messageServices.deleteMessage(1);
+    expect(message).to.eql('true');
+    done();
+  });
+});
