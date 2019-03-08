@@ -162,7 +162,9 @@ describe('Test post a message route', () => {
         expect(res.body.data).to.have.property('subject');
         expect(res.body.data).to.have.property('receiverId');
         expect(res.body.data).to.have.property('senderId');
-        expect(res.body.data).to.have.property('status').eql('sent');
+        expect(res.body.data)
+          .to.have.property('status')
+          .eql('sent');
         done();
       });
   });
@@ -418,5 +420,57 @@ describe('Test the delete message route', () => {
         expect(res.body.data).to.have.property('message');
         done();
       });
+  });
+});
+
+describe('Test for unread email', () => {
+  describe('Test get unread emails service method ', () => {
+    it('should return an empty array if no data match the criteria', (done) => {
+      const unreadMessages = messageServices.getUnreadMessages();
+      expect(unreadMessages).to.be.an('array');
+      done();
+    });
+    it('should return an array of messages that match the criteria of status !== read', (done) => {
+      const dummyMessage = {
+        subject: 'Hello',
+        message: 'You are welcome',
+        emailTo: 'superuser@mail.com',
+      };
+      messageServices.postMessage(dummyMessage);
+      const unreadMessages = messageServices.getUnreadMessages();
+      expect(unreadMessages).to.be.an('array');
+      unreadMessages.forEach((message) => {
+        expect(message).to.have.property('id');
+        expect(message).to.have.property('subject');
+        expect(message).to.have.property('message');
+        expect(message).to.have.property('senderId');
+        expect(message).to.have.property('receiverId');
+        expect(message)
+          .to.have.property('status')
+          .not.eql('read');
+      });
+      done();
+    });
+  });
+  describe('Test get unread messages route', () => {
+    it('should return array of messages if unread messages is found', (done) => {
+      chai
+        .request(server)
+        .get('/api/v1/messages/unread')
+        .end((err, res) => {
+          expect(res.body.data).to.be.an('array');
+          res.body.data.forEach((message) => {
+            expect(message).to.have.property('id');
+            expect(message).to.have.property('subject');
+            expect(message).to.have.property('message');
+            expect(message).to.have.property('senderId');
+            expect(message).to.have.property('receiverId');
+            expect(message)
+              .to.have.property('status')
+              .not.eql('read');
+          });
+          done();
+        });
+    });
   });
 });

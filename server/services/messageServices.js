@@ -36,6 +36,24 @@ export default class MessageService {
         senderId: 3,
         receiverId: 1,
       },
+      {
+        id: 4,
+        subject: 'Howdy',
+        message: 'You good',
+        status: 'sent',
+        senderId: 3,
+        receiverId: 1,
+        parentMessageId: null,
+      },
+      {
+        id: 5,
+        subject: 'Howdy',
+        message: 'okay',
+        status: 'sent',
+        senderId: 3,
+        receiverId: 1,
+        parentMessageId: null,
+      },
     ];
     return this.messages.map((message) => {
       const newMessage = new Message();
@@ -108,12 +126,12 @@ export default class MessageService {
 
   getReceivedMessage() {
     const allMessage = this.AllMessage();
-    return allMessage.filter((message) => message.receiverId === 1);
+    return allMessage.filter(message => message.receiverId === 1);
   }
 
   getSentMessages() {
     const allMessage = this.AllMessage();
-    return allMessage.filter((message) => message.senderId === 1);
+    return allMessage.filter(message => message.senderId === 1);
   }
 
   postMessage(data) {
@@ -131,7 +149,7 @@ export default class MessageService {
     }
     // check if user tried to send to an email and couldnt find the user
     if (toWHo === 'error') {
-    // if so, they should be returned an error message
+      // if so, they should be returned an error message
       return 'NOT FOUND';
     }
     // else they can proceed
@@ -181,5 +199,11 @@ export default class MessageService {
     }
     this.AllMessage().splice([id - 1], 1);
     return 'true';
+  }
+
+  getUnreadMessages() {
+    const allMessages = this.AllMessage();
+
+    return allMessages.filter(message => (message.status !== 'read') && (message.receiverId === 1));
   }
 }
