@@ -144,9 +144,22 @@ export default class MessageService {
     const message = this.AllMessage()[id - 1];
     if (!id) {
       return 'error';
-    } if (!message) {
+    }
+    if (!message) {
       return 'error';
     }
     return message;
+  }
+
+  deleteMessage(id) {
+    const message = this.AllMessage()[id - 1];
+    if (!id) {
+      return 'error';
+    }
+    if (!message) {
+      return 'error';
+    }
+    this.AllMessage().splice([id - 1], 1);
+    return 'true';
   }
 }
