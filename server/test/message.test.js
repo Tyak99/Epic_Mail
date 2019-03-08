@@ -452,4 +452,42 @@ describe('Test for unread email', () => {
       done();
     });
   });
+  describe('Test get unread messages route', () => {
+    it('should return No content when no unread messages are found', (done) => {
+      chai
+        .request(server)
+        .get('/api/v1/messages/unread')
+        .end((err, res) => {
+          expect(res.body.status).to.eql(204);
+          expect(res.body.data).to.eql('No Content');
+          done();
+        });
+    });
+    it('should return array of messages if unread messages is found', (done) => {
+      const dummyMessage = {
+        subject: 'Hello',
+        message: 'You are welcome',
+        senderId: 3,
+        emailTo: 'superuser@mail.com',
+      };
+      messageServices.postMessage(dummyMessage);
+      chai
+        .request(server)
+        .get('/api/v1/messages/unread')
+        .end((err, res) => {
+          expect(res.body.data).to.be.an('array');
+          res.body.data.forEach((message) => {
+            expect(message).to.have.property('id');
+            expect(message).to.have.property('subject');
+            expect(message).to.have.property('message');
+            expect(message).to.have.property('senderId');
+            expect(message).to.have.property('receiverId');
+            expect(message)
+              .to.have.property('status')
+              .not.eql('read');
+          });
+          done();
+        });
+    });
+  });
 });
