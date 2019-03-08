@@ -49,7 +49,7 @@ app.use('/api/v1/messages', messageRoutes);
 app.use('/api/v1/groups', groupRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Welcome to epic mail');
+  res.redirect('/docs');
 });
 
 const PORT = process.env.PORT || 3000;
