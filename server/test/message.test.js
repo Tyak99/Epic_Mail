@@ -21,14 +21,41 @@ describe('Test that an array exists in all message service method', () => {
   });
 });
 describe('Test post a message service method', () => {
+  it('should return an object with senderId and receiverId as null if emailTo isnt passed along', (done) => {
+    const dummyMessage = {
+      subject: 'Hello',
+      message: 'Thanks for coming',
+    };
+    const newMessage = messageServices.postMessage(dummyMessage);
+    expect(newMessage).to.be.an('object');
+    expect(newMessage).to.have.property('id');
+    expect(newMessage).to.have.property('message');
+    expect(newMessage).to.have.property('subject');
+    expect(newMessage)
+      .to.have.property('status')
+      .eql('draft');
+    expect(newMessage).to.have.property('senderId');
+    expect(newMessage).to.have.property('receiverId');
+    expect(newMessage).to.have.property('parentMessageId');
+    done();
+  });
+  it('should return an error if an emailTo is passed along but the user isnt found', (done) => {
+    const dummyMessage = {
+      subject: 'Hello',
+      message: 'Thanks for coming',
+      emailTo: 'nouser@mail.com',
+      senderId: 2,
+    };
+    const newMessage = messageServices.postMessage(dummyMessage);
+    expect(newMessage).to.eql('NOT FOUND');
+    done();
+  });
   it('should return a message object when correct details are passed', (done) => {
     const dummyMessage = {
       subject: 'Hello',
       message: 'Thanks for coming',
-      status: null,
-      parentMessageId: null,
-      senderId: 1,
-      receiverId: 2,
+      emailTo: 'superuser@mail.com',
+      senderId: 2,
     };
     const newMessage = messageServices.postMessage(dummyMessage);
     expect(newMessage).to.be.an('object');
@@ -36,7 +63,9 @@ describe('Test post a message service method', () => {
     expect(newMessage).to.have.property('subject');
     expect(newMessage).to.have.property('message');
     expect(newMessage).to.have.property('createdOn');
-    expect(newMessage).to.have.property('status');
+    expect(newMessage)
+      .to.have.property('status')
+      .eql('sent');
     expect(newMessage).to.have.property('senderId');
     expect(newMessage).to.have.property('receiverId');
     done();
@@ -66,8 +95,6 @@ describe('Test post a message route', () => {
   it('should return error if all the required fields arent passed along', (done) => {
     const dummyMessage = {
       message: 'Thanks for coming',
-      status: null,
-      parentMessageId: null,
     };
     chai
       .request(server)
@@ -78,14 +105,27 @@ describe('Test post a message route', () => {
         done();
       });
   });
-  it('sould create message when the required fields are present', (done) => {
+  it('should return error when the email user wants to send to cant be found', (done) => {
     const dummyMessage = {
       subject: 'Hello',
       message: 'Thanks for coming',
-      status: null,
-      parentMessageId: null,
-      senderId: 1,
-      receiverId: 2,
+      emailTo: 'jon@mail.com',
+      senderId: 2,
+    };
+    chai
+      .request(server)
+      .post('/api/v1/messages')
+      .send(dummyMessage)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(404);
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('sould create message as draft when emailTo isnt passed along', (done) => {
+    const dummyMessage = {
+      subject: 'Hello',
+      message: 'Thanks for coming',
     };
     chai
       .request(server)
@@ -98,7 +138,31 @@ describe('Test post a message route', () => {
         expect(res.body.data).to.have.property('subject');
         expect(res.body.data).to.have.property('message');
         expect(res.body.data).to.have.property('createdOn');
-        expect(res.body.data).to.have.property('status');
+        expect(res.body.data)
+          .to.have.property('status')
+          .eql('draft');
+        done();
+      });
+  });
+  it('should send a message to an inidividual when emailTo is passed along', (done) => {
+    const dummyMessage = {
+      subject: 'Hello',
+      message: 'Thanks for coming',
+      emailTo: 'superuser@mail.com',
+      senderId: 3,
+    };
+    chai
+      .request(server)
+      .post('/api/v1/messages')
+      .send(dummyMessage)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(201);
+        expect(res.body.data).to.have.property('id');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data).to.have.property('subject');
+        expect(res.body.data).to.have.property('receiverId');
+        expect(res.body.data).to.have.property('senderId');
+        expect(res.body.data).to.have.property('status').eql('sent');
         done();
       });
   });

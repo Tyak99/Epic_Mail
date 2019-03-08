@@ -156,9 +156,8 @@ The API is generally RESTFUL and returns results in JSON.
   {
       subject: required
       message: required
-      status: required
+      emailTo: nullable
       senderId: nullable
-      receiverId: nullable
       parentMessageId: nullable
   }
   ```
@@ -183,6 +182,8 @@ The API is generally RESTFUL and returns results in JSON.
 - ##### Error Response
   - Status: `400`
   - error: `"Please input all required fields"`
+  - Status: `404`
+  - error: `"Email not found"`
 
 **[Back to top](#table-of-contents)**
 
