@@ -15,7 +15,7 @@
     "build-service": "babel -d ./server/build/services ./server/services -s",
     "build-app": "babel -d ./server/build ./server/app.js -s",
     "build-utils": "babel -d ./server/build ./server/utils",
-    "build": "npm run clean && npm run build-route && npm run build-controller && npm run build-service && npm run build-model && npm run build-app"
+    "build": "npm run clean && npm run build-route && npm run build-controller && npm run build-service && npm run build-model && npm run build-app && npm run build-utils"
   },
   "repository": {
     "type": "git",

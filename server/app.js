@@ -16,7 +16,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'Exchange message/information',
   },
-  host: 'localhost:3000',
+  host: 'https://intense-thicket-60071.herokuapp.com/',
   basePath: '/',
 };
 
