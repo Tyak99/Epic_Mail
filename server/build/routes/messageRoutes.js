@@ -35,6 +35,21 @@ var router = _express.default.Router();
 
 /**
  * @swagger
+ * definitions:
+ *   PostMessage:
+ *     properties:
+ *       subject:
+ *         type: string
+ *       message:
+ *         type: string
+ *       senderId:
+ *         type: integer
+ *       emailTo:
+ *         type: string
+ */
+
+/**
+ * @swagger
  * /api/v1/messages:
  *   get:
  *     summary: Get all received messages
@@ -63,7 +78,7 @@ var router = _express.default.Router();
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/Message'
+ *           $ref: '#/definitions/PostMessage'
  *     responses:
  *       201:
  *         description: Successfully created
