@@ -331,7 +331,7 @@ describe('Test the delete message route', () => {
       .request(server)
       .delete('/api/v1/messages/5678')
       .end((err, res) => {
-        expect(res.body.status).to.eql(404);
+        expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
         done();
       });
@@ -339,17 +339,16 @@ describe('Test the delete message route', () => {
   it('should return error if no id is passed', (done) => {
     chai
       .request(server)
-      .delete('api/v1/messages')
+      .delete('/api/v1/messages')
       .end((err, res) => {
-        expect(res.body.status).to.eq(400);
-        expect(res.body).to.have.property('error');
+        expect(res.status).to.eql(404);
         done();
       });
   });
   it('should return done deleted when the right id is passed and the message is deleted', (done) => {
     chai
       .request(server)
-      .delete('api/v1/messages/1')
+      .delete('/api/v1/messages/1')
       .end((err, res) => {
         expect(res.body.status).to.eql(200);
         expect(res.body.data).to.have.property('message');
