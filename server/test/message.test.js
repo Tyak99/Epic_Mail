@@ -46,6 +46,7 @@ describe('Test post a message service method', () => {
     };
     const newMessage = messageServices.postMessage(dummyMessage);
     expect(newMessage).to.eql('NOT FOUND');
+    done();
   });
   it('should return a message object when correct details are passed', (done) => {
     const dummyMessage = {

@@ -2,6 +2,9 @@
 import Message from '../models/Message';
 import ReceivedMessage from '../models/ReceivedMessage';
 import SentMessage from '../models/SentMessages';
+import UserService from './userServices';
+
+const userServices = new UserService();
 
 export default class MessageService {
   AllMessage() {
@@ -115,14 +118,31 @@ export default class MessageService {
 
   postMessage(data) {
     const allMessage = this.AllMessage();
+    let toWHo = null;
 
+    // only go through the phase of checking for user id
+    // when emailTo is passed along the request
+    if (data.emailTo) {
+      // retrieve the email in the request body
+      const { emailTo } = data;
+      // find the user with that email
+      const foundUser = userServices.findUserByEmail(emailTo);
+      toWHo = foundUser;
+    }
+    // check if user tried to send to an email and couldnt find the user
+    if (toWHo === 'error') {
+    // if so, they should be returned an error message
+      return 'NOT FOUND';
+    }
+    // else they can proceed
     const newMessage = new Message();
     newMessage.id = allMessage.length + 1;
     newMessage.subject = data.subject;
     newMessage.message = data.message;
-    newMessage.status = data.status || null;
+    newMessage.status = toWHo === null ? 'draft' : 'sent';
     newMessage.senderId = data.senderId || null;
-    newMessage.receiverId = data.receiverId || null;
+    // check if the toWho is null then sender id will be null
+    newMessage.receiverId = toWHo === null ? null : toWHo.id;
     newMessage.parentMessageId = data.parentMessageId || null;
 
     if (newMessage.receiverId !== null) {
