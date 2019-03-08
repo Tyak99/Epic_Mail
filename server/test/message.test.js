@@ -306,3 +306,53 @@ describe('Test get email by id route', () => {
       });
   });
 });
+
+describe('Test delete email service method', () => {
+  it('should return error if no message with the id is found', (done) => {
+    const message = messageServices.deleteMessage(654);
+    expect(message).to.eql('error');
+    done();
+  });
+  it('shohld return error if no id is passed along at all', (done) => {
+    const message = messageServices.deleteMessage();
+    expect(message).to.eql('error');
+    done();
+  });
+  it('should return true if mesage has been found and deleted', (done) => {
+    const message = messageServices.deleteMessage(1);
+    expect(message).to.eql('true');
+    done();
+  });
+});
+
+describe('Test the delete message route', () => {
+  it('should return error if wrong id is passed', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/messages/5678')
+      .end((err, res) => {
+        expect(res.body.status).to.eql(400);
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return error if no id is passed', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/messages')
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        done();
+      });
+  });
+  it('should return done deleted when the right id is passed and the message is deleted', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/messages/1')
+      .end((err, res) => {
+        expect(res.body.status).to.eql(200);
+        expect(res.body.data).to.have.property('message');
+        done();
+      });
+  });
+});
