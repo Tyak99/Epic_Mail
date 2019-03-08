@@ -131,7 +131,7 @@ export default class MessageService {
     }
     // check if user tried to send to an email and couldnt find the user
     if (toWHo === 'error') {
-    // if so, they should be returned an error message
+      // if so, they should be returned an error message
       return 'NOT FOUND';
     }
     // else they can proceed
@@ -181,5 +181,14 @@ export default class MessageService {
     }
     this.AllMessage().splice([id - 1], 1);
     return 'true';
+  }
+
+  getUnreadMessages() {
+    const allMessages = this.AllMessage();
+
+    const unread = allMessages.filter((message) => {
+      return (message.status !== 'read') && (message.receiverId == 1);
+    });
+    return unread;
   }
 }
