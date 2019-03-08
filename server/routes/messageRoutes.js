@@ -45,26 +45,17 @@ const router = express.Router();
  * /api/v1/messages:
  *   post:
  *     tags:
- *       - Message
+ *       - Messages
  *     description: Send an email to an individual
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: subject
+ *       - name: message
  *         description: message object
  *         in: body
  *         required: true
  *         schema:
- *           type: string
- *       - name: message
- *         description: message body
- *         in: body
- *         required: true
- *         schema:
- *           type: string
- *       - name: emailTo
- *         description: the email of the message recipient
- *         in: body
+ *           $ref: '#/definitions/Message'
  *     responses:
  *       201:
  *         description: Successfully created
@@ -109,7 +100,7 @@ const router = express.Router();
  * /api/v1/messages/{id}:
  *   get:
  *     tags:
- *       - Message
+ *       - Messages
  *     description: Returns a single user's message
  *     produces:
  *       - application/json
@@ -131,7 +122,7 @@ const router = express.Router();
  * /api/v1/messages/{id}:
  *   delete:
  *     tags:
- *       - Message
+ *       - Messages
  *     description: Deletes a single message
  *     produces:
  *       - application/json

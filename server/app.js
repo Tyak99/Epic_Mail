@@ -1,5 +1,6 @@
 import express from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
+import path from 'path';
 import userRoutes from './routes/userRoutes';
 import messageRoutes from './routes/messageRoutes';
 import groupRoutes from './routes/groupRoutes';
@@ -29,6 +30,10 @@ const options = {
 
 // initialize swagger-jsdoc
 const swaggerSpec = swaggerJSDoc(options);
+
+app.get('/docs', (req, res) => {
+  res.sendFile(path.join(__dirname, 'redoc.html'));
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
