@@ -464,13 +464,6 @@ describe('Test for unread email', () => {
         });
     });
     it('should return array of messages if unread messages is found', (done) => {
-      const dummyMessage = {
-        subject: 'Hello',
-        message: 'You are welcome',
-        senderId: 3,
-        emailTo: 'superuser@mail.com',
-      };
-      messageServices.postMessage(dummyMessage);
       chai
         .request(server)
         .get('/api/v1/messages/unread')

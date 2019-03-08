@@ -36,6 +36,24 @@ export default class MessageService {
         senderId: 3,
         receiverId: 1,
       },
+      {
+        id: 4,
+        subject: 'Howdy',
+        message: 'You good',
+        status: 'sent',
+        senderId: 3,
+        receiverId: 1,
+        parentMessageId: null,
+      },
+      {
+        id: 5,
+        subject: 'Howdy',
+        message: 'okay',
+        status: 'sent',
+        senderId: 3,
+        receiverId: 1,
+        parentMessageId: null,
+      },
     ];
     return this.messages.map((message) => {
       const newMessage = new Message();
@@ -186,9 +204,6 @@ export default class MessageService {
   getUnreadMessages() {
     const allMessages = this.AllMessage();
 
-    const unread = allMessages.filter((message) => {
-      return (message.status !== 'read') && (message.receiverId == 1);
-    });
-    return unread;
+    return allMessages.filter((message) => (message.status !== 'read') && (message.receiverId == 1));
   }
 }

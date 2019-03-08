@@ -74,3 +74,11 @@ exports.deleteById = (req, res) => {
     },
   });
 };
+
+exports.getUnreadMessages = (req, res) => {
+  const messages = messageServices.getUnreadMessages();
+  return res.send({
+    status: 200,
+    data: messages,
+  });
+};
