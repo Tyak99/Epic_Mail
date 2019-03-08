@@ -1,8 +1,11 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../app';
+import GroupService from '../services/groupServices';
 
 const { expect } = chai;
+
+const groupServices = new GroupService();
 
 describe('Test create a group method', () => {
   it('should return error if group name isnt specifid on creation', (done) => {
