@@ -7,4 +7,5 @@ router.post('/', messageController.postMessage);
 router.get('/', messageController.getReceivedMessages);
 router.get('/sent', messageController.getSentMessages);
 router.get('/:id', messageController.getMessageById);
+router.delete('/:id', messageController.deleteById);
 export default router;
