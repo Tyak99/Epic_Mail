@@ -126,12 +126,12 @@ export default class MessageService {
 
   getReceivedMessage() {
     const allMessage = this.AllMessage();
-    return allMessage.filter((message) => message.receiverId === 1);
+    return allMessage.filter(message => message.receiverId === 1);
   }
 
   getSentMessages() {
     const allMessage = this.AllMessage();
-    return allMessage.filter((message) => message.senderId === 1);
+    return allMessage.filter(message => message.senderId === 1);
   }
 
   postMessage(data) {
@@ -204,6 +204,6 @@ export default class MessageService {
   getUnreadMessages() {
     const allMessages = this.AllMessage();
 
-    return allMessages.filter((message) => (message.status !== 'read') && (message.receiverId == 1));
+    return allMessages.filter(message => (message.status !== 'read') && (message.receiverId === 1));
   }
 }

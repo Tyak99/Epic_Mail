@@ -453,16 +453,6 @@ describe('Test for unread email', () => {
     });
   });
   describe('Test get unread messages route', () => {
-    it('should return No content when no unread messages are found', (done) => {
-      chai
-        .request(server)
-        .get('/api/v1/messages/unread')
-        .end((err, res) => {
-          expect(res.body.status).to.eql(204);
-          expect(res.body.data).to.eql('No Content');
-          done();
-        });
-    });
     it('should return array of messages if unread messages is found', (done) => {
       chai
         .request(server)
