@@ -431,6 +431,12 @@ describe('Test for unread email', () => {
       done();
     });
     it('should return an array of messages that match the criteria of status !== read', (done) => {
+      const dummyMessage = {
+        subject: 'Hello',
+        message: 'You are welcome',
+        emailTo: 'superuser@mail.com',
+      };
+      messageServices.postMessage(dummyMessage);
       const unreadMessages = messageServices.getUnreadMessages();
       expect(unreadMessages).to.be.an('array');
       unreadMessages.forEach((message) => {
