@@ -52,9 +52,9 @@ app.use('/api/v1/auth', _userRoutes.default);
 app.use('/api/v1/messages', _messageRoutes.default);
 app.use('/api/v1/groups', _groupRoutes.default);
 app.get('/', function (req, res) {
-  res.send('Welcome to epic mail');
+  res.redirect('/docs');
 });
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
   console.log('server has started');
 });
