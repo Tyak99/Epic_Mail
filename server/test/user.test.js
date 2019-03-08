@@ -170,3 +170,18 @@ describe('Test user sign in route', () => {
       });
   });
 });
+
+describe('Test the find user by id method', () => {
+  it('should return return error if no user is found', (done) => {
+    const foundUser = userServices.findUserByEmail('false@email.com');
+    expect(foundUser).to.eql('error');
+    done();
+  });
+  it('should return the found user object if it finds the user', (done) => {
+    const foundUser = userServices.findUserByEmail('superuser@mail.com');
+    expect(foundUser).to.be.an('object');
+    expect(foundUser).to.have.property('id');
+    expect(foundUser).to.have.property('email');
+    done();
+  });
+});
