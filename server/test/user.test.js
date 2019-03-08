@@ -69,6 +69,18 @@ describe('Test user signup route', () => {
         done();
       });
   });
+  it('should return error if data arent present', (done) => {
+    const user = { firstName: 'Tunde', email: 'tunde@mail.com' };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(400);
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
   it('should post the user and return the user object, when correct details are passed along request', (done) => {
     const user = {
       firstName: 'Tunde',
