@@ -73,9 +73,9 @@ describe('Test create group', () => {
       chai
         .request(server)
         .post('/api/v1/groups')
-        .sned({ name: 'Team 1', members: ['name@mail.com', 'hope@mail.com'] })
+        .send({ name: 'Team 1', members: ['name@mail.com', 'hope@mail.com'] })
         .end((err, res) => {
-          expect(res.body.status).property.eql(201);
+          expect(res.body.status).to.eql(201);
           expect(res.body.data).to.be.an('object');
           expect(res.body.data).to.have.property('id');
           expect(res.body.data).to.have.property('name');
