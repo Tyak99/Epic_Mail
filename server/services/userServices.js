@@ -44,6 +44,9 @@ export default class UserService {
   findUserByEmail(email) {
     const users = this.fetchAll();
     const foundUser = users.find((user) => user.email == email);
+    if (!foundUser) {
+      return 'error';
+    }
     return foundUser;
   }
 }
