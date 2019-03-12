@@ -52,6 +52,57 @@ describe('Test user signup route', () => {
         done();
       });
   });
+  it('should return error if a correct email isnt passed to email body', (done) => {
+    const user = {
+      email: 'john',
+      password: 'secret',
+      firstName: 'John',
+      lastName: 'Snow',
+    };
+    chai
+      .request(server)
+      .post('api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return error if password isnt upto six caharacters long', (done) => {
+    const user = {
+      email: 'john@mail.com',
+      password: 'secr',
+      firstName: 'John',
+      lastName: 'Snow',
+    };
+    chai
+      .request(server)
+      .post('api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return error when characters different from text and numbers are passed in password', (done) => {
+    const user = {
+      email: 'john@mail.com',
+      password: '$%^&&',
+      firstName: 'John',
+      lastName: 'Snow',
+    };
+    chai
+      .request(server)
+      .post('api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
   it('should return email already in use, if the email exists', (done) => {
     const user = {
       firstName: 'Tunde',
