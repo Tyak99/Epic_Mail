@@ -24,18 +24,19 @@ var UserService =
 function () {
   function UserService() {
     _classCallCheck(this, UserService);
+
+    this.users = [{
+      id: 1,
+      firstName: 'Tunde',
+      lastName: 'Nasri',
+      email: 'superuser@mail.com',
+      password: 'secret'
+    }];
   }
 
   _createClass(UserService, [{
     key: "fetchAll",
     value: function fetchAll() {
-      this.users = [{
-        id: 1,
-        firstName: 'Tunde',
-        lastName: 'Nasri',
-        email: 'superuser@mail.com',
-        password: 'secret'
-      }];
       return this.users.map(function (data) {
         var user = new _User.default();
         user.id = data.id;
@@ -49,7 +50,14 @@ function () {
   }, {
     key: "createUser",
     value: function createUser(data) {
-      var allUser = this.fetchAll();
+      var allUser = this.users;
+      var foundUser = this.users.find(function (element) {
+        return element.email == data.email;
+      });
+
+      if (foundUser) {
+        return 'EMAIL ALREADY IN USE';
+      }
 
       var newUser = _objectSpread({
         id: allUser.length + 1
@@ -61,23 +69,24 @@ function () {
   }, {
     key: "loginUser",
     value: function loginUser(data) {
-      var user = this.fetchAll()[0];
+      var foundUser = this.users.find(function (element) {
+        return element.email == data.email;
+      });
 
-      if (data.email !== user.email) {
-        return 'Email already in use';
+      if (!foundUser) {
+        return 'NO USER';
       }
 
-      if (data.password !== user.password) {
+      if (foundUser.password !== data.password) {
         return 'Invalid password';
       }
 
-      return user;
+      return foundUser;
     }
   }, {
     key: "findUserByEmail",
     value: function findUserByEmail(email) {
-      var users = this.fetchAll();
-      var foundUser = users.find(function (user) {
+      var foundUser = this.users.find(function (user) {
         return user.email == email;
       });
 

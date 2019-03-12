@@ -68,13 +68,6 @@ exports.getMessageById = function (req, res) {
 exports.deleteById = function (req, res) {
   var message = messageServices.deleteMessage(req.params.id);
 
-  if (!req.params.id) {
-    return res.send({
-      status: 404,
-      error: 'No id present to locate resource'
-    });
-  }
-
   if (message === 'error') {
     return res.send({
       status: 400,

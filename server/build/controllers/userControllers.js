@@ -15,13 +15,6 @@ exports.signup = function (req, res) {
       firstName = _req$body.firstName,
       lastName = _req$body.lastName;
 
-  if (email === 'superuser@mail.com') {
-    return res.send({
-      status: 400,
-      error: 'Email already in use'
-    });
-  }
-
   if (!email || !password || !firstName || !lastName) {
     return res.send({
       status: 400,
@@ -29,7 +22,15 @@ exports.signup = function (req, res) {
     });
   }
 
-  userServices.createUser(req.body);
+  var createdUser = userServices.createUser(req.body);
+
+  if (createdUser === 'EMAIL ALREADY IN USE') {
+    return res.send({
+      status: 400,
+      error: 'Email already in use'
+    });
+  }
+
   return res.send({
     status: 201,
     data: {
@@ -51,9 +52,9 @@ exports.login = function (req, res) {
     });
   }
 
-  userServices.loginUser(req.body);
+  var loginUser = userServices.loginUser(req.body);
 
-  if (email !== 'superuser@mail.com' || password !== 'secret') {
+  if (loginUser === 'NO USER' || loginUser === 'Invalid password') {
     return res.send({
       status: 400,
       error: 'Invalid email or password'
@@ -63,6 +64,7 @@ exports.login = function (req, res) {
   return res.send({
     status: 200,
     data: {
+      name: loginUser.firstName,
       token: (0, _tokenHandler.default)(req.body)
     }
   });

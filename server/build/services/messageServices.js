@@ -28,52 +28,53 @@ var MessageService =
 function () {
   function MessageService() {
     _classCallCheck(this, MessageService);
+
+    this.messages = [{
+      id: 1,
+      subject: 'Hello',
+      message: 'Thanks for coming',
+      status: 'read',
+      parentMessageId: null,
+      senderId: 1,
+      receiverId: 2
+    }, {
+      id: 2,
+      subject: 'Hi',
+      message: 'Thanks for going',
+      status: 'draft',
+      parentMessageId: null,
+      senderId: null,
+      receiverId: null
+    }, {
+      id: 3,
+      subject: 'Hello',
+      message: 'You are welcome',
+      status: 'read',
+      parentMessageId: 1,
+      senderId: 3,
+      receiverId: 1
+    }, {
+      id: 4,
+      subject: 'Howdy',
+      message: 'You good',
+      status: 'sent',
+      senderId: 3,
+      receiverId: 1,
+      parentMessageId: null
+    }, {
+      id: 5,
+      subject: 'Howdy',
+      message: 'okay',
+      status: 'sent',
+      senderId: 3,
+      receiverId: 1,
+      parentMessageId: null
+    }];
   }
 
   _createClass(MessageService, [{
     key: "AllMessage",
     value: function AllMessage() {
-      this.messages = [{
-        id: 1,
-        subject: 'Hello',
-        message: 'Thanks for coming',
-        status: 'read',
-        parentMessageId: null,
-        senderId: 1,
-        receiverId: 2
-      }, {
-        id: 2,
-        subject: 'Hi',
-        message: 'Thanks for going',
-        status: 'draft',
-        parentMessageId: null,
-        senderId: null,
-        receiverId: null
-      }, {
-        id: 3,
-        subject: 'Hello',
-        message: 'You are welcome',
-        status: 'read',
-        parentMessageId: 1,
-        senderId: 3,
-        receiverId: 1
-      }, {
-        id: 4,
-        subject: 'Howdy',
-        message: 'You good',
-        status: 'sent',
-        senderId: 3,
-        receiverId: 1,
-        parentMessageId: null
-      }, {
-        id: 5,
-        subject: 'Howdy',
-        message: 'okay',
-        status: 'sent',
-        senderId: 3,
-        receiverId: 1,
-        parentMessageId: null
-      }];
       return this.messages.map(function (message) {
         var newMessage = new _Message.default();
         newMessage.id = message.id;
@@ -90,7 +91,7 @@ function () {
     key: "AllReceivedMessage",
     value: function AllReceivedMessage() {
       this.receivedMessages = [{
-        receiverId: 4,
+        receiverId: 2,
         messageId: 1,
         createdOn: 1551886333846
       }];
@@ -209,37 +210,42 @@ function () {
         });
       }
 
+      this.messages.push(newMessage);
       return newMessage;
     }
   }, {
     key: "getMessageById",
     value: function getMessageById(id) {
-      var message = this.AllMessage()[id - 1];
+      var foundMessage = this.AllMessage().find(function (element) {
+        return element.id === Number(id);
+      });
 
       if (!id) {
         return 'error';
       }
 
-      if (!message) {
+      if (!foundMessage) {
         return 'error';
       }
 
-      return message;
+      return foundMessage;
     }
   }, {
     key: "deleteMessage",
     value: function deleteMessage(id) {
-      var message = this.AllMessage()[id - 1];
+      var foundMessage = this.messages.find(function (element) {
+        return element.id === Number(id);
+      });
 
       if (!id) {
         return 'error';
       }
 
-      if (!message) {
+      if (!foundMessage) {
         return 'error';
       }
 
-      this.AllMessage().splice([id - 1], 1);
+      this.messages.splice([id - 1], 1);
       return 'true';
     }
   }, {
