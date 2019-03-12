@@ -7,7 +7,7 @@ import UserService from './userServices';
 const userServices = new UserService();
 
 export default class MessageService {
-  AllMessage() {
+  constructor() {
     this.messages = [
       {
         id: 1,
@@ -55,6 +55,9 @@ export default class MessageService {
         parentMessageId: null,
       },
     ];
+  }
+
+  AllMessage() {
     return this.messages.map((message) => {
       const newMessage = new Message();
       newMessage.id = message.id;
@@ -71,7 +74,7 @@ export default class MessageService {
   AllReceivedMessage() {
     this.receivedMessages = [
       {
-        receiverId: 4,
+        receiverId: 2,
         messageId: 1,
         createdOn: 1551886333846,
       },
@@ -126,12 +129,12 @@ export default class MessageService {
 
   getReceivedMessage() {
     const allMessage = this.AllMessage();
-    return allMessage.filter(message => message.receiverId === 1);
+    return allMessage.filter((message) => message.receiverId === 1);
   }
 
   getSentMessages() {
     const allMessage = this.AllMessage();
-    return allMessage.filter(message => message.senderId === 1);
+    return allMessage.filter((message) => message.senderId === 1);
   }
 
   postMessage(data) {
@@ -175,35 +178,38 @@ export default class MessageService {
         messageId: newMessage.id,
       });
     }
+    this.messages.push(newMessage);
     return newMessage;
   }
 
   getMessageById(id) {
-    const message = this.AllMessage()[id - 1];
     if (!id) {
       return 'error';
     }
-    if (!message) {
+    const foundMessage = this.AllMessage().find(element => element.id === Number(id));
+    if (!foundMessage) {
       return 'error';
     }
-    return message;
+    return foundMessage;
   }
 
   deleteMessage(id) {
-    const message = this.AllMessage()[id - 1];
     if (!id) {
       return 'error';
     }
-    if (!message) {
+    const foundMessage = this.messages.find(element => element.id === Number(id));
+    if (!foundMessage) {
       return 'error';
     }
-    this.AllMessage().splice([id - 1], 1);
+    this.messages.splice([id - 1], 1);
     return 'true';
   }
 
   getUnreadMessages() {
     const allMessages = this.AllMessage();
 
-    return allMessages.filter(message => (message.status !== 'read') && (message.receiverId === 1));
+    return allMessages.filter(
+      (message) => message.status !== 'read' && message.receiverId === 1
+    );
   }
 }

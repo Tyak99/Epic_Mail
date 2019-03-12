@@ -105,12 +105,12 @@ describe('Test user signup route', () => {
 describe('Test user sign in service method', () => {
   it('should return error if emails dont match', (done) => {
     const data = {
-      email: 'tunde@mail.com',
+      email: 'john@mail.com',
       password: 'secret',
     };
     const logInUser = userServices.loginUser(data);
 
-    expect(logInUser).to.eql('Email already in use');
+    expect(logInUser).to.eql('NO USER');
     done();
   });
   it('should return error if password dont match', (done) => {
@@ -154,7 +154,7 @@ describe('Test user sign in route', () => {
     chai
       .request(server)
       .post('/api/v1/auth/login')
-      .send({ email: 'tunde@mail.com', password: 'secret' })
+      .send({ email: 'john@mail.com', password: 'secret' })
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
@@ -194,6 +194,20 @@ describe('Test the find user by id method', () => {
     expect(foundUser).to.be.an('object');
     expect(foundUser).to.have.property('id');
     expect(foundUser).to.have.property('email');
+    done();
+  });
+});
+
+describe('Test fetchAll user method', () => {
+  it('should return all users', (done) => {
+    const allUsers = userServices.fetchAll();
+    expect(allUsers).to.be.an('array');
+    allUsers.forEach((user) => {
+      expect(user).to.have.property('id');
+      expect(user).to.have.property('email');
+      expect(user).to.have.property('firstName');
+      expect(user).to.have.property('lastName');
+    });
     done();
   });
 });

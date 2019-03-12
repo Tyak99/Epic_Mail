@@ -14,7 +14,8 @@
     "build-model": "babel -d ./server/build/models ./server/models -s",
     "build-service": "babel -d ./server/build/services ./server/services -s",
     "build-app": "babel -d ./server/build ./server/app.js -s",
-    "build-utils": "babel -d ./server/build ./server/utils",
+    "copy-redoc": "cp -R ./server/redoc.html ./server/build/redoc.html",
+    "build-utils": "babel -d ./server/build/utils ./server/utils && npm run copy-redoc",
     "build": "npm run clean && npm run build-route && npm run build-controller && npm run build-service && npm run build-model && npm run build-app && npm run build-utils"
   },
   "repository": {
