@@ -83,7 +83,6 @@ describe('Test user signup route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
         expect(res.body).to.have.property('error');
-        console.log(res.body)
         done();
       });
   });

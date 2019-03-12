@@ -12,13 +12,12 @@ exports.signup = (req, res) => {
       error: 'All fields must be present',
     });
   }
-  const errors = validationResult(req)
-  console.log(errors.array())
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.send({
       status: 422,
       error: errors.array()[0].msg,
-    })
+    });
   }
   const createdUser = userServices.createUser(req.body);
 

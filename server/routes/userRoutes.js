@@ -94,7 +94,7 @@ router.post(
       .isLength({ min: 6 })
       .isAlphanumeric(),
   ],
-  userController.signup
+  userController.signup,
 );
 
 router.post('/login', userController.login);
