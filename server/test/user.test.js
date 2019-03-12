@@ -66,6 +66,7 @@ describe('Test user signup route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Please enter a valid email');
         done();
       });
   });
@@ -83,6 +84,9 @@ describe('Test user signup route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql(
+          'Please enter a password with only text and numbers and at least 6 characters long',
+        );
         done();
       });
   });
@@ -100,6 +104,9 @@ describe('Test user signup route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql(
+          'Please enter a password with only text and numbers and at least 6 characters long'
+        );
         done();
       });
   });
@@ -117,6 +124,7 @@ describe('Test user signup route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Email already in use');
         done();
       });
   });
@@ -129,6 +137,7 @@ describe('Test user signup route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('All fields must be present');
         done();
       });
   });
@@ -198,6 +207,7 @@ describe('Test user sign in route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Please input login details email and password')
         done();
       });
   });
@@ -213,6 +223,7 @@ describe('Test user sign in route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Please enter a valid email');
         done();
       });
   });
@@ -224,6 +235,7 @@ describe('Test user sign in route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Invalid email or password');
         done();
       });
 
@@ -234,6 +246,7 @@ describe('Test user sign in route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Invalid email or password');
       });
   });
   it('should return success and token when correct details are passed along', (done) => {
