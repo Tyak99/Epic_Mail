@@ -4,3 +4,4 @@ coverage
 .prettierrc
 .env
 .DS_Store
+build
