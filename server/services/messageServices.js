@@ -183,10 +183,10 @@ export default class MessageService {
   }
 
   getMessageById(id) {
-    const foundMessage = this.AllMessage().find(element => element.id === Number(id));
     if (!id) {
       return 'error';
     }
+    const foundMessage = this.AllMessage().find(element => element.id === Number(id));
     if (!foundMessage) {
       return 'error';
     }
@@ -194,10 +194,10 @@ export default class MessageService {
   }
 
   deleteMessage(id) {
-    const foundMessage = this.messages.find(element => element.id === Number(id));
     if (!id) {
       return 'error';
     }
+    const foundMessage = this.messages.find(element => element.id === Number(id));
     if (!foundMessage) {
       return 'error';
     }
