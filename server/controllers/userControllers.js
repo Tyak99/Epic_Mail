@@ -1,27 +1,33 @@
+import { validationResult } from 'express-validator/check';
 import UserService from '../services/userServices';
 import tokenFunction from '../utils/tokenHandler';
 
 const userServices = new UserService();
 
 exports.signup = (req, res) => {
-  const
-    {
-      email, password, firstName, lastName,
-    } = req.body;
-  if (email === 'superuser@mail.com') {
-    return res.send({
-      status: 400,
-      error: 'Email already in use',
-    });
-  }
-
+  const { email, password, firstName, lastName } = req.body;
   if (!email || !password || !firstName || !lastName) {
     return res.send({
       status: 400,
       error: 'All fields must be present',
     });
   }
-  userServices.createUser(req.body);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.send({
+      status: 422,
+      error: errors.array()[0].msg,
+    });
+  }
+  const createdUser = userServices.createUser(req.body);
+
+  if (createdUser === 'EMAIL ALREADY IN USE') {
+    return res.send({
+      status: 400,
+      error: 'Email already in use',
+    });
+  }
+
   return res.send({
     status: 201,
     data: {
@@ -39,8 +45,15 @@ exports.login = (req, res) => {
       error: 'Please input login details email and password',
     });
   }
-  userServices.loginUser(req.body);
-  if (email !== 'superuser@mail.com' || password !== 'secret') {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.send({
+      status: 422,
+      error: errors.array()[0].msg,
+    });
+  }
+  const loginUser = userServices.loginUser(req.body);
+  if (loginUser === 'NO USER' || loginUser === 'Invalid password') {
     return res.send({
       status: 400,
       error: 'Invalid email or password',
@@ -49,6 +62,7 @@ exports.login = (req, res) => {
   return res.send({
     status: 200,
     data: {
+      name: loginUser.firstName,
       token: tokenFunction(req.body),
     },
   });

@@ -52,6 +52,64 @@ describe('Test user signup route', () => {
         done();
       });
   });
+  it('should return error if a correct email isnt passed to email body', (done) => {
+    const user = {
+      email: 'john',
+      password: 'secret',
+      firstName: 'John',
+      lastName: 'Snow',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Please enter a valid email');
+        done();
+      });
+  });
+  it('should return error if password isnt upto six caharacters long', (done) => {
+    const user = {
+      email: 'john@mail.com',
+      password: 'secr',
+      firstName: 'John',
+      lastName: 'Snow',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql(
+          'Please enter a password with only text and numbers and at least 6 characters long',
+        );
+        done();
+      });
+  });
+  it('should return error when characters different from text and numbers are passed in password', (done) => {
+    const user = {
+      email: 'john@mail.com',
+      password: '$%^&&',
+      firstName: 'John',
+      lastName: 'Snow',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql(
+          'Please enter a password with only text and numbers and at least 6 characters long'
+        );
+        done();
+      });
+  });
   it('should return email already in use, if the email exists', (done) => {
     const user = {
       firstName: 'Tunde',
@@ -66,6 +124,20 @@ describe('Test user signup route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Email already in use');
+        done();
+      });
+  });
+  it('should return error if data arent present', (done) => {
+    const user = { firstName: 'Tunde', email: 'tunde@mail.com' };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(400);
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('All fields must be present');
         done();
       });
   });
@@ -93,12 +165,12 @@ describe('Test user signup route', () => {
 describe('Test user sign in service method', () => {
   it('should return error if emails dont match', (done) => {
     const data = {
-      email: 'tunde@mail.com',
+      email: 'john@mail.com',
       password: 'secret',
     };
     const logInUser = userServices.loginUser(data);
 
-    expect(logInUser).to.eql('Email already in use');
+    expect(logInUser).to.eql('NO USER');
     done();
   });
   it('should return error if password dont match', (done) => {
@@ -135,6 +207,23 @@ describe('Test user sign in route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Please input login details email and password')
+        done();
+      });
+  });
+  it('should return error if a correct email isnt passed to email body', (done) => {
+    const user = {
+      email: 'john',
+      password: 'secret',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Please enter a valid email');
         done();
       });
   });
@@ -142,10 +231,11 @@ describe('Test user sign in route', () => {
     chai
       .request(server)
       .post('/api/v1/auth/login')
-      .send({ email: 'tunde@mail.com', password: 'secret' })
+      .send({ email: 'john@mail.com', password: 'secret' })
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Invalid email or password');
         done();
       });
 
@@ -156,6 +246,7 @@ describe('Test user sign in route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Invalid email or password');
       });
   });
   it('should return success and token when correct details are passed along', (done) => {
@@ -182,6 +273,20 @@ describe('Test the find user by id method', () => {
     expect(foundUser).to.be.an('object');
     expect(foundUser).to.have.property('id');
     expect(foundUser).to.have.property('email');
+    done();
+  });
+});
+
+describe('Test fetchAll user method', () => {
+  it('should return all users', (done) => {
+    const allUsers = userServices.fetchAll();
+    expect(allUsers).to.be.an('array');
+    allUsers.forEach((user) => {
+      expect(user).to.have.property('id');
+      expect(user).to.have.property('email');
+      expect(user).to.have.property('firstName');
+      expect(user).to.have.property('lastName');
+    });
     done();
   });
 });
