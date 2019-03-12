@@ -201,6 +201,21 @@ describe('Test user sign in route', () => {
         done();
       });
   });
+  it('should return error if a correct email isnt passed to email body', (done) => {
+    const user = {
+      email: 'john',
+      password: 'secret',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
   it('should return error if wrong email or password is passed along', (done) => {
     chai
       .request(server)
