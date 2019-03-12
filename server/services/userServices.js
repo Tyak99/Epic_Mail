@@ -1,7 +1,7 @@
 import User from '../models/User';
 
 export default class UserService {
-  fetchAll() {
+  constructor() {
     this.users = [
       {
         id: 1,
@@ -11,6 +11,9 @@ export default class UserService {
         password: 'secret',
       },
     ];
+  }
+
+  fetchAll() {
     return this.users.map((data) => {
       const user = new User();
       user.id = data.id;
@@ -23,27 +26,25 @@ export default class UserService {
   }
 
   createUser(data) {
-    const allUser = this.fetchAll();
+    const allUser = this.users;
     const newUser = { id: allUser.length + 1, ...data };
     allUser.push(newUser);
     return newUser;
   }
 
   loginUser(data) {
-    const user = this.fetchAll()[0];
-
-    if (data.email !== user.email) {
-      return 'Email already in use';
+    const foundUser = this.users.find(element => element.email == data.email);
+    if (!foundUser) {
+      return 'NO USER';
     }
-    if (data.password !== user.password) {
+    if (foundUser.password !== data.password) {
       return 'Invalid password';
     }
-    return user;
+    return foundUser;
   }
 
   findUserByEmail(email) {
-    const users = this.fetchAll();
-    const foundUser = users.find((user) => user.email == email);
+    const foundUser = this.users.find((user) => user.email == email);
     if (!foundUser) {
       return 'error';
     }
