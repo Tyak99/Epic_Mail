@@ -45,6 +45,13 @@ exports.login = (req, res) => {
       error: 'Please input login details email and password',
     });
   }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.send({
+      status: 422,
+      error: errors.array()[0].msg,
+    });
+  }
   const loginUser = userServices.loginUser(req.body);
   if (loginUser === 'NO USER' || loginUser === 'Invalid password') {
     return res.send({

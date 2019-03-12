@@ -97,6 +97,14 @@ router.post(
   userController.signup,
 );
 
-router.post('/login', userController.login);
+router.post(
+  '/login',
+  body('email')
+    .isEmail()
+    .withMessage('Please enter a valid email')
+    .normalizeEmail()
+    .trim(),
+  userController.login,
+);
 
 export default router;
