@@ -61,7 +61,7 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('api/v1/auth/signup')
+      .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
@@ -78,11 +78,12 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('api/v1/auth/signup')
+      .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
         expect(res.body).to.have.property('error');
+        console.log(res.body)
         done();
       });
   });
@@ -95,7 +96,7 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('api/v1/auth/signup')
+      .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(422);

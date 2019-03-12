@@ -1,3 +1,4 @@
+import { validationResult } from 'express-validator/check';
 import UserService from '../services/userServices';
 import tokenFunction from '../utils/tokenHandler';
 
@@ -10,6 +11,14 @@ exports.signup = (req, res) => {
       status: 400,
       error: 'All fields must be present',
     });
+  }
+  const errors = validationResult(req)
+  console.log(errors.array())
+  if (!errors.isEmpty()) {
+    return res.send({
+      status: 422,
+      error: errors.array()[0].msg,
+    })
   }
   const createdUser = userServices.createUser(req.body);
 

@@ -1,8 +1,8 @@
 import express from 'express';
+import { body } from 'express-validator/check';
 import userController from '../controllers/userControllers';
 
 const router = express.Router();
-
 
 /**
  * @swagger
@@ -78,8 +78,24 @@ const router = express.Router();
  *         description: Invalid email or password
  */
 
-
-router.post('/signup', userController.signup);
+router.post(
+  '/signup',
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Please enter a valid email')
+      .normalizeEmail()
+      .trim(),
+    body(
+      'password',
+      'Please enter a password with only text and numbers and at least 6 characters long'
+    )
+      .trim()
+      .isLength({ min: 6 })
+      .isAlphanumeric(),
+  ],
+  userController.signup
+);
 
 router.post('/login', userController.login);
 
