@@ -16,7 +16,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'Exchange message/information',
   },
-  host: 'localhost:3000',
+  host: 'https://intense-thicket-60071.herokuapp.com/',
   basePath: '/',
 };
 
@@ -49,10 +49,10 @@ app.use('/api/v1/messages', messageRoutes);
 app.use('/api/v1/groups', groupRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Welcome to epic mail');
+  res.redirect('/docs');
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log('server has started');
 });

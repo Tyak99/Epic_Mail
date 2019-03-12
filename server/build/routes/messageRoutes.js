@@ -1,9 +1,17 @@
-import express from 'express';
-import messageController from '../controllers/messageControllers';
+"use strict";
 
-const router = express.Router();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
 
+var _express = _interopRequireDefault(require("express"));
 
+var _messageControllers = _interopRequireDefault(require("../controllers/messageControllers"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var router = _express.default.Router();
 /**
  * @swagger
  * definitions:
@@ -156,10 +164,13 @@ const router = express.Router();
  *         description: No id present to locate resource
  */
 
-router.post('/', messageController.postMessage);
-router.get('/', messageController.getReceivedMessages);
-router.get('/sent', messageController.getSentMessages);
-router.get('/unread', messageController.getUnreadMessages);
-router.get('/:id', messageController.getMessageById);
-router.delete('/:id', messageController.deleteById);
-export default router;
+
+router.post('/', _messageControllers.default.postMessage);
+router.get('/', _messageControllers.default.getReceivedMessages);
+router.get('/sent', _messageControllers.default.getSentMessages);
+router.get('/unread', _messageControllers.default.getUnreadMessages);
+router.get('/:id', _messageControllers.default.getMessageById);
+router.delete('/:id', _messageControllers.default.deleteById);
+var _default = router;
+exports.default = _default;
+//# sourceMappingURL=messageRoutes.js.map

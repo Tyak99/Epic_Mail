@@ -50,7 +50,7 @@ cd myproject
 npm install
 
 # Then simply start your app
-npm start
+npm run dev
 ```
 
 ### Running Test
@@ -63,12 +63,22 @@ cd myproject
 npm test
 ```
 
+### Running Build
+
+```
+# Enter project directory
+cd myproject
+
+# Start test
+npm run build
+```
+
 ## Project Links
 
 - Gh-Pages Url
   `https://tyak99.github.io/Epic_Mail/Ui/Index.html`
 - Api documentation 
-  `/docs`
+  `https://intense-thicket-60071.herokuapp.com/docs`
 **[Back to top](#table-of-contents)**
 
 ## REST API
