@@ -27,6 +27,10 @@ export default class UserService {
 
   createUser(data) {
     const allUser = this.users;
+    const foundUser = this.users.find(element => element.email == data.email);
+    if (foundUser) {
+      return 'EMAIL ALREADY IN USE';
+    }
     const newUser = { id: allUser.length + 1, ...data };
     allUser.push(newUser);
     return newUser;
