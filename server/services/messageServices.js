@@ -2,9 +2,7 @@
 import Message from '../models/Message';
 import ReceivedMessage from '../models/ReceivedMessage';
 import SentMessage from '../models/SentMessages';
-import UserService from './userServices';
 
-const userServices = new UserService();
 
 export default class MessageService {
   constructor() {
