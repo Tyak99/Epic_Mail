@@ -4,9 +4,11 @@ import path from 'path';
 import userRoutes from './routes/userRoutes';
 import messageRoutes from './routes/messageRoutes';
 import groupRoutes from './routes/groupRoutes';
+import db from './db';
 
 require('dotenv').config();
 
+db();
 const app = express();
 
 // swagger definition
