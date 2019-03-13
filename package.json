@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "An email messaging app",
   "main": "index.js",
+  "nyc": {
+    "exclude": "**/*index.js" 
+  },
   "scripts": {
     "start": "node ./server/build/app.js",
     "dev": "nodemon --exec babel-node ./server/app.js",
