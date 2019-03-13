@@ -1,6 +1,6 @@
 import { validationResult } from 'express-validator/check';
 import tokenFunction from '../utils/tokenHandler';
-
+import db from '../db/index';
 
 exports.signup = (req, res) => {
   const { email, password, firstName, lastName } = req.body;
@@ -17,12 +17,31 @@ exports.signup = (req, res) => {
       error: errors.array()[0].msg,
     });
   }
-  return res.send({
-    status: 201,
-    data: {
-      name: req.body.firstName,
-      token: tokenFunction(req.body),
-    },
+  // first check the database if such email doesnt exists
+  db.query('SELECT * FROM users WHERE email = $1', [email], (err, response) => {
+    if (response.rows[0]) {
+      return res.send({
+        status: 400,
+        error: 'Email already in use',
+      });
+    }
+    // if it doesnt. then save it to the database
+    db.query(
+      'INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING *',
+      [email, password, firstName, lastName],
+      (err, response) => {
+        if (err) {
+          console.log(err);
+        }
+        return res.send({
+          status: 201,
+          data: {
+            name: response.rows[0].firstname,
+            token: tokenFunction(req.body),
+          },
+        });
+      }
+    );
   });
 };
 
