@@ -3,7 +3,6 @@ import Message from '../models/Message';
 import ReceivedMessage from '../models/ReceivedMessage';
 import SentMessage from '../models/SentMessages';
 
-
 export default class MessageService {
   constructor() {
     this.messages = [
@@ -51,6 +50,15 @@ export default class MessageService {
         senderId: 3,
         receiverId: 1,
         parentMessageId: null,
+      },
+    ];
+    this.users = [
+      {
+        id: 1,
+        firstName: 'Tunde',
+        lastName: 'Nasri',
+        password: 'secret',
+        email: 'superuser@mail.com',
       },
     ];
   }
@@ -145,11 +153,12 @@ export default class MessageService {
       // retrieve the email in the request body
       const { emailTo } = data;
       // find the user with that email
-      const foundUser = userServices.findUserByEmail(emailTo);
+      const foundUser = this.users.find(element => element.email == emailTo);
+      console.log(foundUser)
       toWHo = foundUser;
     }
     // check if user tried to send to an email and couldnt find the user
-    if (toWHo === 'error') {
+    if (toWHo === undefined) {
       // if so, they should be returned an error message
       return 'NOT FOUND';
     }
@@ -184,7 +193,9 @@ export default class MessageService {
     if (!id) {
       return 'error';
     }
-    const foundMessage = this.AllMessage().find(element => element.id === Number(id));
+    const foundMessage = this.AllMessage().find(
+      (element) => element.id === Number(id)
+    );
     if (!foundMessage) {
       return 'error';
     }
@@ -195,7 +206,9 @@ export default class MessageService {
     if (!id) {
       return 'error';
     }
-    const foundMessage = this.messages.find(element => element.id === Number(id));
+    const foundMessage = this.messages.find(
+      (element) => element.id === Number(id)
+    );
     if (!foundMessage) {
       return 'error';
     }
