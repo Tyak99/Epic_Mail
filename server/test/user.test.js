@@ -35,7 +35,7 @@ describe('Test user signup route', () => {
   it('should return 404 on wrong api call', (done) => {
     chai
       .request(server)
-      .post('/api/v1/auth/')
+      .post('/api/v2/auth/')
       .end((err, res) => {
         expect(res.status).to.eql(404);
         done();
@@ -50,7 +50,7 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('/api/v1/auth/signup')
+      .post('/api/v2/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
@@ -68,7 +68,7 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('/api/v1/auth/signup')
+      .post('/api/v2/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
@@ -88,7 +88,7 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('/api/v1/auth/signup')
+      .post('/api/v2/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
@@ -108,7 +108,7 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('/api/v1/auth/signup')
+      .post('/api/v2/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(201);
@@ -127,7 +127,7 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('/api/v1/auth/signup')
+      .post('/api/v2/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
@@ -140,7 +140,7 @@ describe('Test user signup route', () => {
     const user = { firstName: 'Tunde', email: 'tunde@mail.com' };
     chai
       .request(server)
-      .post('/api/v1/auth/signup')
+      .post('/api/v2/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
@@ -155,7 +155,7 @@ describe('Test user sign in route', () => {
   it('should return error when no email or password is avalilable', (done) => {
     chai
       .request(server)
-      .post('/api/v1/auth/login')
+      .post('/api/v2/auth/login')
       .send({})
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
@@ -173,7 +173,7 @@ describe('Test user sign in route', () => {
     };
     chai
       .request(server)
-      .post('/api/v1/auth/login')
+      .post('/api/v2/auth/login')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
@@ -185,7 +185,7 @@ describe('Test user sign in route', () => {
   it('should return error if wrong email or password is passed along', (done) => {
     chai
       .request(server)
-      .post('/api/v1/auth/login')
+      .post('/api/v2/auth/login')
       .send({ email: 'john@mail.com', password: 'secret' })
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
@@ -196,7 +196,7 @@ describe('Test user sign in route', () => {
 
     chai
       .request(server)
-      .post('/api/v1/auth/login')
+      .post('/api/v2/auth/login')
       .send({ email: 'superuser@mail.com', password: 'baseball' })
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
@@ -207,7 +207,7 @@ describe('Test user sign in route', () => {
   it('should return success and token when correct details are passed along', (done) => {
     chai
       .request(server)
-      .post('/api/v1/auth/login')
+      .post('/api/v2/auth/login')
       .send({ email: 'superuser@mail.com', password: 'secret' })
       .end((err, res) => {
         expect(res.body.status).to.eql(200);
