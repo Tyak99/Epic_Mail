@@ -46,7 +46,7 @@ app.get('/swagger.json', (req, res) => {
 
 app.use('/api/v2/auth', userRoutes);
 app.use('/api/v1/messages', messageRoutes);
-app.use('/api/v1/groups', groupRoutes);
+app.use('/api/v2/groups', groupRoutes);
 
 app.get('/', (req, res) => {
   res.redirect('/docs');
