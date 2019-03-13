@@ -33,9 +33,6 @@ exports.signup = (req, res) => {
       'INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING *',
       [email, hash, firstName, lastName],
       (err, response) => {
-        if (err) {
-          console.log(err);
-        }
         return res.send({
           status: 201,
           data: {
@@ -63,13 +60,29 @@ exports.login = (req, res) => {
       error: errors.array()[0].msg,
     });
   }
-  // User is already verified before they get here
-  // so here i need to give the user token
-  res.send({
-    status: 200,
-    data: {
-      name: req.user.firstname,
-      token: tokenFunction(req.user),
-    },
+  db.query('SELECT * FROM users WHERE email = $1', [email], (err, user) => {
+    if (!user.rows[0]) {
+      return res.send({
+        status: 400,
+        error: 'Invalid email or password',
+      });
+    }
+    const hash = user.rows[0].password;
+    bcrypt.compare(password, hash, (err, response) => {
+      if (response === false) {
+        return res.send({
+          status: 400,
+          error: 'Invalid email or password',
+        });
+      }
+      return res.send({
+        status: 200,
+        data: {
+          name: user.rows[0].firstname,
+          token: tokenFunction(user.rows[0]),
+        },
+      });
+    });
   });
 };
+

@@ -1,12 +1,8 @@
 import express from 'express';
 import { body } from 'express-validator/check';
-import passport from 'passport';
-import passportService from '../utils/passport';
 import userController from '../controllers/userControllers';
 
 const router = express.Router();
-
-const requireSignIn = passport.authenticate('local', { session: false });
 
 /**
  * @swagger
@@ -98,7 +94,7 @@ router.post(
       .isLength({ min: 6 })
       .isAlphanumeric(),
   ],
-  userController.signup
+  userController.signup,
 );
 
 router.post(
@@ -108,7 +104,6 @@ router.post(
     .withMessage('Please enter a valid email')
     .normalizeEmail()
     .trim(),
-  requireSignIn,
   userController.login,
 );
 
