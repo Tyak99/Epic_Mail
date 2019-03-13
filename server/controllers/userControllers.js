@@ -1,4 +1,5 @@
 import { validationResult } from 'express-validator/check';
+import bcrypt from 'bcryptjs';
 import tokenFunction from '../utils/tokenHandler';
 import db from '../db/index';
 
@@ -26,9 +27,11 @@ exports.signup = (req, res) => {
       });
     }
     // if it doesnt. then save it to the database
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
     db.query(
       'INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING *',
-      [email, password, firstName, lastName],
+      [email, hash, firstName, lastName],
       (err, response) => {
         if (err) {
           console.log(err);
