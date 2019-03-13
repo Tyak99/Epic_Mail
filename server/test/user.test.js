@@ -99,6 +99,25 @@ describe('Test user signup route', () => {
         done();
       });
   });
+  it('should post the user and return the user object, when correct details are passed along request', (done) => {
+    const user = {
+      firstName: 'Tunde',
+      lastName: 'Nasri',
+      email: 'superuser@mail.com',
+      password: 'secret',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(201);
+        expect(res.body.data).to.be.an('object');
+        expect(res.body.data).to.have.property('token');
+        expect(res.body.data).to.have.property('name');
+        done();
+      });
+  });
   it('should return email already in use, if the email exists', (done) => {
     const user = {
       firstName: 'Tunde',
@@ -127,25 +146,6 @@ describe('Test user signup route', () => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.eql('All fields must be present');
-        done();
-      });
-  });
-  it('should post the user and return the user object, when correct details are passed along request', (done) => {
-    const user = {
-      firstName: 'Tunde',
-      lastName: 'Nasri',
-      email: 'tunde@mail.com',
-      password: 'secret',
-    };
-    chai
-      .request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((err, res) => {
-        expect(res.body.status).to.eql(201);
-        expect(res.body.data).to.be.an('object');
-        expect(res.body.data).to.have.property('token');
-        expect(res.body.data).to.have.property('name');
         done();
       });
   });
