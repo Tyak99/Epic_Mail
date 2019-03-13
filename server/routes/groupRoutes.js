@@ -1,4 +1,5 @@
 import express from 'express';
+import { body } from 'express-validator/check';
 import groupController from '../controllers/groupControllers';
 
 const router = express.Router();
@@ -37,7 +38,15 @@ const router = express.Router();
  *         description: Provide the necessary details
  */
 
-
-router.post('/', groupController.postGroup);
+router.post(
+  '/',
+  body(
+    'name',
+    'Group name must be upto 4 letters long and contain only letters and numbers'
+  )
+    .isLength({ min: 4 })
+    .isAlphanumeric(),
+  groupController.postGroup,
+);
 
 export default router;

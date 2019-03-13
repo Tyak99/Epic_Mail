@@ -1,3 +1,4 @@
+import { validationResult } from 'express-validator/check';
 import db from '../db/index';
 
 exports.postGroup = (req, res) => {
@@ -6,6 +7,13 @@ exports.postGroup = (req, res) => {
     return res.send({
       status: 400,
       error: 'Please input group name',
+    });
+  }
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.send({
+      status: 400,
+      error: error.array()[0].msg,
     });
   }
   db.query(
