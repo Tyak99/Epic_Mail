@@ -1,6 +1,3 @@
-import GroupService from '../services/groupServices';
-
-const groupServices = new GroupService();
 
 exports.postGroup = (req, res) => {
   const { name, members } = req.body;
