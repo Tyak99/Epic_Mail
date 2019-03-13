@@ -63,4 +63,13 @@ exports.login = (req, res) => {
       error: errors.array()[0].msg,
     });
   }
+  // User is already verified before they get here
+  // so here i need to give the user token
+  res.send({
+    status: 200,
+    data: {
+      name: req.user.firstname,
+      token: tokenFunction(req.user),
+    },
+  });
 };

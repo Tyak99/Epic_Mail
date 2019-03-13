@@ -12,11 +12,13 @@ const LocalLogin = new LocalStrategy(LocalOption, (email, password, done) => {
       done(null, false);
     } else {
       const hash = res.rows[0].password;
-      bcrypt.compare(password, hash, (err, res) => {
+      console.log(hash);
+      bcrypt.compare(password, hash, (err, response) => {
         // res === true
-        if (res === false) {
+        if (response === false) {
           done(null, false);
         } else {
+          console.log(res.rows[0]);
           done(null, res.rows[0]);
         }
       });
