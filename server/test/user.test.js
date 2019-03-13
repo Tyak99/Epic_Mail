@@ -1,11 +1,21 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import db from '../db/index';
 
 import server from '../app';
 import tokenFunction from '../utils/tokenHandler';
 
 chai.use(chaiHttp);
 const { expect } = chai;
+
+before(() => {
+  db.query('TRUNCATE TABLE users', (err, res) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+  console.log('before every test in every file');
+});
 
 describe('Test token generator function', () => {
   it('should generate a unique token when user id is passed', (done) => {
@@ -64,7 +74,7 @@ describe('Test user signup route', () => {
         expect(res.body.status).to.eql(422);
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.eql(
-          'Please enter a password with only text and numbers and at least 6 characters long',
+          'Please enter a password with only text and numbers and at least 6 characters long'
         );
         done();
       });
@@ -150,7 +160,9 @@ describe('Test user sign in route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
-        expect(res.body.error).to.eql('Please input login details email and password')
+        expect(res.body.error).to.eql(
+          'Please input login details email and password'
+        );
         done();
       });
   });
