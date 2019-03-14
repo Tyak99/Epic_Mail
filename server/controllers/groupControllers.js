@@ -16,6 +16,14 @@ exports.postGroup = (req, res) => {
       error: error.array()[0].msg,
     });
   }
+  db.query('SELECT * FROM groups WHERE name = $1', [name], (err, group) => {
+    if (group.rows[0]) {
+      return res.send({
+        status: 400,
+        error: 'Group name already taken, try another',
+      });
+    }
+  });
   db.query(
     'INSERT INTO groups (name) VALUES ($1) RETURNING *',
     [name],
