@@ -49,6 +49,12 @@ cd myproject
 # Install NPM dependencies
 npm install
 
+# Create a .env file to root folder
+touch .env
+
+# Add postgres database information
+DATABASE_URL=your_database_url
+
 # Then simply start your app
 npm run dev
 ```
@@ -58,6 +64,9 @@ npm run dev
 ```
 # Enter project directory
 cd myproject
+
+# Add test postgres database information
+TEST_DATABASE_URL=your_database_url
 
 # Start test
 npm test
@@ -91,7 +100,7 @@ The API is generally RESTFUL and returns results in JSON.
 
 - ##### URL
 
-  `api/v1/auth/signup`
+  `api/v2/auth/signup`
 
 - ##### Method:
 
@@ -126,7 +135,7 @@ The API is generally RESTFUL and returns results in JSON.
 
 - ##### URL
 
-  `api/v1/auth/login`
+  `api/v2/auth/login`
 
 - ##### Method:
 
@@ -135,8 +144,8 @@ The API is generally RESTFUL and returns results in JSON.
 - ##### Data Params
   ```
   {
-      email: supeuser@mail.com
-      password: secret
+      email: string
+      password: string
   }
   ```
 - ##### Success Response

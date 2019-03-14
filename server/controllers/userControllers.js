@@ -1,8 +1,7 @@
 import { validationResult } from 'express-validator/check';
-import UserService from '../services/userServices';
+import bcrypt from 'bcryptjs';
 import tokenFunction from '../utils/tokenHandler';
-
-const userServices = new UserService();
+import db from '../db/index';
 
 exports.signup = (req, res) => {
   const { email, password, firstName, lastName } = req.body;
@@ -19,21 +18,42 @@ exports.signup = (req, res) => {
       error: errors.array()[0].msg,
     });
   }
-  const createdUser = userServices.createUser(req.body);
-
-  if (createdUser === 'EMAIL ALREADY IN USE') {
-    return res.send({
-      status: 400,
-      error: 'Email already in use',
-    });
-  }
-
-  return res.send({
-    status: 201,
-    data: {
-      name: req.body.firstName,
-      token: tokenFunction(req.body),
-    },
+  // first check the database if such email doesnt exists
+  db.query('SELECT * FROM users WHERE email = $1', [email], (err, response) => {
+    if (err) {
+      return res.send({
+        status: 500,
+        error: 'Internal server error',
+      });
+    }
+    if (response.rows[0]) {
+      return res.send({
+        status: 400,
+        error: 'Email already in use',
+      });
+    }
+    // if it doesnt. then save it to the database
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+    db.query(
+      'INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING *',
+      [email, hash, firstName, lastName],
+      (err, data) => {
+        if (err) {
+          return res.send({
+            status: 500,
+            error: 'Internal server error',
+          });
+        }
+        return res.send({
+          status: 201,
+          data: {
+            name: data.rows[0].firstname,
+            token: tokenFunction(req.body),
+          },
+        });
+      }
+    );
   });
 };
 
@@ -52,18 +72,40 @@ exports.login = (req, res) => {
       error: errors.array()[0].msg,
     });
   }
-  const loginUser = userServices.loginUser(req.body);
-  if (loginUser === 'NO USER' || loginUser === 'Invalid password') {
-    return res.send({
-      status: 400,
-      error: 'Invalid email or password',
+  db.query('SELECT * FROM users WHERE email = $1', [email], (err, user) => {
+    if (err) {
+      return res.send({
+        status: 500,
+        error: 'Internal server error',
+      });
+    }
+    if (!user.rows[0]) {
+      return res.send({
+        status: 400,
+        error: 'Invalid email or password',
+      });
+    }
+    const hash = user.rows[0].password;
+    bcrypt.compare(password, hash, (err, response) => {
+      if (err) {
+        return res.send({
+          status: 500,
+          error: 'Internal server error',
+        });
+      }
+      if (response === false) {
+        return res.send({
+          status: 400,
+          error: 'Invalid email or password',
+        });
+      }
+      return res.send({
+        status: 200,
+        data: {
+          name: user.rows[0].firstname,
+          token: tokenFunction(user.rows[0]),
+        },
+      });
     });
-  }
-  return res.send({
-    status: 200,
-    data: {
-      name: loginUser.firstName,
-      token: tokenFunction(req.body),
-    },
   });
 };
