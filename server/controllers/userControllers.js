@@ -20,7 +20,6 @@ exports.signup = (req, res) => {
   }
   // first check the database if such email doesnt exists
   db.query('SELECT * FROM users WHERE email = $1', [email], (err, response) => {
-    console.log(`select from users signup ${err}`);
     if (err) {
       return res.send({
         status: 500,
@@ -40,7 +39,6 @@ exports.signup = (req, res) => {
       'INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING *',
       [email, hash, firstName, lastName],
       (err, data) => {
-        console.log(`insert into users signup ${err}`);
         if (err) {
           return res.send({
             status: 500,
@@ -75,7 +73,6 @@ exports.login = (req, res) => {
     });
   }
   db.query('SELECT * FROM users WHERE email = $1', [email], (err, user) => {
-    console.log(`select from users login ${err}`)
     if (err) {
       return res.send({
         status: 500,
