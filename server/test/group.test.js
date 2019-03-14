@@ -107,3 +107,23 @@ describe('Test create a group route', () => {
       });
   });
 });
+
+describe('Test errors', () => {
+  before(() => {
+    db.query('DROP TABLE IF EXISTS groupmembers', (err, res) => {});
+  });
+  before(() => {
+    db.query('DROP TABLE IF EXISTS groups', (err, res) => {});
+  });
+  it('should test for error when database is dropped', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/groups')
+      .send({ name: 'team1' })
+      .end((err, res) => {
+        expect(res.body.status).to.eql(500);
+        expect(res.body).to.have.property('error').to.eql('Internal server error');
+        done();
+      });
+  });
+});
