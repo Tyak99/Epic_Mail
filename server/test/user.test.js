@@ -8,10 +8,12 @@ import tokenFunction from '../utils/tokenHandler';
 chai.use(chaiHttp);
 const { expect } = chai;
 
-before(() => {
-  db.query('DROP TABLE IF EXISTS users', (err, res) => {});
+before((done) => {
+  db.query('DROP TABLE IF EXISTS users', (err, res) => {
+    done();
+  });
 });
-before(() => {
+before((done) => {
   db.query(
     `CREATE TABLE users (
     id serial PRIMARY KEY,
@@ -19,7 +21,11 @@ before(() => {
     password VARCHAR(255) NOT NULL,
     firstName varchar(255) NOT NULL,
     lastName varchar(255) NOT NULL
-)`);
+)`,
+    (err, res) => {
+      done();
+    }
+  );
 });
 
 describe('Test token generator function', () => {
