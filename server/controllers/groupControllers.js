@@ -58,9 +58,7 @@ exports.postGroup = (req, res) => {
                 role: data.rows[0].userrole,
               },
             });
-          }
-        );
-      }
-    );
+          });
+      });
   });
 };

@@ -52,7 +52,7 @@ exports.signup = (req, res) => {
             token: tokenFunction(req.body),
           },
         });
-      }
+      },
     );
   });
 };
