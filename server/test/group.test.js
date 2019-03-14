@@ -11,7 +11,7 @@ describe('Test create group', () => {
     it('should return 404 on wrong api call', (done) => {
       chai
         .request(server)
-        .post('/api/v2/wrongapi')
+        .post('/api/v1/wrongapi')
         .end((err, res) => {
           expect(res.status).to.eql(404);
           done();
@@ -20,7 +20,7 @@ describe('Test create group', () => {
     it('should return error when needed details arent passed along', (done) => {
       chai
         .request(server)
-        .post('/api/v2/groups')
+        .post('/api/v1/groups')
         .send({})
         .end((err, res) => {
           expect(res.body.status).an.eql(400);
@@ -32,7 +32,7 @@ describe('Test create group', () => {
     it('should respond with the created group object if its created successfully', (done) => {
       chai
         .request(server)
-        .post('/api/v2/groups')
+        .post('/api/v1/groups')
         .send({ name: 'Team 1'})
         .end((err, res) => {
           expect(res.body.status).to.eql(201);
