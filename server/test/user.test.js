@@ -9,18 +9,18 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 before(() => {
-  db.query('DROP TABLE IF EXISTS users', (err, res) => {
-  });
+  db.query('DROP TABLE IF EXISTS users', (err, res) => {});
 });
 before(() => {
-  db.query(`CREATE TABLE users (
+  db.query(
+    `CREATE TABLE users (
     id serial PRIMARY KEY,
     email varchar(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     firstName varchar(255) NOT NULL,
     lastName varchar(255) NOT NULL
 )`);
-})
+});
 
 describe('Test token generator function', () => {
   it('should generate a unique token when user id is passed', (done) => {
