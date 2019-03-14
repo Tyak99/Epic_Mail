@@ -8,8 +8,6 @@ chai.use(chaiHttp);
 
 before((done) => {
   db.query('DROP TABLE IF EXISTS groupmembers', (err, res) => {
-    console.log('DROP TABLE GROUPMEMBERS');
-
     done();
   });
 });
@@ -27,7 +25,6 @@ before((done) => {
     name varchar(255) NOT NULL UNIQUE
 )`,
     (err, res) => {
-      console.log('CREATE TABLE GROUPS');
       done();
     }
   );
@@ -41,7 +38,6 @@ before((done) => {
     userrole varchar(255) NOT NULL
 )`,
     (err, res) => {
-      console.log('CREATE TABLE GROUPMEMBERS');
       done();
     }
   );
