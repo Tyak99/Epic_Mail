@@ -20,6 +20,12 @@ exports.signup = (req, res) => {
   }
   // first check the database if such email doesnt exists
   db.query('SELECT * FROM users WHERE email = $1', [email], (err, response) => {
+    if (err) {
+      return res.send({
+        status: 500,
+        error: 'Internal server error',
+      });
+    }
     if (response.rows[0]) {
       return res.send({
         status: 400,
@@ -32,11 +38,17 @@ exports.signup = (req, res) => {
     db.query(
       'INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING *',
       [email, hash, firstName, lastName],
-      (err, response) => {
+      (err, data) => {
+        if (err) {
+          return res.send({
+            status: 500,
+            error: 'Internal server error',
+          });
+        }
         return res.send({
           status: 201,
           data: {
-            name: response.rows[0].firstname,
+            name: data.rows[0].firstname,
             token: tokenFunction(req.body),
           },
         });
@@ -61,6 +73,12 @@ exports.login = (req, res) => {
     });
   }
   db.query('SELECT * FROM users WHERE email = $1', [email], (err, user) => {
+    if (err) {
+      return res.send({
+        status: 500,
+        error: 'Internal server error',
+      });
+    }
     if (!user.rows[0]) {
       return res.send({
         status: 400,
@@ -69,6 +87,12 @@ exports.login = (req, res) => {
     }
     const hash = user.rows[0].password;
     bcrypt.compare(password, hash, (err, response) => {
+      if (err) {
+        return res.send({
+          status: 500,
+          error: 'Internal server error',
+        });
+      }
       if (response === false) {
         return res.send({
           status: 400,
@@ -85,4 +109,3 @@ exports.login = (req, res) => {
     });
   });
 };
-

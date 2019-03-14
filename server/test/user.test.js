@@ -8,19 +8,25 @@ import tokenFunction from '../utils/tokenHandler';
 chai.use(chaiHttp);
 const { expect } = chai;
 
-before(() => {
+before((done) => {
   db.query('DROP TABLE IF EXISTS users', (err, res) => {
+    done();
   });
 });
-before(() => {
-  db.query(`CREATE TABLE users (
+before((done) => {
+  db.query(
+    `CREATE TABLE users (
     id serial PRIMARY KEY,
     email varchar(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     firstName varchar(255) NOT NULL,
     lastName varchar(255) NOT NULL
-)`);
-})
+)`,
+    (err, res) => {
+      done();
+    }
+  );
+});
 
 describe('Test token generator function', () => {
   it('should generate a unique token when user id is passed', (done) => {
@@ -40,7 +46,7 @@ describe('Test user signup route', () => {
   it('should return 404 on wrong api call', (done) => {
     chai
       .request(server)
-      .post('/api/v2/auth/')
+      .post('/api/v1/auth/')
       .end((err, res) => {
         expect(res.status).to.eql(404);
         done();
@@ -55,7 +61,7 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('/api/v2/auth/signup')
+      .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
@@ -73,7 +79,7 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('/api/v2/auth/signup')
+      .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
@@ -93,7 +99,7 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('/api/v2/auth/signup')
+      .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
@@ -113,7 +119,7 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('/api/v2/auth/signup')
+      .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(201);
@@ -132,7 +138,7 @@ describe('Test user signup route', () => {
     };
     chai
       .request(server)
-      .post('/api/v2/auth/signup')
+      .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
@@ -145,7 +151,7 @@ describe('Test user signup route', () => {
     const user = { firstName: 'Tunde', email: 'tunde@mail.com' };
     chai
       .request(server)
-      .post('/api/v2/auth/signup')
+      .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
@@ -160,7 +166,7 @@ describe('Test user sign in route', () => {
   it('should return error when no email or password is avalilable', (done) => {
     chai
       .request(server)
-      .post('/api/v2/auth/login')
+      .post('/api/v1/auth/login')
       .send({})
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
@@ -178,7 +184,7 @@ describe('Test user sign in route', () => {
     };
     chai
       .request(server)
-      .post('/api/v2/auth/login')
+      .post('/api/v1/auth/login')
       .send(user)
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
@@ -190,7 +196,7 @@ describe('Test user sign in route', () => {
   it('should return error if wrong email or password is passed along', (done) => {
     chai
       .request(server)
-      .post('/api/v2/auth/login')
+      .post('/api/v1/auth/login')
       .send({ email: 'john@mail.com', password: 'secret' })
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
@@ -198,25 +204,55 @@ describe('Test user sign in route', () => {
         expect(res.body.error).to.eql('Invalid email or password');
         done();
       });
-
+  });
+  it('should test if password is incorrect', (done) => {
     chai
       .request(server)
-      .post('/api/v2/auth/login')
+      .post('/api/v1/auth/login')
       .send({ email: 'superuser@mail.com', password: 'baseball' })
       .end((err, res) => {
         expect(res.body.status).to.eql(400);
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.eql('Invalid email or password');
+        done();
       });
   });
   it('should return success and token when correct details are passed along', (done) => {
     chai
       .request(server)
-      .post('/api/v2/auth/login')
+      .post('/api/v1/auth/login')
       .send({ email: 'superuser@mail.com', password: 'secret' })
       .end((err, res) => {
         expect(res.body.status).to.eql(200);
         expect(res.body.data).to.have.property('token');
+        done();
+      });
+  });
+});
+
+describe('Test errors', () => {
+  before(() => {
+    db.query('DROP TABLE IF EXISTS users', (err, res) => {});
+  });
+  it('should test for error on login when server is down', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send({ email: 'superuser@mail.com', password: 'secret' })
+      .end((err, res) => {
+        expect(res.body.status).to.eql(500);
+        expect(res.body).to.have.property('error').to.eql('Internal server error');
+        done();
+      });
+  });
+  it('should test for error on signup when server is down', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send({ email: 'superuser@mail.com', password: 'secret', firstName: 'Tunde', lastName: 'Nasri' })
+      .end((err, res) => {
+        expect(res.body.status).to.eql(500);
+        expect(res.body).to.have.property('error').to.eql('Internal server error');
         done();
       });
   });
