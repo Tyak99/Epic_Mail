@@ -205,7 +205,8 @@ export default class MessageService {
     if (!foundMessage) {
       return 'error';
     }
-    this.messages.splice([id - 1], 1);
+    const messageIndex = this.messages.indexOf(foundMessage);
+    this.messages.splice(messageIndex, 1);
     return 'true';
   }
 
