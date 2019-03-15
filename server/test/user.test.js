@@ -66,7 +66,7 @@ describe('Test user signup route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
         expect(res.body).to.have.property('error');
-        expect(res.body.error).to.eql('Please enter a valid email');
+        expect(res.body.error).to.eql('A valid email is required');
         done();
       });
   });
@@ -128,16 +128,29 @@ describe('Test user signup route', () => {
         done();
       });
   });
-  it('should return error if data arent present', (done) => {
-    const user = { firstName: 'Tunde', email: 'tunde@mail.com' };
+  it('should return error if lastName is now present ', (done) => {
+    const user = { firstName: 'Tunde', email: 'tunde@mail.com', password: 'secret' };
     chai
       .request(server)
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.body.status).to.eql(400);
+        expect(res.body.status).to.eql(422);
         expect(res.body).to.have.property('error');
-        expect(res.body.error).to.eql('All fields must be present');
+        expect(res.body.error).to.eql('Last name with at least 2 characters long is required ');
+        done();
+      });
+  });
+  it('should return error if lastName is now present ', (done) => {
+    const user = { lastName: 'Nasri', email: 'tunde@mail.com', password: 'secret' };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('First name with at least 2 characters long is required ');
         done();
       });
   });
