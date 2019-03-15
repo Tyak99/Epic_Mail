@@ -157,7 +157,11 @@ export default class MessageService {
     }
     // else they can proceed
     const newMessage = new Message();
-    newMessage.id = allMessage.length + 1;
+    //get the last email in the array
+    const lastMessage = allMessage[allMessage.length - 1];
+    const newId = lastMessage.id + 1;
+    // check the id and add one
+    newMessage.id = newId;
     newMessage.subject = data.subject;
     newMessage.message = data.message;
     newMessage.status = toWHo === null ? 'draft' : 'sent';
