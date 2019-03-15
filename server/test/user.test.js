@@ -137,7 +137,7 @@ describe('Test user signup route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
         expect(res.body).to.have.property('error');
-        expect(res.body.error).to.eql('Last name with at least 2 characters long is required ');
+        expect(res.body.error).to.eql('Last name with at least 2 characters long is required');
         done();
       });
   });
@@ -150,7 +150,7 @@ describe('Test user signup route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(422);
         expect(res.body).to.have.property('error');
-        expect(res.body.error).to.eql('First name with at least 2 characters long is required ');
+        expect(res.body.error).to.eql('First name with at least 2 characters long is required');
         done();
       });
   });
