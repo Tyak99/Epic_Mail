@@ -218,7 +218,7 @@ describe('Test user sign in route', () => {
       .post('/api/v1/auth/login')
       .send({})
       .end((err, res) => {
-        expect(res.body.status).to.eql(400);
+        expect(res.body.status).to.eql(422);
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.eql('Please input login details email and password')
         done();

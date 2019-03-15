@@ -105,11 +105,18 @@ router.post(
 
 router.post(
   '/login',
-  body('email')
-    .isEmail()
-    .withMessage('Please enter a valid email')
-    .normalizeEmail()
-    .trim(),
+  [
+    body('email')
+      .exists()
+      .withMessage('Please input login details email and password')
+      .isEmail()
+      .withMessage('Please enter a valid email')
+      .normalizeEmail()
+      .trim(),
+    body('password')
+      .exists()
+      .withMessage('Please input login details email and password'),
+  ],
   userController.login,
 );
 

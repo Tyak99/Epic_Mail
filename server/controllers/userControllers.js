@@ -31,13 +31,6 @@ exports.signup = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.send({
-      status: 400,
-      error: 'Please input login details email and password',
-    });
-  }
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.send({
