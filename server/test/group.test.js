@@ -7,6 +7,12 @@ const { expect } = chai;
 chai.use(chaiHttp);
 
 before((done) => {
+  db.query('DROP TABLE IF EXISTS groupmembers', (err, res) => {
+    done();
+  });
+});
+
+before((done) => {
   db.query('DROP TABLE IF EXISTS groups', (err, res) => {
     done();
   });
@@ -16,7 +22,20 @@ before((done) => {
     `CREATE TABLE groups (
     id serial PRIMARY KEY,
     name varchar(255) NOT NULL,
-    adminid INT REFERENCES users(id)
+    adminid INT REFERENCES users(id) ON DELETE CASCADE
+)`,
+    (err, res) => {
+      done();
+    }
+  );
+});
+
+before((done) => {
+  db.query(
+    `CREATE TABLE groupmembers (
+    groupid INT REFERENCES groups(id) ON DELETE CASCADE,
+    memberid INT REFERENCES users(id) ON DELETE CASCADE,
+    userrole VARCHAR(180) NOT NULL
 )`,
     (err, res) => {
       done();
@@ -26,6 +45,7 @@ before((done) => {
 
 let userToken = '';
 
+console.log(userToken)
 describe('Test signup a new user', () => {
   it('should return success and token when correct details so that token can be used', (done) => {
     chai
