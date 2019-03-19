@@ -41,4 +41,6 @@ const router = express.Router();
 
 router.post('/', tokenHandler.verifyToken, groupController.postGroup);
 
+router.post('/:groupid/users/', tokenHandler.verifyToken, groupController.addUserToGroup);
+
 export default router;

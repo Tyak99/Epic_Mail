@@ -44,6 +44,7 @@ before((done) => {
 });
 
 let userToken = '';
+let secondToken = '';
 
 describe('Test signup a new user', () => {
   it('should return success and token when correct details so that token can be used', (done) => {
@@ -58,8 +59,26 @@ describe('Test signup a new user', () => {
         userToken = res.body.data.token;
         done();
       });
+  });
+  it('should return success and token when correct details so that token can be used', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send({
+        email: 'tunde@mail.com',
+        password: 'secret',
+        firstName: 'John',
+        lastName: 'Champion',
+      })
+      .end((err, res) => {
+        expect(res.status).to.eql(201);
+        expect(res.body.status).to.eql('success');
+        expect(res.body.data).to.have.property('token');
+        secondToken = res.body.data.token;
+        done();
+      });
+  });
 });
-})
 
 describe('Test create a group route', () => {
   it('should return 404 on wrong api call', (done) => {
@@ -94,6 +113,7 @@ describe('Test create a group route', () => {
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(201);
+        expect(res.body).to.have.property('status').to.eql('success');
         expect(res.body.data).to.be.an('object');
         expect(res.body.data).to.have.property('id');
         expect(res.body.data).to.have.property('name');
@@ -113,5 +133,69 @@ describe('Test create a group route', () => {
         expect(res.body).to.have.property('error');
         done();
       });
-  })
+  });
+});
+
+describe('Test add user to group route', () => {
+  it('should return error if group user wants to add members to doesnt exist', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/groups/wrongid/users/')
+      .send({ email: 'jonbellion@mail.com' })
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body).to.have.property('error');
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('Failed');
+        done();
+      });
+  });
+  it('should return error if  the user making the request to add new user to group is not the owner of the group', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/groups/1/users/')
+      .send({ email: 'jonbellion@mail.com' })
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(401);
+        expect(res.body).to.have.property('error');
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('Failed');
+        done();
+      });
+  });
+  it('should return error if  the user that should be added to group is not available', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/groups/1/users/')
+      .send({ email: 'jonbellion@mail.com' })
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body).to.have.property('error');
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('Failed');
+        done();
+      });
+  });
+  it('should add the user to group member and return the user group details', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/groups/1/users/')
+      .send({ email: 'tunde@mail.com' })
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(201);
+        expect(res.body).to.have.property('status').to.eql('success');
+        expect(res.body).to.have.property('data').to.be.an('object');
+        expect(res.body.data).to.have.property('id');
+        expect(res.body.data).to.have.property('userId');
+        expect(res.body.data).to.have.property('userRole');
+        done();
+      });
+  });
 });
