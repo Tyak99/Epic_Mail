@@ -162,8 +162,8 @@ describe('Test user signup route', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.body.status).to.eql(400);
-        expect(res.body).to.have.property('error');
+        expect(res.status).to.eql(404);
+        expect(res.body.status).to.eql('failed');
         expect(res.body.error).to.eql('Email already in use');
         done();
       });
@@ -230,6 +230,24 @@ describe('Test user sign in route', () => {
       .end((err, res) => {
         expect(res.body.status).to.eql(200);
         expect(res.body.data).to.have.property('token');
+        done();
+      });
+  });
+});
+
+describe('Test errors returned when database is down', () => {
+  before((done) => {
+    db.query('DROP TABLE IF EXISTS users', (err, res) => { done()});
+  });
+  it('should test for error on signup when database is down', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send({ email: 'superuser@mail.com', password: 'secret', firstName: 'Tunde', lastName: 'Nasri' })
+      .end((err, res) => {
+        expect(res.status).to.eql(500);
+        expect(res.body).to.have.property('status').to.eql('failed')
+        expect(res.body).to.have.property('error').to.eql('Internal server error');
         done();
       });
   });
