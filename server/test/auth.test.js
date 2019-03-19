@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import db from '../database/index';
 
 import server from '../app';
-import tokenFunction from '../utils/tokenHandler';
+import tokenHandler from '../utils/tokenHandler';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -30,7 +30,7 @@ describe('Test token generator function', () => {
       email: 'tunde@mail.com',
       password: 'secret',
     };
-    const token = tokenFunction(user);
+    const token = tokenHandler.generateToken(user);
     expect(token).to.be.a('string');
     expect(token).to.have.lengthOf.above(10);
     done();
