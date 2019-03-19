@@ -73,15 +73,6 @@ describe('Test post a message service method', () => {
 });
 
 describe('Test post a message route', () => {
-  it('should return error 404 on wrong api call', (done) => {
-    chai
-      .request(server)
-      .post('/api/v1/wrong')
-      .end((err, res) => {
-        expect(res.status).to.eql(404);
-        done();
-      });
-  });
   it('should return error if no data is passed along', (done) => {
     chai
       .request(server)
@@ -223,15 +214,6 @@ describe('Test get received emails method', () => {
 });
 
 describe('Test get received emails route', () => {
-  it('should return error on wrong api call', (done) => {
-    chai
-      .request(server)
-      .get('/api/v1/wrongapi')
-      .end((err, res) => {
-        expect(res.status).to.eql(404);
-        done();
-      });
-  });
   it('should return an array of received emails', (done) => {
     chai
       .request(server)

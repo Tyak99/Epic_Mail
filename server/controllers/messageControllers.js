@@ -25,7 +25,7 @@ exports.postMessage = (req, res) => {
 
 exports.getReceivedMessages = (req, res) => {
   const messages = messageServices.getReceivedMessage();
-  res.send({
+  return res.send({
     status: 200,
     data: messages,
   });
@@ -33,7 +33,7 @@ exports.getReceivedMessages = (req, res) => {
 
 exports.getSentMessages = (req, res) => {
   const messages = messageServices.getSentMessages();
-  res.send({
+  return res.send({
     status: 200,
     data: messages,
   });
