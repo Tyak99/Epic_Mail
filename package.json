@@ -48,6 +48,7 @@
     "express": "^4.16.4",
     "express-validator": "^5.3.1",
     "jwt-simple": "^0.5.5",
+    "pg": "^7.9.0",
     "swagger-jsdoc": "^3.2.7"
   },
   "engines": {
