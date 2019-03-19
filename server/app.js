@@ -8,7 +8,6 @@ import groupRoutes from './routes/groupRoutes';
 require('dotenv').config();
 
 const app = express();
-
 // swagger definition
 const swaggerDefinition = {
   info: {

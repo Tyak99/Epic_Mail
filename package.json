@@ -6,17 +6,11 @@
   "scripts": {
     "start": "node ./server/build/app.js",
     "dev": "nodemon --exec babel-node ./server/app.js",
-    "test": "nyc mocha --require @babel/register ./server/test --exit",
+    "test": "NODE_ENV=test nyc mocha --require @babel/register ./server/test --exit",
     "coverage": "nyc report --reporter=lcov --reporter=text-lcov | coveralls",
     "clean": "rm -rf ./server/build && mkdir ./server/build",
-    "build-route": "babel -d ./server/build/routes ./server/routes -s",
-    "build-controller": "babel -d ./server/build/controllers ./server/controllers -s",
-    "build-model": "babel -d ./server/build/models ./server/models -s",
-    "build-service": "babel -d ./server/build/services ./server/services -s",
-    "build-app": "babel -d ./server/build ./server/app.js -s",
     "copy-redoc": "cp -R ./server/redoc.html ./server/build/redoc.html",
-    "build-utils": "babel -d ./server/build/utils ./server/utils && npm run copy-redoc",
-    "build": "npm run clean && npm run build-route && npm run build-controller && npm run build-service && npm run build-model && npm run build-app && npm run build-utils"
+    "build": "npm run clean && babel -d ./server/build ./server && npm run copy-redoc"
   },
   "repository": {
     "type": "git",
@@ -44,6 +38,7 @@
   },
   "dependencies": {
     "@babel/cli": "^7.2.3",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-validator": "^5.3.1",

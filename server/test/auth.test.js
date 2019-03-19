@@ -1,13 +1,27 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import db from '../database/index';
 
 import server from '../app';
-import UserService from '../services/userServices';
 import tokenFunction from '../utils/tokenHandler';
 
 chai.use(chaiHttp);
-const userServices = new UserService();
 const { expect } = chai;
+
+before((done) => {
+  db.query('DROP TABLE IF EXISTS users', (err, res) => {
+    done()
+  });
+});
+before((done) => {
+  db.query(`CREATE TABLE users (
+    id serial PRIMARY KEY,
+    email varchar(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    firstName varchar(255) NOT NULL,
+    lastName varchar(255) NOT NULL
+)`, (err, res) => done());
+})
 
 describe('Test token generator function', () => {
   it('should generate a unique token when user id is passed', (done) => {
@@ -23,25 +37,6 @@ describe('Test token generator function', () => {
   });
 });
 
-describe('Test user signup services', () => {
-  it('should return a user object when email,password,firstName,lastName is passed along', (done) => {
-    const user = {
-      firstName: 'Tunde',
-      lastName: 'Nasri',
-      email: 'tunde@mail.com',
-      password: 'secret',
-    };
-    const newUser = userServices.createUser(user);
-    expect(newUser).to.be.an('object');
-    expect(newUser).to.have.property('id');
-    expect(newUser).to.have.property('firstName');
-    expect(newUser).to.have.property('lastName');
-    expect(newUser).to.have.property('email');
-    expect(newUser).to.have.property('password');
-    done();
-  });
-});
-
 describe('Test user signup route', () => {
   it('should return 404 on wrong api call', (done) => {
     chai
@@ -52,7 +47,7 @@ describe('Test user signup route', () => {
         done();
       });
   });
-  it('should return error if a correct email isnt passed to email body', (done) => {
+  it('should return error if a correct email is not passed to email body', (done) => {
     const user = {
       email: 'john',
       password: 'secret',
@@ -64,7 +59,8 @@ describe('Test user signup route', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.body.status).to.eql(422);
+        expect(res.status).to.eql(422);
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.eql('A valid email is required');
         done();
@@ -82,7 +78,8 @@ describe('Test user signup route', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.body.status).to.eql(422);
+        expect(res.status).to.eql(422);
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.eql(
           'Please enter a password with only text and numbers and at least 6 characters long',
@@ -102,11 +99,59 @@ describe('Test user signup route', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.body.status).to.eql(422);
+        expect(res.status).to.eql(422);
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.eql(
           'Please enter a password with only text and numbers and at least 6 characters long'
         );
+        done();
+      });
+  });
+  it('should return error if lastName is not present ', (done) => {
+    const user = { firstName: 'Tunde', email: 'tunde@mail.com', password: 'secret' };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        expect(res.body).to.have.property('status').to.eql('Failed');
+        expect(res.body.error).to.eql('Last name with at least 2 characters long is required');
+        done();
+      });
+  });
+  it('should return error if firstName is not present ', (done) => {
+    const user = { lastName: 'Nasri', email: 'tunde@mail.com', password: 'secret' };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        expect(res.body).to.have.property('status').to.eql('Failed');
+        expect(res.body.error).to.eql('First name with at least 2 characters long is required');
+        done();
+      });
+  });
+  it('should post the user and return the user object, when correct details are passed along request', (done) => {
+    const user = {
+      firstName: 'Tunde',
+      lastName: 'Nasri',
+      email: 'superuser@mail.com',
+      password: 'secret',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.status).to.eql(201);
+        expect(res.body.data).to.be.an('object');
+        expect(res.body.data).to.have.property('token');
+        expect(res.body.data).to.have.property('name');
         done();
       });
   });
@@ -122,93 +167,13 @@ describe('Test user signup route', () => {
       .post('/api/v1/auth/signup')
       .send(user)
       .end((err, res) => {
-        expect(res.body.status).to.eql(400);
-        expect(res.body).to.have.property('error');
+        expect(res.status).to.eql(404);
+        expect(res.body.status).to.eql('Failed');
         expect(res.body.error).to.eql('Email already in use');
         done();
       });
   });
-  it('should return error if lastName is now present ', (done) => {
-    const user = { firstName: 'Tunde', email: 'tunde@mail.com', password: 'secret' };
-    chai
-      .request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((err, res) => {
-        expect(res.body.status).to.eql(422);
-        expect(res.body).to.have.property('error');
-        expect(res.body.error).to.eql('Last name with at least 2 characters long is required');
-        done();
-      });
-  });
-  it('should return error if lastName is now present ', (done) => {
-    const user = { lastName: 'Nasri', email: 'tunde@mail.com', password: 'secret' };
-    chai
-      .request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((err, res) => {
-        expect(res.body.status).to.eql(422);
-        expect(res.body).to.have.property('error');
-        expect(res.body.error).to.eql('First name with at least 2 characters long is required');
-        done();
-      });
-  });
-  it('should post the user and return the user object, when correct details are passed along request', (done) => {
-    const user = {
-      firstName: 'Tunde',
-      lastName: 'Nasri',
-      email: 'tunde@mail.com',
-      password: 'secret',
-    };
-    chai
-      .request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((err, res) => {
-        expect(res.body.status).to.eql(201);
-        expect(res.body.data).to.be.an('object');
-        expect(res.body.data).to.have.property('token');
-        expect(res.body.data).to.have.property('name');
-        done();
-      });
-  });
-});
-
-describe('Test user sign in service method', () => {
-  it('should return error if emails dont match', (done) => {
-    const data = {
-      email: 'john@mail.com',
-      password: 'secret',
-    };
-    const logInUser = userServices.loginUser(data);
-
-    expect(logInUser).to.eql('NO USER');
-    done();
-  });
-  it('should return error if password dont match', (done) => {
-    const data = {
-      email: 'superuser@mail.com',
-      password: 'baseball',
-    };
-    const logInUser = userServices.loginUser(data);
-    expect(logInUser).to.eql('Invalid password');
-    done();
-  });
-  it('should return a user object when passed email and password', (done) => {
-    const user = {
-      email: 'superuser@mail.com',
-      password: 'secret',
-    };
-    const loggedInUser = userServices.loginUser(user);
-    expect(loggedInUser).to.be.an('object');
-    expect(loggedInUser).to.have.property('id');
-    expect(loggedInUser).to.have.property('firstName');
-    expect(loggedInUser).to.have.property('lastName');
-    expect(loggedInUser).to.have.property('email');
-    expect(loggedInUser).to.have.property('password');
-    done();
-  });
+ 
 });
 
 describe('Test user sign in route', () => {
@@ -218,8 +183,9 @@ describe('Test user sign in route', () => {
       .post('/api/v1/auth/login')
       .send({})
       .end((err, res) => {
-        expect(res.body.status).to.eql(422);
+        expect(res.status).to.eql(422);
         expect(res.body).to.have.property('error');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body.error).to.eql('Please input login details email and password')
         done();
       });
@@ -234,8 +200,9 @@ describe('Test user sign in route', () => {
       .post('/api/v1/auth/login')
       .send(user)
       .end((err, res) => {
-        expect(res.body.status).to.eql(422);
+        expect(res.status).to.eql(422);
         expect(res.body).to.have.property('error');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body.error).to.eql('Please enter a valid email');
         done();
       });
@@ -246,8 +213,9 @@ describe('Test user sign in route', () => {
       .post('/api/v1/auth/login')
       .send({ email: 'john@mail.com', password: 'secret' })
       .end((err, res) => {
-        expect(res.body.status).to.eql(400);
+        expect(res.status).to.eql(400);
         expect(res.body).to.have.property('error');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body.error).to.eql('Invalid email or password');
         done();
       });
@@ -257,7 +225,8 @@ describe('Test user sign in route', () => {
       .post('/api/v1/auth/login')
       .send({ email: 'superuser@mail.com', password: 'baseball' })
       .end((err, res) => {
-        expect(res.body.status).to.eql(400);
+        expect(res.status).to.eql(400);
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.eql('Invalid email or password');
       });
@@ -268,38 +237,41 @@ describe('Test user sign in route', () => {
       .post('/api/v1/auth/login')
       .send({ email: 'superuser@mail.com', password: 'secret' })
       .end((err, res) => {
-        expect(res.body.status).to.eql(200);
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
         expect(res.body.data).to.have.property('token');
+        expect(res.body.data).to.have.property('name');
         done();
       });
   });
 });
 
-describe('Test the find user by id method', () => {
-  it('should return return error if no user is found', (done) => {
-    const foundUser = userServices.findUserByEmail('false@email.com');
-    expect(foundUser).to.eql('error');
-    done();
+describe('Test errors returned when database is down', () => {
+  before((done) => {
+    db.query('DROP TABLE IF EXISTS users', (err, res) => { done()});
   });
-  it('should return the found user object if it finds the user', (done) => {
-    const foundUser = userServices.findUserByEmail('superuser@mail.com');
-    expect(foundUser).to.be.an('object');
-    expect(foundUser).to.have.property('id');
-    expect(foundUser).to.have.property('email');
-    done();
+  it('should test for error on signup when database is down', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send({ email: 'superuser@mail.com', password: 'secret', firstName: 'Tunde', lastName: 'Nasri' })
+      .end((err, res) => {
+        expect(res.status).to.eql(500);
+        expect(res.body).to.have.property('status').to.eql('Failed');
+        expect(res.body).to.have.property('error').to.eql('Internal server error');
+        done();
+      });
   });
-});
-
-describe('Test fetchAll user method', () => {
-  it('should return all users', (done) => {
-    const allUsers = userServices.fetchAll();
-    expect(allUsers).to.be.an('array');
-    allUsers.forEach((user) => {
-      expect(user).to.have.property('id');
-      expect(user).to.have.property('email');
-      expect(user).to.have.property('firstName');
-      expect(user).to.have.property('lastName');
-    });
-    done();
-  });
+  it('should test for error on login page when database is down', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send({ email: 'superuser@mail.com', password: 'secret'})
+      .end((err, res) => {
+        expect(res.status).to.eql(500);
+        expect(res.body).to.have.property('status').to.eql('Failed');
+        expect(res.body).to.have.property('error').to.eql('Internal server error');
+        done();
+      });
+  })
 });

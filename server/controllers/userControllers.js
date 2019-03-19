@@ -1,55 +1,93 @@
+import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator/check';
-import UserService from '../services/userServices';
 import tokenFunction from '../utils/tokenHandler';
-
-const userServices = new UserService();
+import db from '../database/index';
 
 exports.signup = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.send({
-      status: 422,
+    return res.status(422).json({
+      status: 'Failed',
       error: errors.array()[0].msg,
-    });
+    })
   }
-  const createdUser = userServices.createUser(req.body);
+  // first check the database if that email exists previously
+  db.query(
+    'SELECT * FROM users WHERE email = $1',
+    [req.body.email],
+    (err, user) => {
+      if (err) {
+        return res.status(500).json({
+          status: 'Failed',
+          error: 'Internal server error',
+        });
+      }
+      if (user.rows[0]) {
+        return res.status(404).json({
+          status: 'Failed',
+          error: 'Email already in use',
+        });
+      }
+      // if it doesnt then create the user
+      const { email, password, firstName, lastName } = req.body;
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(password, salt);
 
-  if (createdUser === 'EMAIL ALREADY IN USE') {
-    return res.send({
-      status: 400,
-      error: 'Email already in use',
-    });
-  }
-
-  return res.send({
-    status: 201,
-    data: {
-      name: req.body.firstName,
-      token: tokenFunction(req.body),
-    },
-  });
+      const values = [email, hash, firstName, lastName];
+      db.query(
+        'INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING *',
+        values,
+        (err, createdUser) => {
+          return res.status(201).json({
+            status: 'success',
+            data: {
+              name: createdUser.rows[0].firstname,
+              token: tokenFunction(createdUser.rows[0]),
+            },
+          });
+        }
+      );
+    }
+  );
 };
 
 exports.login = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.send({
-      status: 422,
+    return res.status(422).json({
+      status: 'Failed',
       error: errors.array()[0].msg,
-    });
+    })
   }
-  const loginUser = userServices.loginUser(req.body);
-  if (loginUser === 'NO USER' || loginUser === 'Invalid password') {
-    return res.send({
-      status: 400,
-      error: 'Invalid email or password',
+  const { email, password } = req.body;
+  db.query('SELECT * FROM users WHERE email = $1', [email], (err, user) => {
+    if (err) {
+      return res.status(500).json({
+        status: 'Failed',
+        error: 'Internal server error',
+      })
+    }
+    if (!user.rows[0]) {
+      return res.status(400).json({
+        status: 'Failed',
+        error: 'Invalid email or password',
+      });
+    }
+    const hash = user.rows[0].password;
+    bcrypt.compare(password, hash, (err, response) => {
+      if (response === false) {
+        return res.status(400).json({
+          status: 'Failed',
+          error: 'Invalid email or password',
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          name: user.rows[0].firstname,
+          token: tokenFunction(user.rows[0]),
+        },
+      });
     });
-  }
-  return res.send({
-    status: 200,
-    data: {
-      name: loginUser.firstName,
-      token: tokenFunction(req.body),
-    },
   });
 };
