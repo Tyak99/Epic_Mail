@@ -21,7 +21,8 @@ describe('Test create a group route', () => {
       .post('/api/v1/groups')
       .send({})
       .end((err, res) => {
-        expect(res.body.status).an.eql(400);
+        expect(res.status).an.eql(400);
+        expect(res.body).to.have.property('status').eql('Failed');
         expect(res.body).to.have.property('error');
         done();
       });
@@ -30,15 +31,14 @@ describe('Test create a group route', () => {
     chai
       .request(server)
       .post('/api/v1/groups')
-      .send({ name: 'Team 1', members: ['name@mail.com', 'hope@mail.com'] })
+      .send({ name: 'Lakers' })
+      .set('Authorization', userToken)
       .end((err, res) => {
-        expect(res.body.status).to.eql(201);
+        expect(res.status).to.eql(201);
         expect(res.body.data).to.be.an('object');
         expect(res.body.data).to.have.property('id');
         expect(res.body.data).to.have.property('name');
-        expect(res.body.data)
-          .to.have.property('members')
-          .to.be.an('array');
+        expect(res.body.data).to.have.property('role');
         done();
       });
   });
