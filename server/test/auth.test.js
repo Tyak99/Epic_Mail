@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 before((done) => {
-  db.query('DROP TABLE IF EXISTS users', (err, res) => {
+  db.query('DROP TABLE IF EXISTS users CASCADE', (err, res) => {
     done()
   });
 });

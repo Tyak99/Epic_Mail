@@ -13,7 +13,7 @@ before((done) => {
 });
 
 before((done) => {
-  db.query('DROP TABLE IF EXISTS groups', (err, res) => {
+  db.query('DROP TABLE IF EXISTS groups CASCADE', (err, res) => {
     done();
   });
 });
@@ -45,7 +45,6 @@ before((done) => {
 
 let userToken = '';
 
-console.log(userToken)
 describe('Test signup a new user', () => {
   it('should return success and token when correct details so that token can be used', (done) => {
     chai
