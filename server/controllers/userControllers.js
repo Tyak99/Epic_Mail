@@ -43,7 +43,7 @@ exports.signup = (req, res) => {
             status: 'success',
             data: {
               name: createdUser.rows[0].firstname,
-              token: tokenFunction(req.body),
+              token: tokenFunction(createdUser.rows[0]),
             },
           });
         }
@@ -60,4 +60,29 @@ exports.login = (req, res) => {
       error: errors.array()[0].msg,
     });
   }
+  const { email, password } = req.body;
+  db.query('SELECT * FROM users WHERE email = $1', [email], (err, user) => {
+    if (!user.rows[0]) {
+      return res.status(400).json({
+        status: 'failed',
+        error: 'Invalid email or password',
+      });
+    }
+    const hash = user.rows[0].password;
+    bcrypt.compare(password, hash, (err, response) => {
+      if (response === false) {
+        return res.status(400).json({
+          status: 'failed',
+          error: 'Invalid email or password',
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          name: user.rows[0].firstname,
+          token: tokenFunction(user.rows[0]),
+        },
+      });
+    });
+  });
 };
