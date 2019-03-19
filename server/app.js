@@ -4,11 +4,12 @@ import path from 'path';
 import userRoutes from './routes/userRoutes';
 import messageRoutes from './routes/messageRoutes';
 import groupRoutes from './routes/groupRoutes';
+import createTable from './database/createTables';
 
 require('dotenv').config();
 
 const app = express();
-
+createTable();
 // swagger definition
 const swaggerDefinition = {
   info: {
