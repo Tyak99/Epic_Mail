@@ -113,6 +113,7 @@ describe('Test create a group route', () => {
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(201);
+        expect(res.body).to.have.property('status').to.eql('success');
         expect(res.body.data).to.be.an('object');
         expect(res.body.data).to.have.property('id');
         expect(res.body.data).to.have.property('name');
@@ -189,6 +190,8 @@ describe('Test add user to group route', () => {
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(201);
+        expect(res.body).to.have.property('status').to.eql('success');
+        expect(res.body).to.have.property('data').to.be.an('object');
         expect(res.body.data).to.have.property('id');
         expect(res.body.data).to.have.property('userId');
         expect(res.body.data).to.have.property('userRole');
