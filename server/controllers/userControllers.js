@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator/check';
 import tokenFunction from '../utils/tokenHandler';
 import db from '../database/index';
@@ -21,7 +22,10 @@ exports.signup = (req, res) => {
     }
     // if it doesnt then create the user
     const { email, password, firstName, lastName } = req.body;
-    const values = [email, password, firstName, lastName];
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+
+    const values = [email, hash, firstName, lastName];
     db.query('INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING *', values, (err, createdUser) => {
       if (err) {
         return res.status(500).json({
