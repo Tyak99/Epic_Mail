@@ -64,9 +64,14 @@ describe('Test signup a new user', () => {
     chai
       .request(server)
       .post('/api/v1/auth/signup')
-      .send({ email: 'tunde@mail.com', password: 'secret', firstName: 'John', lastName: 'Champion' })
+      .send({
+        email: 'tunde@mail.com',
+        password: 'secret',
+        firstName: 'John',
+        lastName: 'Champion',
+      })
       .end((err, res) => {
-        expect(res.status).to.eql(200);
+        expect(res.status).to.eql(201);
         expect(res.body.status).to.eql('success');
         expect(res.body.data).to.have.property('token');
         secondToken = res.body.data.token;
@@ -164,7 +169,7 @@ describe('Test add user to group route', () => {
   it('should return error if  the user that should be added to group is not available', (done) => {
     chai
       .request(server)
-      .post('/api/v1/groups/wrongid/users/')
+      .post('/api/v1/groups/1/users/')
       .send({ email: 'jonbellion@mail.com' })
       .set('Authroization', userToken)
       .send((err, res) => {
@@ -189,5 +194,5 @@ describe('Test add user to group route', () => {
         expect(res.body).to.have.property('userRole');
         done();
       });
-  })
+  });
 });
