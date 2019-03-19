@@ -2,11 +2,9 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 
 import server from '../app';
-import UserService from '../services/userServices';
 import tokenFunction from '../utils/tokenHandler';
 
 chai.use(chaiHttp);
-const userServices = new UserService();
 const { expect } = chai;
 
 describe('Test token generator function', () => {
@@ -19,25 +17,6 @@ describe('Test token generator function', () => {
     const token = tokenFunction(user);
     expect(token).to.be.a('string');
     expect(token).to.have.lengthOf.above(10);
-    done();
-  });
-});
-
-describe('Test user signup services', () => {
-  it('should return a user object when email,password,firstName,lastName is passed along', (done) => {
-    const user = {
-      firstName: 'Tunde',
-      lastName: 'Nasri',
-      email: 'tunde@mail.com',
-      password: 'secret',
-    };
-    const newUser = userServices.createUser(user);
-    expect(newUser).to.be.an('object');
-    expect(newUser).to.have.property('id');
-    expect(newUser).to.have.property('firstName');
-    expect(newUser).to.have.property('lastName');
-    expect(newUser).to.have.property('email');
-    expect(newUser).to.have.property('password');
     done();
   });
 });
@@ -175,42 +154,6 @@ describe('Test user signup route', () => {
   });
 });
 
-describe('Test user sign in service method', () => {
-  it('should return error if emails dont match', (done) => {
-    const data = {
-      email: 'john@mail.com',
-      password: 'secret',
-    };
-    const logInUser = userServices.loginUser(data);
-
-    expect(logInUser).to.eql('NO USER');
-    done();
-  });
-  it('should return error if password dont match', (done) => {
-    const data = {
-      email: 'superuser@mail.com',
-      password: 'baseball',
-    };
-    const logInUser = userServices.loginUser(data);
-    expect(logInUser).to.eql('Invalid password');
-    done();
-  });
-  it('should return a user object when passed email and password', (done) => {
-    const user = {
-      email: 'superuser@mail.com',
-      password: 'secret',
-    };
-    const loggedInUser = userServices.loginUser(user);
-    expect(loggedInUser).to.be.an('object');
-    expect(loggedInUser).to.have.property('id');
-    expect(loggedInUser).to.have.property('firstName');
-    expect(loggedInUser).to.have.property('lastName');
-    expect(loggedInUser).to.have.property('email');
-    expect(loggedInUser).to.have.property('password');
-    done();
-  });
-});
-
 describe('Test user sign in route', () => {
   it('should return error when no email or password is avalilable', (done) => {
     chai
@@ -272,34 +215,5 @@ describe('Test user sign in route', () => {
         expect(res.body.data).to.have.property('token');
         done();
       });
-  });
-});
-
-describe('Test the find user by id method', () => {
-  it('should return return error if no user is found', (done) => {
-    const foundUser = userServices.findUserByEmail('false@email.com');
-    expect(foundUser).to.eql('error');
-    done();
-  });
-  it('should return the found user object if it finds the user', (done) => {
-    const foundUser = userServices.findUserByEmail('superuser@mail.com');
-    expect(foundUser).to.be.an('object');
-    expect(foundUser).to.have.property('id');
-    expect(foundUser).to.have.property('email');
-    done();
-  });
-});
-
-describe('Test fetchAll user method', () => {
-  it('should return all users', (done) => {
-    const allUsers = userServices.fetchAll();
-    expect(allUsers).to.be.an('array');
-    allUsers.forEach((user) => {
-      expect(user).to.have.property('id');
-      expect(user).to.have.property('email');
-      expect(user).to.have.property('firstName');
-      expect(user).to.have.property('lastName');
-    });
-    done();
   });
 });
