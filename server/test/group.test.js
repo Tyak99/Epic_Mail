@@ -1,9 +1,28 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../app';
+import db from '../database/index';
 
 const { expect } = chai;
 chai.use(chaiHttp);
+
+before((done) => {
+  db.query('DROP TABLE IF EXISTS groups', (err, res) => {
+    done();
+  });
+});
+before((done) => {
+  db.query(
+    `CREATE TABLE groups (
+    id serial PRIMARY KEY,
+    name varchar(255) NOT NULL,
+    adminid INT REFERENCES users(id)
+)`,
+    (err, res) => {
+      done();
+    }
+  );
+});
 
 let userToken = '';
 
@@ -33,11 +52,12 @@ describe('Test create a group route', () => {
         done();
       });
   });
-  it('should return error when needed details arent passed along', (done) => {
+  it('should return error when needed details are not passed along', (done) => {
     chai
       .request(server)
       .post('/api/v1/groups')
       .send({})
+      .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).an.eql(400);
         expect(res.body)
@@ -62,4 +82,17 @@ describe('Test create a group route', () => {
         done();
       });
   });
+  it('should respond error when group name already exists', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/groups')
+      .send({ name: 'Lakers' })
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(409);
+        expect(res.body.status).to.eql('Failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  })
 });
