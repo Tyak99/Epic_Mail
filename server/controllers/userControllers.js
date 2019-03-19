@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator/check';
-import tokenFunction from '../utils/tokenHandler';
+import tokenHandler from '../utils/tokenHandler';
 import db from '../database/index';
 
 exports.signup = (req, res) => {
@@ -42,7 +42,7 @@ exports.signup = (req, res) => {
             status: 'success',
             data: {
               name: createdUser.rows[0].firstname,
-              token: tokenFunction(createdUser.rows[0]),
+              token: tokenHandler.tokenFunction(createdUser.rows[0]),
             },
           });
         }
@@ -85,7 +85,7 @@ exports.login = (req, res) => {
         status: 'success',
         data: {
           name: user.rows[0].firstname,
-          token: tokenFunction(user.rows[0]),
+          token: tokenHandler.tokenFunction(user.rows[0]),
         },
       });
     });
