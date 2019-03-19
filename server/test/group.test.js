@@ -5,6 +5,24 @@ import server from '../app';
 const { expect } = chai;
 chai.use(chaiHttp);
 
+let userToken = '';
+
+describe('Test signup a new user', () => {
+  it('should return success and token when correct details so that token can be used', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send({ email: 'superuser@mail.com', password: 'secret' })
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body.data).to.have.property('token');
+        userToken = res.body.data.token;
+        done();
+      });
+});
+})
+
 describe('Test create a group route', () => {
   it('should return 404 on wrong api call', (done) => {
     chai
@@ -22,7 +40,9 @@ describe('Test create a group route', () => {
       .send({})
       .end((err, res) => {
         expect(res.status).an.eql(400);
-        expect(res.body).to.have.property('status').eql('Failed');
+        expect(res.body)
+          .to.have.property('status')
+          .eql('Failed');
         expect(res.body).to.have.property('error');
         done();
       });
