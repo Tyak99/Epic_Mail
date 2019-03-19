@@ -141,8 +141,8 @@ describe('Test add user to group route', () => {
       .request(server)
       .post('/api/v1/groups/wrongid/users/')
       .send({ email: 'jonbellion@mail.com' })
-      .set('Authroization', userToken)
-      .send((err, res) => {
+      .set('Authorization', userToken)
+      .end((err, res) => {
         expect(res.status).to.eql(404);
         expect(res.body).to.have.property('error');
         expect(res.body)
@@ -154,10 +154,10 @@ describe('Test add user to group route', () => {
   it('should return error if  the user making the request to add new user to group is not the owner of the group', (done) => {
     chai
       .request(server)
-      .post('/api/v1/groups/wrongid/users/')
+      .post('/api/v1/groups/1/users/')
       .send({ email: 'jonbellion@mail.com' })
-      .set('Authroization', secondToken)
-      .send((err, res) => {
+      .set('Authorization', secondToken)
+      .end((err, res) => {
         expect(res.status).to.eql(401);
         expect(res.body).to.have.property('error');
         expect(res.body)
@@ -171,8 +171,8 @@ describe('Test add user to group route', () => {
       .request(server)
       .post('/api/v1/groups/1/users/')
       .send({ email: 'jonbellion@mail.com' })
-      .set('Authroization', userToken)
-      .send((err, res) => {
+      .set('Authorization', userToken)
+      .end((err, res) => {
         expect(res.status).to.eql(404);
         expect(res.body).to.have.property('error');
         expect(res.body)
@@ -186,12 +186,12 @@ describe('Test add user to group route', () => {
       .request(server)
       .post('/api/v1/groups/1/users/')
       .send({ email: 'tunde@mail.com' })
-      .set('Authroization', userToken)
-      .send((err, res) => {
+      .set('Authorization', userToken)
+      .end((err, res) => {
         expect(res.status).to.eql(201);
-        expect(res.body).to.have.property('id');
-        expect(res.body).to.have.property('userId');
-        expect(res.body).to.have.property('userRole');
+        expect(res.body.data).to.have.property('id');
+        expect(res.body.data).to.have.property('userId');
+        expect(res.body.data).to.have.property('userRole');
         done();
       });
   });
