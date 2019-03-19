@@ -1,11 +1,27 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import db from '../database/index';
 
 import server from '../app';
 import tokenFunction from '../utils/tokenHandler';
 
 chai.use(chaiHttp);
 const { expect } = chai;
+
+before((done) => {
+  db.query('DROP TABLE IF EXISTS users', (err, res) => {
+    done()
+  });
+});
+before((done) => {
+  db.query(`CREATE TABLE users (
+    id serial PRIMARY KEY,
+    email varchar(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    firstName varchar(255) NOT NULL,
+    lastName varchar(255) NOT NULL
+)`, (err, res) => done());
+})
 
 describe('Test token generator function', () => {
   it('should generate a unique token when user id is passed', (done) => {
@@ -31,7 +47,7 @@ describe('Test user signup route', () => {
         done();
       });
   });
-  it('should return error if a correct email isnt passed to email body', (done) => {
+  it('should return error if a correct email is not passed to email body', (done) => {
     const user = {
       email: 'john',
       password: 'secret',
@@ -89,6 +105,51 @@ describe('Test user signup route', () => {
         done();
       });
   });
+  it('should return error if lastName is not present ', (done) => {
+    const user = { firstName: 'Tunde', email: 'tunde@mail.com', password: 'secret' };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('Last name with at least 2 characters long is required');
+        done();
+      });
+  });
+  it('should return error if firstName is not present ', (done) => {
+    const user = { lastName: 'Nasri', email: 'tunde@mail.com', password: 'secret' };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.body.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        expect(res.body.error).to.eql('First name with at least 2 characters long is required');
+        done();
+      });
+  });
+  it('should post the user and return the user object, when correct details are passed along request', (done) => {
+    const user = {
+      firstName: 'Tunde',
+      lastName: 'Nasri',
+      email: 'superuser@mail.com',
+      password: 'secret',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        expect(res.status).to.eql(201);
+        expect(res.body.data).to.be.an('object');
+        expect(res.body.data).to.have.property('token');
+        expect(res.body.data).to.have.property('name');
+        done();
+      });
+  });
   it('should return email already in use, if the email exists', (done) => {
     const user = {
       firstName: 'Tunde',
@@ -107,51 +168,7 @@ describe('Test user signup route', () => {
         done();
       });
   });
-  it('should return error if lastName is now present ', (done) => {
-    const user = { firstName: 'Tunde', email: 'tunde@mail.com', password: 'secret' };
-    chai
-      .request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((err, res) => {
-        expect(res.body.status).to.eql(422);
-        expect(res.body).to.have.property('error');
-        expect(res.body.error).to.eql('Last name with at least 2 characters long is required');
-        done();
-      });
-  });
-  it('should return error if lastName is now present ', (done) => {
-    const user = { lastName: 'Nasri', email: 'tunde@mail.com', password: 'secret' };
-    chai
-      .request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((err, res) => {
-        expect(res.body.status).to.eql(422);
-        expect(res.body).to.have.property('error');
-        expect(res.body.error).to.eql('First name with at least 2 characters long is required');
-        done();
-      });
-  });
-  it('should post the user and return the user object, when correct details are passed along request', (done) => {
-    const user = {
-      firstName: 'Tunde',
-      lastName: 'Nasri',
-      email: 'tunde@mail.com',
-      password: 'secret',
-    };
-    chai
-      .request(server)
-      .post('/api/v1/auth/signup')
-      .send(user)
-      .end((err, res) => {
-        expect(res.body.status).to.eql(201);
-        expect(res.body.data).to.be.an('object');
-        expect(res.body.data).to.have.property('token');
-        expect(res.body.data).to.have.property('name');
-        done();
-      });
-  });
+ 
 });
 
 describe('Test user sign in route', () => {
