@@ -5,13 +5,6 @@ import tokenFunction from '../utils/tokenHandler';
 const userServices = new UserService();
 
 exports.signup = (req, res) => {
-  const { email, password, firstName, lastName } = req.body;
-  if (!email || !password || !firstName || !lastName) {
-    return res.send({
-      status: 400,
-      error: 'All fields must be present',
-    });
-  }
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.send({
@@ -38,13 +31,6 @@ exports.signup = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.send({
-      status: 400,
-      error: 'Please input login details email and password',
-    });
-  }
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.send({

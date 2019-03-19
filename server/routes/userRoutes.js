@@ -83,7 +83,7 @@ router.post(
   [
     body('email')
       .isEmail()
-      .withMessage('Please enter a valid email')
+      .withMessage('A valid email is required')
       .normalizeEmail()
       .trim(),
     body(
@@ -93,17 +93,30 @@ router.post(
       .trim()
       .isLength({ min: 6 })
       .isAlphanumeric(),
+    body('firstName')
+      .isLength({ min: 2 })
+      .withMessage('First name with at least 2 characters long is required'),
+    body('lastName')
+      .isLength({ min: 2 })
+      .withMessage('Last name with at least 2 characters long is required'),
   ],
   userController.signup,
 );
 
 router.post(
   '/login',
-  body('email')
-    .isEmail()
-    .withMessage('Please enter a valid email')
-    .normalizeEmail()
-    .trim(),
+  [
+    body('email')
+      .exists()
+      .withMessage('Please input login details email and password')
+      .isEmail()
+      .withMessage('Please enter a valid email')
+      .normalizeEmail()
+      .trim(),
+    body('password')
+      .exists()
+      .withMessage('Please input login details email and password'),
+  ],
   userController.login,
 );
 

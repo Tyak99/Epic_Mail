@@ -1,7 +1,5 @@
 /* eslint-disable class-methods-use-this */
 import Message from '../models/Message';
-import ReceivedMessage from '../models/ReceivedMessage';
-import SentMessage from '../models/SentMessages';
 import UserService from './userServices';
 
 const userServices = new UserService();
@@ -71,62 +69,6 @@ export default class MessageService {
     });
   }
 
-  AllReceivedMessage() {
-    this.receivedMessages = [
-      {
-        receiverId: 2,
-        messageId: 1,
-        createdOn: 1551886333846,
-      },
-    ];
-    return this.receivedMessages.map((message) => {
-      const newReceivedMessage = new ReceivedMessage();
-      newReceivedMessage.receiverId = message.receiverId;
-      newReceivedMessage.messageId = message.messageId;
-      newReceivedMessage.createdOn = message.createdOn;
-      return newReceivedMessage;
-    });
-  }
-
-  AllSentMessages() {
-    this.sentMessages = [
-      {
-        senderId: 1,
-        messageId: 1,
-        createdOn: 1551886333846,
-      },
-    ];
-    return this.sentMessages.map((message) => {
-      const newSentMessage = new SentMessage();
-      newSentMessage.receiverId = message.senderId;
-      newSentMessage.messageId = message.messageId;
-      newSentMessage.createdOn = message.createdOn;
-      return newSentMessage;
-    });
-  }
-
-  postReceivedMessage(data) {
-    const { receiverId } = data;
-    if (!receiverId) {
-      return 'error';
-    }
-    const message = new ReceivedMessage();
-    message.receiverId = data.receiverId;
-    message.messageId = data.messageId;
-    return message;
-  }
-
-  postSentMessage(data) {
-    const { senderId, messageId } = data;
-    if (!senderId) {
-      return 'error';
-    }
-    const message = new SentMessage();
-    message.senderId = senderId;
-    message.messageId = messageId;
-    return message;
-  }
-
   getReceivedMessage() {
     const allMessage = this.AllMessage();
     return allMessage.filter((message) => message.receiverId === 1);
@@ -157,7 +99,11 @@ export default class MessageService {
     }
     // else they can proceed
     const newMessage = new Message();
-    newMessage.id = allMessage.length + 1;
+    //get the last email in the array
+    const lastMessage = allMessage[allMessage.length - 1];
+    const newId = lastMessage.id + 1;
+    // check the id and add one
+    newMessage.id = newId;
     newMessage.subject = data.subject;
     newMessage.message = data.message;
     newMessage.status = toWHo === null ? 'draft' : 'sent';
@@ -166,18 +112,6 @@ export default class MessageService {
     newMessage.receiverId = toWHo === null ? null : toWHo.id;
     newMessage.parentMessageId = data.parentMessageId || null;
 
-    if (newMessage.receiverId !== null) {
-      this.postReceivedMessage({
-        receiverId: newMessage.receiverId,
-        messageId: newMessage.id,
-      });
-    }
-    if (newMessage.senderId !== null) {
-      this.postSentMessage({
-        senderId: newMessage.senderId,
-        messageId: newMessage.id,
-      });
-    }
     this.messages.push(newMessage);
     return newMessage;
   }
@@ -201,7 +135,8 @@ export default class MessageService {
     if (!foundMessage) {
       return 'error';
     }
-    this.messages.splice([id - 1], 1);
+    const messageIndex = this.messages.indexOf(foundMessage);
+    this.messages.splice(messageIndex, 1);
     return 'true';
   }
 
