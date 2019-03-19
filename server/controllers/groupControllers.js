@@ -1,6 +1,3 @@
-import GroupService from '../services/groupServices';
-
-const groupServices = new GroupService();
 
 exports.postGroup = (req, res) => {
   const { name, members } = req.body;
@@ -10,9 +7,4 @@ exports.postGroup = (req, res) => {
       error: 'Provide the neccessary details',
     });
   }
-  const group = groupServices.postGroup(req.body);
-  return res.send({
-    status: 201,
-    data: group,
-  });
 };
