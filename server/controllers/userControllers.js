@@ -6,10 +6,10 @@ import db from '../database/index';
 exports.signup = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.send({
-      status: 422,
+    return res.status(422).json({
+      status: 'Failed',
       error: errors.array()[0].msg,
-    });
+    })
   }
   // first check the database if that email exists previously
   db.query(
@@ -18,13 +18,13 @@ exports.signup = (req, res) => {
     (err, user) => {
       if (err) {
         return res.status(500).json({
-          status: 'failed',
+          status: 'Failed',
           error: 'Internal server error',
         });
       }
       if (user.rows[0]) {
         return res.status(404).json({
-          status: 'failed',
+          status: 'Failed',
           error: 'Email already in use',
         });
       }
@@ -38,7 +38,6 @@ exports.signup = (req, res) => {
         'INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING *',
         values,
         (err, createdUser) => {
-          console.log('DONT TELL ME YOU ARE GETTING HERE')
           return res.status(201).json({
             status: 'success',
             data: {
@@ -55,16 +54,22 @@ exports.signup = (req, res) => {
 exports.login = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.send({
-      status: 422,
+    return res.status(422).json({
+      status: 'Failed',
       error: errors.array()[0].msg,
-    });
+    })
   }
   const { email, password } = req.body;
   db.query('SELECT * FROM users WHERE email = $1', [email], (err, user) => {
+    if (err) {
+      return res.status(500).json({
+        status: 'Failed',
+        error: 'Internal server error',
+      })
+    }
     if (!user.rows[0]) {
       return res.status(400).json({
-        status: 'failed',
+        status: 'Failed',
         error: 'Invalid email or password',
       });
     }
@@ -72,7 +77,7 @@ exports.login = (req, res) => {
     bcrypt.compare(password, hash, (err, response) => {
       if (response === false) {
         return res.status(400).json({
-          status: 'failed',
+          status: 'Failed',
           error: 'Invalid email or password',
         });
       }

@@ -60,7 +60,7 @@ describe('Test user signup route', () => {
       .send(user)
       .end((err, res) => {
         expect(res.status).to.eql(422);
-        expect(res.body).to.have.property('status').to.eql('failed');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.eql('A valid email is required');
         done();
@@ -79,7 +79,7 @@ describe('Test user signup route', () => {
       .send(user)
       .end((err, res) => {
         expect(res.status).to.eql(422);
-        expect(res.body).to.have.property('status').to.eql('failed');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.eql(
           'Please enter a password with only text and numbers and at least 6 characters long',
@@ -100,7 +100,7 @@ describe('Test user signup route', () => {
       .send(user)
       .end((err, res) => {
         expect(res.status).to.eql(422);
-        expect(res.body).to.have.property('status').to.eql('failed');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.eql(
           'Please enter a password with only text and numbers and at least 6 characters long'
@@ -117,7 +117,7 @@ describe('Test user signup route', () => {
       .end((err, res) => {
         expect(res.status).to.eql(422);
         expect(res.body).to.have.property('error');
-        expect(res.body).to.have.property('status').to.eql('failed');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body.error).to.eql('Last name with at least 2 characters long is required');
         done();
       });
@@ -131,7 +131,7 @@ describe('Test user signup route', () => {
       .end((err, res) => {
         expect(res.status).to.eql(422);
         expect(res.body).to.have.property('error');
-        expect(res.body).to.have.property('status').to.eql('failed');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body.error).to.eql('First name with at least 2 characters long is required');
         done();
       });
@@ -168,7 +168,7 @@ describe('Test user signup route', () => {
       .send(user)
       .end((err, res) => {
         expect(res.status).to.eql(404);
-        expect(res.body.status).to.eql('failed');
+        expect(res.body.status).to.eql('Failed');
         expect(res.body.error).to.eql('Email already in use');
         done();
       });
@@ -183,8 +183,9 @@ describe('Test user sign in route', () => {
       .post('/api/v1/auth/login')
       .send({})
       .end((err, res) => {
-        expect(res.body.status).to.eql(422);
+        expect(res.status).to.eql(422);
         expect(res.body).to.have.property('error');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body.error).to.eql('Please input login details email and password')
         done();
       });
@@ -201,7 +202,7 @@ describe('Test user sign in route', () => {
       .end((err, res) => {
         expect(res.status).to.eql(422);
         expect(res.body).to.have.property('error');
-        expect(res.body).to.have.property('status').to.eql('failed');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body.error).to.eql('Please enter a valid email');
         done();
       });
@@ -214,7 +215,7 @@ describe('Test user sign in route', () => {
       .end((err, res) => {
         expect(res.status).to.eql(400);
         expect(res.body).to.have.property('error');
-        expect(res.body).to.have.property('status').to.eql('failed');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body.error).to.eql('Invalid email or password');
         done();
       });
@@ -225,7 +226,7 @@ describe('Test user sign in route', () => {
       .send({ email: 'superuser@mail.com', password: 'baseball' })
       .end((err, res) => {
         expect(res.status).to.eql(400);
-        expect(res.body).to.have.property('status').to.eql('failed');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body).to.have.property('error');
         expect(res.body.error).to.eql('Invalid email or password');
       });
@@ -256,7 +257,7 @@ describe('Test errors returned when database is down', () => {
       .send({ email: 'superuser@mail.com', password: 'secret', firstName: 'Tunde', lastName: 'Nasri' })
       .end((err, res) => {
         expect(res.status).to.eql(500);
-        expect(res.body).to.have.property('status').to.eql('failed');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body).to.have.property('error').to.eql('Internal server error');
         done();
       });
@@ -268,7 +269,7 @@ describe('Test errors returned when database is down', () => {
       .send({ email: 'superuser@mail.com', password: 'secret'})
       .end((err, res) => {
         expect(res.status).to.eql(500);
-        expect(res.body).to.have.property('status').to.eql('failed');
+        expect(res.body).to.have.property('status').to.eql('Failed');
         expect(res.body).to.have.property('error').to.eql('Internal server error');
         done();
       });
