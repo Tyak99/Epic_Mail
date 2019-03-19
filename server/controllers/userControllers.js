@@ -42,7 +42,7 @@ exports.signup = (req, res) => {
             status: 'success',
             data: {
               name: createdUser.rows[0].firstname,
-              token: tokenHandler.tokenFunction(createdUser.rows[0]),
+              token: tokenHandler.generateToken(createdUser.rows[0]),
             },
           });
         }
@@ -85,7 +85,7 @@ exports.login = (req, res) => {
         status: 'success',
         data: {
           name: user.rows[0].firstname,
-          token: tokenHandler.tokenFunction(user.rows[0]),
+          token: tokenHandler.generateToken(user.rows[0]),
         },
       });
     });

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import db from '../database/index';
 
-const tokenFunction = (user) => {
+const generateToken = (user) => {
   return jwt.sign({ sub: user.id }, process.env.secret, { expiresIn: '1h' });
 };
 const verifyToken = (req, res, next) => {
@@ -37,6 +37,6 @@ const verifyToken = (req, res, next) => {
 };
 
 module.exports = {
-  tokenFunction,
+  generateToken,
   verifyToken,
 };
