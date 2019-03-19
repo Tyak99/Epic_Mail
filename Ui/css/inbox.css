@@ -45,23 +45,6 @@ header .nav .logout a {
 header .nav .logout a:hover {
   color: #FFACAA;
 }
-
-.section1 {
-  width: 100%;
-  display: block;
-}
-.section1 a {
-  display: inline-block;
-  padding: 5px 30px;
-  text-decoration: none;
-  text-align: center;
-  color: #49738c;
-  width: 16%;
-  cursor: pointer;
-}
-.section1 a:hover {
-  color: #0e79d1;
-}
 .nav .logout a:hover {
   color: #FFACAA;
 }
