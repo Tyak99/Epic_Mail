@@ -1,8 +1,5 @@
 /* eslint-disable class-methods-use-this */
 import Message from '../models/Message';
-import UserService from './userServices';
-
-const userServices = new UserService();
 
 export default class MessageService {
   constructor() {
