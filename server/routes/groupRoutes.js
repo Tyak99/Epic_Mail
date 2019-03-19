@@ -1,5 +1,6 @@
 import express from 'express';
 import groupController from '../controllers/groupControllers';
+import tokenHandler from '../utils/tokenHandler';
 
 const router = express.Router();
 
@@ -38,6 +39,6 @@ const router = express.Router();
  */
 
 
-router.post('/', groupController.postGroup);
+router.post('/', tokenHandler.verifyToken, groupController.postGroup);
 
 export default router;
