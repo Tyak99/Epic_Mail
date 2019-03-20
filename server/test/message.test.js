@@ -118,6 +118,23 @@ describe('Test post a message route', () => {
         done();
       });
   });
+  it('should return error when the input emailTo is not an email', (done) => {
+    const dummyMessage = {
+      subject: 'Hello',
+      message: 'Thanks for coming',
+      emailTo: 'tunde',
+    };
+    chai
+      .request(server)
+      .post('/api/v1/messages')
+      .send(dummyMessage)
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(422);
+        expect(res.body.status).to.have.property('error');
+        done();
+      });
+  });
   it('should return error when the email user wants to send to cant be found', (done) => {
     const dummyMessage = {
       subject: 'Hello',

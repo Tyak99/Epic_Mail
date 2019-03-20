@@ -1,14 +1,22 @@
 import MessageService from '../services/messageServices';
 import db from '../database/index';
+import { validationResult } from 'express-validator/check';
 
 const messageServices = new MessageService();
 
 exports.postMessage = (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    })
+  }
   const { subject, message } = req.body;
   if (!subject || !message) {
     return res.send({
       status: 400,
-      error: 'Please input all the required data',
+      error: 'Please input the required data, subject and message',
     });
   }
   // check if email to is passed along request

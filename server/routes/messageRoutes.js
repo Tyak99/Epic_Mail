@@ -1,6 +1,7 @@
 import express from 'express';
 import messageController from '../controllers/messageControllers';
 import tokenHandler from '../utils/tokenHandler'
+import validator from '../utils/validator';
 
 const router = express.Router();
 
@@ -157,7 +158,7 @@ const router = express.Router();
  *         description: No id present to locate resource
  */
 
-router.post('/', tokenHandler.verifyToken, messageController.postMessage);
+router.post('/',validator.postMessageValidation, tokenHandler.verifyToken, messageController.postMessage);
 router.get('/', messageController.getReceivedMessages);
 router.get('/sent', messageController.getSentMessages);
 router.get('/unread', messageController.getUnreadMessages);
