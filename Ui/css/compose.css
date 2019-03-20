@@ -46,8 +46,10 @@ header .nav .logout a:hover {
   color: #FFACAA;
 }
 .aside-section {
-  width: 26%;
+  width: 20%;
   float: left;
+  height: 100vh;
+  box-shadow: 0 10px 35px -6px #8c8b8b inset;
 }
 
 .aside-section ul {
@@ -77,7 +79,7 @@ header .nav .logout a:hover {
 
 .section-2 {
   float: right;
-  width: 74%;
+  width: 80%;
   text-align: center;
 }
 form {
