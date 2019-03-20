@@ -200,7 +200,7 @@ describe('Test post a message route', () => {
         expect(res.body.data).to.have.property('created_at');
         expect(res.body.data)
           .to.have.property('status')
-          .eql('sent');
+          .eql('unread');
         done();
       });
   });

@@ -31,7 +31,7 @@ exports.postMessage = (req, res) => {
         const values = [
           subject,
           message,
-          'sent',
+          'unread',
           req.decoded.sub,
           user.rows[0].id,
         ];
@@ -194,6 +194,34 @@ exports.getMessageById = (req, res) => {
       return res.status(200).json({
         status: 'success',
         data: message.rows[0],
+      });
+    }
+  );
+};
+
+exports.getUnreadMessages = (req, res) => {
+  // check the db for messages that the user is the receiver
+  db.query(
+    'SELECT * FROM messages WHERE receiverid = $1 AND status = $2 AND receiverdeleted = $3',
+    [req.decoded.sub, 'unread', 0],
+    (err, messages) => {
+      if (err) {
+        return res.status(500).json({
+          status: 'failed',
+          error: 'Internal server error',
+        });
+      }
+      if (!messages.rows[0]) {
+        return res.status(200).json({
+          status: 'failed',
+          data: {
+            message: 'No unread messages found',
+          },
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: messages.rows,
       });
     }
   );
