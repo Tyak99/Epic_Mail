@@ -36,7 +36,7 @@ before((done) => {
 let userToken = '';
 let secondToken = '';
 
-describe('Logn a user in the message test', () => {
+describe('Login a user in the message test', () => {
   it('should return success and token when correct details so that token can be used', (done) => {
     chai
       .request(server)
@@ -118,11 +118,11 @@ describe('Test post a message route', () => {
         done();
       });
   });
-  it('should return error when the input emailTo is not an email', (done) => {
+  it('should return error when the input subject is less than 2 characters', (done) => {
     const dummyMessage = {
-      subject: 'Hello',
+      subject: 'H',
       message: 'Thanks for coming',
-      emailTo: 'tunde',
+      emailTo: 'tunde@mail.com',
     };
     chai
       .request(server)
@@ -131,7 +131,8 @@ describe('Test post a message route', () => {
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(422);
-        expect(res.body.status).to.have.property('error');
+        expect(res.body).to.have.property('error');
+        expect(res.body.status).to.eql('failed');
         done();
       });
   });
