@@ -216,3 +216,32 @@ describe('Test get received emails route', () => {
       });
   });
 });
+
+describe('Test get sent message route', () => {
+  it('should return no content when no sent messages is found ', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/sent')
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('message');
+        done();
+      });
+  });
+  it('should return an array of found sent messages', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/sent')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.an('array');
+        done();
+      });
+  });
+});
