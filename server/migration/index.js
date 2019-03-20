@@ -45,6 +45,16 @@ const dropUserTable = async () => {
   }
 };
 
+const dropMessageTable = async () => {
+  const queryText = 'DROP TABLE IF EXISTS messages CASCADE';
+  try {
+    await pool.query(queryText);
+    console.log('Dropped messages table');
+  } catch (err) {
+    console.log('Error dropping table');
+  }
+};
+
 /**
  * Create Tables
  */
@@ -96,16 +106,37 @@ const createGroupMemberTable = async () => {
   }
 };
 
+const createMessageTable = async () => {
+  const queryText = `CREATE TABLE messages (
+    id serial PRIMARY KEY,
+    message TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    status VARCHAR(255) NOT NULL,
+    senderid INT REFERENCES users(id) ON DELETE CASCADE,
+    receiverid INT REFERENCES users(id) ON DELETE CASCADE,
+    parentmessageid INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )`;
+  try {
+    await pool.query(queryText);
+    console.log('Create group member table');
+  } catch (err) {
+    console.log('Error creating group member table');
+  }
+};
+
 const dropAllTables = async () => {
   await dropGroupMemberTable();
   await dropGroupTable();
   await dropUserTable();
+  await dropMessageTable();
 };
 
 const createAllTables = async () => {
   await createUserTable();
   await createGroupTable();
   await createGroupMemberTable();
+  await createMessageTable();
 };
 
 module.exports = {
