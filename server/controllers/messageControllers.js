@@ -31,8 +31,8 @@ exports.postMessage = (req, res) => {
           user.rows[0].id,
         ];
         db.query(
-          'INSERT INTO messages (subject, message, status, senderid, receierid) VALUES ($1, $2, $3, $4, $5)',
-          [values],
+          'INSERT INTO messages (subject, message, status, senderid, receiverid) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+          values,
           (err, createdMessage) => {
             if (createdMessage.rows[0]) {
               const {
@@ -41,6 +41,7 @@ exports.postMessage = (req, res) => {
                 message,
                 status,
                 parentmessageid,
+                created_at,
               } = createdMessage.rows[0];
               return res.status(201).json({
                 status: 'success',
@@ -50,6 +51,7 @@ exports.postMessage = (req, res) => {
                   message,
                   status,
                   parentmessageid,
+                  created_at,
                 },
               });
             }
@@ -61,7 +63,7 @@ exports.postMessage = (req, res) => {
     //post a message without a receiver id making it a draft
     const values = [subject, message, 'draft', req.decoded.sub];
     db.query(
-      'INSERT INTO messages (subject, message, status, senderid)',
+      'INSERT INTO messages (subject, message, status, senderid) VALUES ($1, $2, $3, $4) RETURNING *',
       values,
       (err, createdMessage) => {
         if (createdMessage.rows[0]) {
@@ -71,6 +73,7 @@ exports.postMessage = (req, res) => {
             message,
             status,
             parentmessageid,
+            created_at,
           } = createdMessage.rows[0];
           return res.status(201).json({
             status: 'success',
@@ -80,6 +83,7 @@ exports.postMessage = (req, res) => {
               message,
               status,
               parentmessageid,
+              created_at,
             },
           });
         }
