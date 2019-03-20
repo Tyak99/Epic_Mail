@@ -25,7 +25,8 @@ before((done) => {
       senderid INT REFERENCES users(id) ON DELETE CASCADE,
       receiverid INT REFERENCES users(id) ON DELETE CASCADE,
       parentmessageid INT,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      receiverdeleted iNT DEFAULT 0
     )`,
     (err, res) => {
       done();
@@ -197,6 +198,36 @@ describe('Test post a message route', () => {
         expect(res.body.data)
           .to.have.property('status')
           .eql('sent');
+        done();
+      });
+  });
+});
+
+
+describe('Test get received emails route', () => {
+  it('should return no content when no received mesage is found', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(204);
+        expect(res.body.status).to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('message');
+        done();
+      });
+  });
+  it('should return the found array of received messages', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.an('array');
         done();
       });
   });
