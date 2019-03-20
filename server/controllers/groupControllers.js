@@ -125,8 +125,40 @@ const removeMember = (req, res) => {
   });
 };
 
+const deleteGroup = (req, res) => {
+  const { groupid } = req.params;
+  // check if the group exists in the db
+  db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
+    if (!group.rows[0]) {
+      return res.status(404).json({
+        status: 'Failed',
+        error: 'Group does not exist',
+      });
+    }
+    if (group.rows[0].adminid !== req.decoded.sub) {
+      return res.status(403).json({
+        status: 'Failed',
+        error: 'Error! Only group admin can delete group',
+      });
+    }
+    db.query(
+      'DELETE FROM groups WHERE id = $1',
+      [groupid],
+      (err, deletedGroup) => {
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'Group deleted successfully',
+          },
+        });
+      }
+    );
+  });
+};
+
 module.exports = {
   addUserToGroup,
   postGroup,
   removeMember,
+  deleteGroup,
 };
