@@ -95,10 +95,10 @@ const addUserToGroup = (req, res) => {
 const removeMember = (req, res) => {
   const { groupid, userid } = req.params;
   // check if group exists
-  db.query('SELECT * FROM groups WHERE id = $1', [group], (err, group) => {
+  db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
     if (!group.rows[0]) {
       return res.status(404).json({
-        status: 'success',
+        status: 'Failed',
         error: 'No group with that id found',
       });
     }
@@ -115,7 +115,7 @@ const removeMember = (req, res) => {
       [userid, groupid],
       (err, member) => {
         return res.status(200).json({
-          statua: 'success',
+          status: 'success',
           data: {
             message: 'User removed from group successfully',
           },

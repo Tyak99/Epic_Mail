@@ -210,7 +210,7 @@ describe('Test delete user from a group route', () => {
   it('should return error when group isnt found by the id provided in the route parameter', (done) => {
     chai
       .request(server)
-      .delete('/groups/wrongid/users/userid')
+      .delete('/api/v1/groups/100/users/6')
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(404);
@@ -224,7 +224,7 @@ describe('Test delete user from a group route', () => {
   it('should return error when a user that isnt an admin tries to delete user from the group', (done) => {
     chai
       .request(server)
-      .delete('/groups/1/users/2')
+      .delete('/api/v1/groups/1/users/2')
       .set('Authorization', secondToken)
       .end((err, res) => {
         expect(res.status).to.eql(403);
@@ -238,7 +238,7 @@ describe('Test delete user from a group route', () => {
   it('should remove user from group when all conditions are met', (done) => {
     chai
       .request(server)
-      .delete('/groups/1/users/2')
+      .delete('/api/v1/groups/1/users/2')
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(200);
