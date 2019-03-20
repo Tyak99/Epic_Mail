@@ -232,7 +232,7 @@ describe('Test delete user from a group route', () => {
           .to.have.property('status')
           .to.eql('Failed');
         expect(res.body).to.have.property('error');
-        done()
+        done();
       });
   });
   it('should remove user from group when all conditions are met', (done) => {
@@ -242,9 +242,57 @@ describe('Test delete user from a group route', () => {
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(200);
-        expect(res.body).to.have.property('status').to.eql('success');
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('success');
         expect(res.body.data).to.have.property('message');
-        done()
+        done();
       });
-  })
+  });
+});
+
+describe('Test user delete group they own route', () => {
+  it('should return error when no group is found', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/groups/5')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('Failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return error when user who sends request is not the group admin', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/groups/1')
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(403);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('Failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should delete group and return successs when all conditions are met', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/groups/1')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('message');
+        done();
+      });
+  });
 });
