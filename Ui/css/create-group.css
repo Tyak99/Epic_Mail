@@ -114,40 +114,6 @@ label {
   border-radius: 0.25em;
 }
 
-.add-btn {
-  padding: 7px;
-  background-color: cornflowerblue;
-  color: white;
-  cursor: pointer;
-}
-.add-btn:hover {
-  background-color: #3d92c9;
-}
-.list-members {
-  margin: 1rem;
-  background-color: lightgrey;
-  padding: 8px;
-  line-height: 1.5rem;
-  width: 80%;
-  display: grid;
-}
-.list-members p {
-  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid grey;
-  border-radius: 14px;
-  padding: 1px 8px;
-  margin: 2px;
-}
-
-.list-members p span {
-  font-size: 1rem;
-  cursor: pointer;
-  float: right;
-}
-.list-members p span:hover {
-  color: maroon;
-}
-
 .submit-btn {
   padding: 10px 20px;
   background-color: #49738c;
@@ -166,6 +132,9 @@ hr {
   box-shadow: 0 10px 10px -10px #8c8b8b inset;
 }
 
+.list-groups {
+  margin-left: 10px;
+}
 .list-groups ul {
   margin: 1rem;
   list-style: none;
@@ -198,8 +167,5 @@ hr {
     display: block;
     height: 91vh;
     background-color: #f1f1f1;
-  }
-  .list-members {
-    width: 90%;
   }
 }
