@@ -4,15 +4,15 @@ const postGroup = (req, res) => {
   const { name } = req.body;
   if (!name) {
     return res.status(400).json({
-      status: 'Failed',
+      status: 'failed',
       error: 'Provide the neccessary details',
     });
   }
   db.query('SELECT * FROM groups WHERE name = $1', [name], (err, data) => {
     if (data.rows[0]) {
       return res.status(409).json({
-        status: 'Failed',
-        error: 'Team name already exist',
+        status: 'failed',
+        error: 'group name already exist',
       });
     }
     db.query(
@@ -46,14 +46,14 @@ const addUserToGroup = (req, res) => {
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
     if (!group.rows[0]) {
       return res.status(404).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'Group does not exist',
       });
     }
     // if it exists, check if the user sending the request is an admin
     if (group.rows[0].adminid !== userId) {
       return res.status(401).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'Sorry, only group admin can modify group',
       });
     }
@@ -65,7 +65,7 @@ const addUserToGroup = (req, res) => {
       (err, user) => {
         if (!user.rows[0]) {
           return res.status(404).json({
-            status: 'Failed',
+            status: 'failed',
             error: 'Sorry no user with that email found',
           });
         }
@@ -98,14 +98,14 @@ const removeMember = (req, res) => {
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
     if (!group.rows[0]) {
       return res.status(404).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'No group with that id found',
       });
     }
     // if group exists, check if user making the request is authorized to do so
     if (group.rows[0].adminid !== req.decoded.sub) {
       return res.status(403).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'Only group admin is allowed to modify group',
       });
     }
@@ -118,6 +118,12 @@ const removeMember = (req, res) => {
           return res.status(500).json({
             status: 'failed',
             error: 'Internal server error'
+          })
+        }
+        if (!member.rows[0]) {
+          return res.status(404).json({
+            status: 'failed',
+            error: 'user does not exist in group'
           })
         }
         if (member.rows[0]) {
@@ -139,13 +145,13 @@ const deleteGroup = (req, res) => {
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
     if (!group.rows[0]) {
       return res.status(404).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'Group does not exist',
       });
     }
     if (group.rows[0].adminid !== req.decoded.sub) {
       return res.status(403).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'Error! Only group admin can delete group',
       });
     }
