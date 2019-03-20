@@ -45,31 +45,15 @@ header .nav .logout a {
 header .nav .logout a:hover {
   color: #FFACAA;
 }
-
-.section1 {
-  width: 100%;
-  display: block;
-}
-.section1 a {
-  display: inline-block;
-  padding: 5px 30px;
-  text-decoration: none;
-  text-align: center;
-  color: #49738c;
-  width: 16%;
-  cursor: pointer;
-}
-.section1 a:hover {
-  color: #0e79d1;
-}
 .nav .logout a:hover {
   color: #FFACAA;
 }
 
 .aside-section {
-  width: 26%;
+  width: 20%;
   float: left;
-  height: 83vh;
+  height: 100vh;
+  box-shadow: 0 10px 35px -6px #8c8b8b inset;
 }
 
 .aside-section ul {
@@ -98,7 +82,7 @@ header .nav .logout a:hover {
 
 .main-section {
   float: right;
-  width: 74%;
+  width: 80%;
   margin-top: 10px;
 }
 
