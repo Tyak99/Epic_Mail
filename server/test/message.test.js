@@ -211,7 +211,7 @@ describe('Test get received emails route', () => {
       .get('/api/v1/messages')
       .set('Authorization', userToken)
       .end((err, res) => {
-        expect(res.status).to.eql(204);
+        expect(res.status).to.eql(200);
         expect(res.body.status).to.eql('success');
         expect(res.body).to.have.property('data');
         expect(res.body.data).to.have.property('message');
