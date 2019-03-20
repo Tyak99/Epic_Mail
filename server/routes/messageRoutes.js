@@ -160,7 +160,7 @@ const router = express.Router();
 
 router.post('/',validator.postMessageValidation, tokenHandler.verifyToken, messageController.postMessage);
 router.get('/', tokenHandler.verifyToken,messageController.getReceivedMessages);
-// router.get('/sent', messageController.getSentMessages);
+router.get('/sent',tokenHandler.verifyToken ,messageController.getSentMessages);
 // router.get('/unread', messageController.getUnreadMessages);
 // router.get('/:id', messageController.getMessageById);
 // router.delete('/:id', messageController.deleteById);
