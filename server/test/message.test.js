@@ -222,7 +222,7 @@ describe('Test get received emails route', () => {
     chai
       .request(server)
       .get('/api/v1/messages')
-      .set('Authorization', userToken)
+      .set('Authorization', secondToken)
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body.status).to.eql('success');

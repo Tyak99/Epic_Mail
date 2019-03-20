@@ -5,12 +5,12 @@ import { validationResult } from 'express-validator/check';
 const messageServices = new MessageService();
 
 exports.postMessage = (req, res) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
       status: 'failed',
       error: errors.array()[0].msg,
-    })
+    });
   }
   const { subject, message } = req.body;
   if (!subject || !message) {
@@ -101,11 +101,32 @@ exports.postMessage = (req, res) => {
 };
 
 exports.getReceivedMessages = (req, res) => {
-  const messages = messageServices.getReceivedMessage();
-  res.send({
-    status: 200,
-    data: messages,
-  });
+  // search the message db table by the users id
+  db.query(
+    'SELECT * FROM messages WHERE receiverid = $1 AND receiverdeleted = $2',
+    [req.decoded.sub, 0],
+    (err, message) => {
+      if (err) {
+        return res.status(500).json({
+          status: 'failed',
+          error: 'Internal server error',
+        });
+      }
+      if (!message.rows[0]) {
+      console.log('########## you are right')
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'No received messages found'
+          }
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: message.rows,
+      });
+    }
+  );
 };
 
 exports.getSentMessages = (req, res) => {
