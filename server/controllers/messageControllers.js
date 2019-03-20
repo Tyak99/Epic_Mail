@@ -11,8 +11,8 @@ exports.postMessage = (req, res) => {
   }
   const { subject, message } = req.body;
   if (!subject || !message) {
-    return res.send({
-      status: 400,
+    return res.status(400)({
+      status: 'failed',
       error: 'Please input the required data, subject and message',
     });
   }
@@ -167,8 +167,8 @@ exports.getMessageById = (req, res) => {
         });
       }
       if (!message.rows[0]) {
-        return res.send({
-          status: 404,
+        return res.status(404).json({
+          status: 'failed',
           error: 'No message with that id found',
         });
       }
@@ -176,8 +176,8 @@ exports.getMessageById = (req, res) => {
         message.rows[0].senderid !== sub &&
         message.rows[0].receiverid !== sub
       ) {
-        return res.send({
-          status: 403,
+        return res.status(403).json({
+          status: 'failed',
           error:
             'Sorry, you can request a message only when you are the sender or receiver',
         });
@@ -192,7 +192,7 @@ exports.getMessageById = (req, res) => {
         });
       }
       return res.status(200).json({
-        status: 'failed',
+        status: 'success',
         data: message.rows[0],
       });
     }

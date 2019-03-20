@@ -78,7 +78,7 @@ describe('Login a user in the message test', () => {
         lastName: 'Champion',
       })
       .end((err, res) => {
-        expect(res.status).to.eql(200);
+        expect(res.status).to.eql(201);
         expect(res.body.status).to.eql('success');
         expect(res.body.data).to.have.property('token');
         thirdToken = res.body.data.token;
