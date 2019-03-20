@@ -1,6 +1,6 @@
 import db from '../database/index';
 
-const postGroup =  (req, res) => {
+const postGroup = (req, res) => {
   const { name } = req.body;
   if (!name) {
     return res.status(400).json({
@@ -82,8 +82,8 @@ const addUserToGroup = (req, res) => {
                   id: groupmember.rows[0].groupid,
                   userId: memberid,
                   userRole: groupmember.rows[0].userrole,
-                }
-              })
+                },
+              });
             }
           }
         );
@@ -92,7 +92,41 @@ const addUserToGroup = (req, res) => {
   });
 };
 
+const removeMember = (req, res) => {
+  const { groupid, userid } = req.params;
+  // check if group exists
+  db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
+    if (!group.rows[0]) {
+      return res.status(404).json({
+        status: 'Failed',
+        error: 'No group with that id found',
+      });
+    }
+    // if group exists, check if user making the request is authorized to do so
+    if (group.rows[0].adminid !== req.decoded.sub) {
+      return res.status(403).json({
+        status: 'Failed',
+        error: 'Only group admin is allowed to modify group',
+      });
+    }
+    // delete user if found in groupmember table
+    db.query(
+      'DELETE FROM groupmembers WHERE memberid = $1 AND groupid = $2',
+      [userid, groupid],
+      (err, member) => {
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'User removed from group successfully',
+          },
+        });
+      }
+    );
+  });
+};
+
 module.exports = {
   addUserToGroup,
   postGroup,
+  removeMember,
 };

@@ -43,4 +43,6 @@ router.post('/', tokenHandler.verifyToken, groupController.postGroup);
 
 router.post('/:groupid/users/', tokenHandler.verifyToken, groupController.addUserToGroup);
 
+router.delete('/:groupid/users/:userid', tokenHandler.verifyToken, groupController.removeMember)
+
 export default router;
