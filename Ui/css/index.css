@@ -1,0 +1,112 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Ubuntu", sans-serif;
+    background: #00B4DB;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #0083B0, #00B4DB);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #0083B0, #00B4DB); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+
+  }
+  
+  .container {
+      width: 90%;
+      margin: 0 auto;
+  }
+
+  .section {
+      float: left;
+      width: 50%;
+  }
+
+  .section-2 {
+      float: right;
+      width: 50%;
+  }
+
+  .section-3 {
+      width: 80%;
+      float: left;
+  }
+  .section-3 p {
+      font-size: large;
+  }
+  .header {
+      font-size: 72px;
+      text-align: center;
+      color: white;
+  }
+  .sub-headers{
+      font-size: 60px;
+      color: #efe8e8;
+  }
+  form {
+    max-width: 290px;
+    margin: 0 auto;
+}
+
+.form-title {
+    font-size: 1.5em;
+    margin-top: 0;
+}
+
+.form-group {
+    margin: 1rem 0;
+}
+
+label {
+    display: block;
+    margin-bottom: .5rem;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    font-size: 1em;
+    font-weight: 400;
+    border: 1px solid #ced4da;
+    border-radius: .25em;
+}
+
+.submit-btn {
+    font-size: large;
+    padding: 18px 44px;
+    background-color: indianred;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.submit-btn:hover {
+    background-color: #DB5756;
+}
+  
+.btn {
+    padding: 18px 44px;
+    border-radius: 10px;
+    color: white;
+    font-size: larger;
+    cursor: pointer;
+}
+
+.btn-register {
+    background-color: indianred;
+}
+
+.btn-login {
+    background-color: maroon
+}
+
+@media screen and (max-width: 750px) {
+    .section {
+        width: unset;
+    }
+    .section .sub-headers {
+        font-size: 50px;
+    }
+    .section-2 {
+        float: none;
+        width: unset;
+    }
+}

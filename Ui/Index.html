@@ -4,53 +4,69 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="./css/index.css" />
+    <!-- awsome font icons -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
     <!-- google fonts -->
     <link
       href="https://fonts.googleapis.com/css?family=Ubuntu"
       rel="stylesheet"
     />
-    <!-- font awesome icon -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link rel="stylesheet" href="./css/main.css" />
-    <link rel="stylesheet" href="./css/login.css" />
-    <title>Log in</title>
+    <title>Homepage</title>
   </head>
   <body>
-    <!-- Navigation -->
-    <div class="nav" id="myNav">
-      <h2 class="nav-brand">Epic Mail</h2>
-      <a href="#" class="active">Sign In</a>
-      <a href="./Signup.html"> Sign Up </a>
-      <a href="javascript:void(0);" class="icon" onclick="navbarFunction()">
-        <i class="fa fa-bars"></i>
-      </a>
-    </div>
-    <!-- End of Naviagtion -->
     <div class="container">
-      <form action="inbox.html">
-        <h2 class="form-title">
-          Sign In
-        </h2>
-        <div class="form-group">
-          <label for=""> Email </label>
-          <input
-            type="email"
-            class="form-control"
-            placeholder="Email Address"
-          />
-        </div>
-        <div class="form-group">
-          <label for=""> Password</label>
-          <input type="password" class="form-control" placeholder="Password" />
-        </div>
-        <div style="text-align: center">
-          <button type="submit" class="submit-btn">Sign in</button>
-        </div>
-      </form>
+      <div>
+        <h1 class="header">EPIC MAIL <i class="fas fa-mail-bulk"></i></h1>
+      </div>
+
+      <div class="section">
+        <h1 class="sub-headers">Send And Receive Emails Easily</h1>
+        <!-- <h1 class="sub-headers">Get notified instantly of new emails</h1>
+        <h1 class="sub-headers">Send emails to groups</h1> -->
+        <button class="btn btn-register">Get Started For Free</button>
+      </div>
+      <div class="section-2">
+        <form action="">
+          <h2 class="form-title">
+            Sign In
+          </h2>
+          <div class="form-group">
+            <label for=""> Email* </label>
+            <input
+              type="email"
+              class="form-control"
+              placeholder="Email Address"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for=""> Password*</label>
+            <input
+              type="password"
+              class="form-control"
+              placeholder="Password"
+              required
+            />
+          </div>
+          <div style="text-align: center">
+            <button type="submit" class="submit-btn">Sign In</button>
+          </div>
+        </form>
+      </div>
+      <br>
+      <div class="section-3">
+        <h1>AN EMAIL APP DESIGNED JUST FOR YOU</h1>
+        <p>
+          Epic mail is a platform that allows you send and receive messages at
+          ease, create groups, share messages to groups and lot more
+        </p>
+      </div>
     </div>
   </body>
-  <script src="./js/main.js"></script>
 </html>
