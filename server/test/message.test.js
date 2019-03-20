@@ -1,12 +1,74 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../app';
+import db from '../database/index';
 
 import MessageService from '../services/messageServices';
 
 const { expect } = chai;
 chai.use(chaiHttp);
 const messageServices = new MessageService();
+
+before((done) => {
+  db.query('DROP TABLE IF EXISTS messages', (err, res) => {
+    done();
+  });
+});
+
+before((done) => {
+  db.query(
+    `CREATE TABLE messages (
+      id serial PRIMARY KEY,
+      message TEXT NOT NULL,
+      subject TEXT NOT NULL,
+      status VARCHAR(255) NOT NULL,
+      senderid INT REFERENCES users(id) ON DELETE CASCADE,
+      receiverid INT REFERENCES users(id) ON DELETE CASCADE,
+      parentmessageid INT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )`,
+    (err, res) => {
+      done();
+    }
+  );
+});
+
+let userToken = '';
+let secondToken = '';
+
+describe('Logn a user in the message test', () => {
+  it('should return success and token when correct details so that token can be used', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send({ email: 'superuser@mail.com', password: 'secret' })
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body.data).to.have.property('token');
+        userToken = res.body.data.token;
+        done();
+      });
+  });
+  it('should return success and token when correct details so that token can be used', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/login')
+      .send({
+        email: 'tunde@mail.com',
+        password: 'secret',
+        firstName: 'John',
+        lastName: 'Champion',
+      })
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body.data).to.have.property('token');
+        secondToken = res.body.data.token;
+        done();
+      });
+  });
+});
 
 describe('Test that an array exists in all message service method', () => {
   it('should return an array when allmessage methis is called', (done) => {
@@ -20,6 +82,7 @@ describe('Test that an array exists in all message service method', () => {
     done();
   });
 });
+
 describe('Test post a message route', () => {
   it('should return error 404 on wrong api call', (done) => {
     chai
@@ -34,6 +97,7 @@ describe('Test post a message route', () => {
     chai
       .request(server)
       .post('/api/v1/messages')
+      .set('Authorizatioin', userToken)
       .send({})
       .end((err, res) => {
         expect(res.body).to.have.property('error');
@@ -47,6 +111,7 @@ describe('Test post a message route', () => {
     chai
       .request(server)
       .post('/api/v1/messages')
+      .set('Authorizatioin', userToken)
       .send(dummyMessage)
       .end((err, res) => {
         expect(res.body).to.have.property('error');
@@ -64,8 +129,9 @@ describe('Test post a message route', () => {
       .request(server)
       .post('/api/v1/messages')
       .send(dummyMessage)
+      .set('Authorization', userToken)
       .end((err, res) => {
-        expect(res.body.status).to.eql(404);
+        expect(res.status).to.eql(404);
         expect(res.body).to.have.property('error');
         done();
       });
@@ -79,13 +145,14 @@ describe('Test post a message route', () => {
       .request(server)
       .post('/api/v1/messages')
       .send(dummyMessage)
+      .set('Authorization', userToken)
       .end((err, res) => {
-        expect(res.body.status).to.eql(201);
+        expect(res.status).to.eql(201);
         expect(res.body).to.have.property('data');
         expect(res.body.data).to.have.property('id');
         expect(res.body.data).to.have.property('subject');
         expect(res.body.data).to.have.property('message');
-        expect(res.body.data).to.have.property('createdOn');
+        expect(res.body.data).to.have.property('created_at');
         expect(res.body.data)
           .to.have.property('status')
           .eql('draft');
@@ -96,20 +163,19 @@ describe('Test post a message route', () => {
     const dummyMessage = {
       subject: 'Hello',
       message: 'Thanks for coming',
-      emailTo: 'superuser@mail.com',
-      senderId: 3,
+      emailTo: 'tunde@mail.com',
     };
     chai
       .request(server)
       .post('/api/v1/messages')
       .send(dummyMessage)
+      .set('Authorization', userToken)
       .end((err, res) => {
-        expect(res.body.status).to.eql(201);
+        expect(res.status).to.eql(201);
         expect(res.body.data).to.have.property('id');
         expect(res.body.data).to.have.property('message');
         expect(res.body.data).to.have.property('subject');
-        expect(res.body.data).to.have.property('receiverId');
-        expect(res.body.data).to.have.property('senderId');
+        expect(res.body.data).to.have.property('created_at');
         expect(res.body.data)
           .to.have.property('status')
           .eql('sent');
