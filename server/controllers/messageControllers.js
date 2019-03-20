@@ -1,4 +1,5 @@
 import MessageService from '../services/messageServices';
+import db from '../database/index';
 
 const messageServices = new MessageService();
 
@@ -10,17 +11,81 @@ exports.postMessage = (req, res) => {
       error: 'Please input all the required data',
     });
   }
-  const postMessage = messageServices.postMessage(req.body);
-  if (postMessage == 'NOT FOUND') {
-    return res.send({
-      status: 404,
-      error: 'Email not found',
-    });
+  // check if email to is passed along request
+  if (req.body.emailTo) {
+    db.query(
+      'SELECT * FROM users WHERE email = $1',
+      [req.body.emailTo],
+      (err, user) => {
+        if (!user.rows[0]) {
+          return res.status(404).json({
+            status: 'failed',
+            error: 'No user with that email found',
+          });
+        }
+        const values = [
+          subject,
+          message,
+          'sent',
+          req.decoded.sub,
+          user.rows[0].id,
+        ];
+        db.query(
+          'INSERT INTO messages (subject, message, status, senderid, receierid) VALUES ($1, $2, $3, $4, $5)',
+          [values],
+          (err, createdMessage) => {
+            if (createdMessage.rows[0]) {
+              const {
+                id,
+                subject,
+                message,
+                status,
+                parentmessageid,
+              } = createdMessage.rows[0];
+              return res.status(201).json({
+                status: 'success',
+                data: {
+                  id,
+                  subject,
+                  message,
+                  status,
+                  parentmessageid,
+                },
+              });
+            }
+          }
+        );
+      }
+    );
+  } else {
+    //post a message without a receiver id making it a draft
+    const values = [subject, message, 'draft', req.decoded.sub];
+    db.query(
+      'INSERT INTO messages (subject, message, status, senderid)',
+      values,
+      (err, createdMessage) => {
+        if (createdMessage.rows[0]) {
+          const {
+            id,
+            subject,
+            message,
+            status,
+            parentmessageid,
+          } = createdMessage.rows[0];
+          return res.status(201).json({
+            status: 'success',
+            data: {
+              id,
+              subject,
+              message,
+              status,
+              parentmessageid,
+            },
+          });
+        }
+      }
+    );
   }
-  return res.send({
-    status: 201,
-    data: postMessage,
-  });
 };
 
 exports.getReceivedMessages = (req, res) => {
