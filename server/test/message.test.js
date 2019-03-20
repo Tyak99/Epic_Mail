@@ -33,6 +33,7 @@ before((done) => {
 
 let userToken = '';
 let secondToken = '';
+let thirdToken = '';
 
 describe('Login a user in the message test', () => {
   it('should return success and token when correct details so that token can be used', (done) => {
@@ -63,6 +64,24 @@ describe('Login a user in the message test', () => {
         expect(res.body.status).to.eql('success');
         expect(res.body.data).to.have.property('token');
         secondToken = res.body.data.token;
+        done();
+      });
+  });
+  it('should return success and token when correct details so that token can be used', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send({
+        email: 'john@mail.com',
+        password: 'secret',
+        firstName: 'John',
+        lastName: 'Champion',
+      })
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body.data).to.have.property('token');
+        thirdToken = res.body.data.token;
         done();
       });
   });
@@ -241,6 +260,46 @@ describe('Test get sent message route', () => {
         expect(res.body.status).to.eql('success');
         expect(res.body).to.have.property('data');
         expect(res.body.data).to.be.an('array');
+        done();
+      });
+  });
+});
+
+describe('Test get message by id route', () => {
+  it('should return error when no message is found by the provided id', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/999')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body.status).to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return error when the user making request is not the sender or receiver of message', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/1')
+      .set('Authorization', thirdToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(403);
+        expect(res.body.status).to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return the found message object', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/1')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.an('object');
         done();
       });
   });
