@@ -100,7 +100,7 @@ describe('Test create a group route', () => {
         expect(res.status).an.eql(400);
         expect(res.body)
           .to.have.property('status')
-          .eql('Failed');
+          .eql('failed');
         expect(res.body).to.have.property('error');
         done();
       });
@@ -131,7 +131,7 @@ describe('Test create a group route', () => {
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(409);
-        expect(res.body.status).to.eql('Failed');
+        expect(res.body.status).to.eql('failed');
         expect(res.body).to.have.property('error');
         done();
       });
@@ -142,7 +142,7 @@ describe('Test add user to group route', () => {
   it('should return error if group user wants to add members to doesnt exist', (done) => {
     chai
       .request(server)
-      .post('/api/v1/groups/wrongid/users/')
+      .post('/api/v1/groups/999/users/')
       .send({ email: 'jonbellion@mail.com' })
       .set('Authorization', userToken)
       .end((err, res) => {
@@ -150,7 +150,7 @@ describe('Test add user to group route', () => {
         expect(res.body).to.have.property('error');
         expect(res.body)
           .to.have.property('status')
-          .to.eql('Failed');
+          .to.eql('failed');
         done();
       });
   });
@@ -165,7 +165,7 @@ describe('Test add user to group route', () => {
         expect(res.body).to.have.property('error');
         expect(res.body)
           .to.have.property('status')
-          .to.eql('Failed');
+          .to.eql('failed');
         done();
       });
   });
@@ -180,7 +180,7 @@ describe('Test add user to group route', () => {
         expect(res.body).to.have.property('error');
         expect(res.body)
           .to.have.property('status')
-          .to.eql('Failed');
+          .to.eql('failed');
         done();
       });
   });
@@ -216,7 +216,7 @@ describe('Test delete user from a group route', () => {
         expect(res.status).to.eql(404);
         expect(res.body)
           .to.have.property('status')
-          .to.eql('Failed');
+          .to.eql('failed');
         expect(res.body).to.have.property('error');
         done();
       });
@@ -230,7 +230,7 @@ describe('Test delete user from a group route', () => {
         expect(res.status).to.eql(403);
         expect(res.body)
           .to.have.property('status')
-          .to.eql('Failed');
+          .to.eql('failed');
         expect(res.body).to.have.property('error');
         done();
       });
@@ -261,7 +261,7 @@ describe('Test user delete group they own route', () => {
         expect(res.status).to.eql(404);
         expect(res.body)
           .to.have.property('status')
-          .to.eql('Failed');
+          .to.eql('failed');
         expect(res.body).to.have.property('error');
         done();
       });
@@ -275,7 +275,7 @@ describe('Test user delete group they own route', () => {
         expect(res.status).to.eql(403);
         expect(res.body)
           .to.have.property('status')
-          .to.eql('Failed');
+          .to.eql('failed');
         expect(res.body).to.have.property('error');
         done();
       });
