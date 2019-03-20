@@ -111,15 +111,23 @@ const removeMember = (req, res) => {
     }
     // delete user if found in groupmember table
     db.query(
-      'DELETE FROM groupmembers WHERE memberid = $1 AND groupid = $2',
+      'DELETE FROM groupmembers WHERE memberid = $1 AND groupid = $2 RETURNING *',
       [userid, groupid],
       (err, member) => {
-        return res.status(200).json({
-          status: 'success',
-          data: {
-            message: 'User removed from group successfully',
-          },
-        });
+        if (err) {
+          return res.status(500).json({
+            status: 'failed',
+            error: 'Internal server error'
+          })
+        }
+        if (member.rows[0]) {
+          return res.status(200).json({
+            status: 'success',
+            data: {
+              message: 'User removed from group successfully',
+            },
+          });
+        }
       }
     );
   });
@@ -142,15 +150,23 @@ const deleteGroup = (req, res) => {
       });
     }
     db.query(
-      'DELETE FROM groups WHERE id = $1',
+      'DELETE FROM groups WHERE id = $1 RETURNING *',
       [groupid],
       (err, deletedGroup) => {
-        return res.status(200).json({
-          status: 'success',
-          data: {
-            message: 'Group deleted successfully',
-          },
-        });
+        if (err) {
+          return res.status(500).json({
+            status: 'failed',
+            error: 'Internal server error',
+          });
+        }
+        if (deletedGroup.rows[0]) {
+          return res.status(200).json({
+            status: 'success',
+            data: {
+              message: 'Group deleted successfully',
+            },
+          });
+        }
       }
     );
   });
