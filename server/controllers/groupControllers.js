@@ -114,12 +114,6 @@ const removeMember = (req, res) => {
       'DELETE FROM groupmembers WHERE memberid = $1 AND groupid = $2 RETURNING *',
       [userid, groupid],
       (err, member) => {
-        if (err) {
-          return res.status(500).json({
-            status: 'failed',
-            error: 'Internal server error'
-          })
-        }
         if (!member.rows[0]) {
           return res.status(404).json({
             status: 'failed',
@@ -159,12 +153,6 @@ const deleteGroup = (req, res) => {
       'DELETE FROM groups WHERE id = $1 RETURNING *',
       [groupid],
       (err, deletedGroup) => {
-        if (err) {
-          return res.status(500).json({
-            status: 'failed',
-            error: 'Internal server error',
-          });
-        }
         if (deletedGroup.rows[0]) {
           return res.status(200).json({
             status: 'success',

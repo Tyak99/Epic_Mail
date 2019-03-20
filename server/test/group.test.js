@@ -249,6 +249,20 @@ describe('Test delete user from a group route', () => {
         done();
       });
   });
+  it('should return error when user tries to remove am member that doesnt exist in the group', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/groups/1/users/999')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  })
 });
 
 describe('Test user delete group they own route', () => {
