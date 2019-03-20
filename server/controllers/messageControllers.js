@@ -1,7 +1,6 @@
 import { validationResult } from 'express-validator/check';
 import db from '../database/index';
 
-
 exports.postMessage = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -114,8 +113,36 @@ exports.getReceivedMessages = (req, res) => {
         return res.status(200).json({
           status: 'success',
           data: {
-            message: 'No received messages found'
-          }
+            message: 'No received messages found',
+          },
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: message.rows,
+      });
+    }
+  );
+};
+
+exports.getSentMessages = (req, res) => {
+  // search the message db table by the users id
+  db.query(
+    'SELECT * FROM messages WHERE senderid = $1',
+    [req.decoded.sub],
+    (err, message) => {
+      if (err) {
+        return res.status(500).json({
+          status: 'failed',
+          error: 'Internal server error',
+        });
+      }
+      if (!message.rows[0]) {
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'No sent messages found',
+          },
         });
       }
       return res.status(200).json({
