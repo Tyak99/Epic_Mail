@@ -44,7 +44,7 @@ const addUserToGroup = (req, res) => {
   const userId = req.decoded.sub;
   // search the group table if such group exists
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
-    if (!group) {
+    if (!group.rows[0]) {
       return res.status(404).json({
         status: 'Failed',
         error: 'Group does not exist',
