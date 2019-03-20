@@ -206,7 +206,6 @@ describe('Test post a message route', () => {
   });
 });
 
-
 describe('Test get received emails route', () => {
   it('should return no content when no received mesage is found', (done) => {
     chai
@@ -303,4 +302,31 @@ describe('Test get message by id route', () => {
         done();
       });
   });
+});
+
+describe('Test  get all unread messages route', () => {
+  it('should return no unread messages found if none is found', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/unread')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('message');
+        done();
+      });
+  });
+  it('should return array of unread messages if they exist ', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/unread')
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.an('array');
+        done();
+      });
+  })
 });
