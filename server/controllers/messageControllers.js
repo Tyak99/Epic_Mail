@@ -1,8 +1,6 @@
-import MessageService from '../services/messageServices';
-import db from '../database/index';
 import { validationResult } from 'express-validator/check';
+import db from '../database/index';
 
-const messageServices = new MessageService();
 
 exports.postMessage = (req, res) => {
   const errors = validationResult(req);
@@ -127,50 +125,4 @@ exports.getReceivedMessages = (req, res) => {
       });
     }
   );
-};
-
-exports.getSentMessages = (req, res) => {
-  const messages = messageServices.getSentMessages();
-  res.send({
-    status: 200,
-    data: messages,
-  });
-};
-
-exports.getMessageById = (req, res) => {
-  const message = messageServices.getMessageById(req.params.id);
-  if (message === 'error') {
-    return res.send({
-      status: 400,
-      error: 'No message with that id found',
-    });
-  }
-  return res.send({
-    status: 200,
-    data: message,
-  });
-};
-
-exports.deleteById = (req, res) => {
-  const message = messageServices.deleteMessage(req.params.id);
-  if (message === 'error') {
-    return res.send({
-      status: 400,
-      error: 'No message with that id found',
-    });
-  }
-  return res.send({
-    status: 200,
-    data: {
-      message: 'Message deleted successfully',
-    },
-  });
-};
-
-exports.getUnreadMessages = (req, res) => {
-  const messages = messageServices.getUnreadMessages();
-  return res.send({
-    status: 200,
-    data: messages,
-  });
 };
