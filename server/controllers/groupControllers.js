@@ -4,15 +4,15 @@ const postGroup = (req, res) => {
   const { name } = req.body;
   if (!name) {
     return res.status(400).json({
-      status: 'Failed',
+      status: 'failed',
       error: 'Provide the neccessary details',
     });
   }
   db.query('SELECT * FROM groups WHERE name = $1', [name], (err, data) => {
     if (data.rows[0]) {
       return res.status(409).json({
-        status: 'Failed',
-        error: 'Team name already exist',
+        status: 'failed',
+        error: 'group name already exist',
       });
     }
     db.query(
@@ -44,16 +44,16 @@ const addUserToGroup = (req, res) => {
   const userId = req.decoded.sub;
   // search the group table if such group exists
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
-    if (!group) {
+    if (!group.rows[0]) {
       return res.status(404).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'Group does not exist',
       });
     }
     // if it exists, check if the user sending the request is an admin
     if (group.rows[0].adminid !== userId) {
       return res.status(401).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'Sorry, only group admin can modify group',
       });
     }
@@ -65,7 +65,7 @@ const addUserToGroup = (req, res) => {
       (err, user) => {
         if (!user.rows[0]) {
           return res.status(404).json({
-            status: 'Failed',
+            status: 'failed',
             error: 'Sorry no user with that email found',
           });
         }
@@ -98,28 +98,36 @@ const removeMember = (req, res) => {
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
     if (!group.rows[0]) {
       return res.status(404).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'No group with that id found',
       });
     }
     // if group exists, check if user making the request is authorized to do so
     if (group.rows[0].adminid !== req.decoded.sub) {
       return res.status(403).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'Only group admin is allowed to modify group',
       });
     }
     // delete user if found in groupmember table
     db.query(
-      'DELETE FROM groupmembers WHERE memberid = $1 AND groupid = $2',
+      'DELETE FROM groupmembers WHERE memberid = $1 AND groupid = $2 RETURNING *',
       [userid, groupid],
       (err, member) => {
-        return res.status(200).json({
-          status: 'success',
-          data: {
-            message: 'User removed from group successfully',
-          },
-        });
+        if (!member.rows[0]) {
+          return res.status(404).json({
+            status: 'failed',
+            error: 'user does not exist in group'
+          })
+        }
+        if (member.rows[0]) {
+          return res.status(200).json({
+            status: 'success',
+            data: {
+              message: 'User removed from group successfully',
+            },
+          });
+        }
       }
     );
   });
@@ -131,26 +139,28 @@ const deleteGroup = (req, res) => {
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
     if (!group.rows[0]) {
       return res.status(404).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'Group does not exist',
       });
     }
     if (group.rows[0].adminid !== req.decoded.sub) {
       return res.status(403).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'Error! Only group admin can delete group',
       });
     }
     db.query(
-      'DELETE FROM groups WHERE id = $1',
+      'DELETE FROM groups WHERE id = $1 RETURNING *',
       [groupid],
       (err, deletedGroup) => {
-        return res.status(200).json({
-          status: 'success',
-          data: {
-            message: 'Group deleted successfully',
-          },
-        });
+        if (deletedGroup.rows[0]) {
+          return res.status(200).json({
+            status: 'success',
+            data: {
+              message: 'Group deleted successfully',
+            },
+          });
+        }
       }
     );
   });

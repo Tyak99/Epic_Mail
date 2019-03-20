@@ -71,7 +71,7 @@ const createGroupTable = async () => {
         groups (
           id serial PRIMARY KEY,
           name VARCHAR(180) NOT NULL,
-          adminid INT REFERENCES users(id)
+          adminid INT REFERENCES users(id) ON DELETE CASCADE
         )`;
   try {
     await pool.query(queryText);
@@ -84,8 +84,8 @@ const createGroupTable = async () => {
 const createGroupMemberTable = async () => {
   const queryText = `CREATE TABLE IF NOT EXISTS
         groupmembers (
-          groupid INT REFERENCES groups(id),
-          memberid INT REFERENCES users(id),
+          groupid INT REFERENCES groups(id) ON DELETE CASCADE,
+          memberid INT REFERENCES users(id) ON DELETE CASCADE,
           userrole VARCHAR(180)
         )`;
   try {
