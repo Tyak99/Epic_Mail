@@ -152,3 +152,49 @@ exports.getSentMessages = (req, res) => {
     }
   );
 };
+
+exports.getMessageById = (req, res) => {
+  const { sub } = req.decoded;
+  // check the db for the id passed in the parameter
+  db.query(
+    'SELECT * FROM messages WHERE id = $1',
+    [req.params.id],
+    (err, message) => {
+      if (err) {
+        return res.status(500).json({
+          status: 'failed',
+          error: 'Internal server error',
+        });
+      }
+      if (!message.rows[0]) {
+        return res.send({
+          status: 404,
+          error: 'No message with that id found',
+        });
+      }
+      if (
+        message.rows[0].senderid !== sub &&
+        message.rows[0].receiverid !== sub
+      ) {
+        return res.send({
+          status: 403,
+          error:
+            'Sorry, you can request a message only when you are the sender or receiver',
+        });
+      }
+      if (
+        sub == message.rows[0].receiverid &&
+        message.rows[0].receiverdeleted == 1
+      ) {
+        return res.status(404).json({
+          status: 'failed',
+          error: 'Sorry, the requested message has been deleted from inbox',
+        });
+      }
+      return res.status(200).json({
+        status: 'failed',
+        data: message.rows[0],
+      });
+    }
+  );
+};
