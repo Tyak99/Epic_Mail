@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./server/build/app.js",
+    "create-table": "node ./server/migration/index createAllTables",
+    "drop-table": "node ./server/migration/index dropAllTables",
+    "migrate": "npm run drop-table && npm run create-table",
     "dev": "nodemon --exec babel-node ./server/app.js",
     "test": "NODE_ENV=test nyc mocha --require @babel/register ./server/test --exit",
     "coverage": "nyc report --reporter=lcov --reporter=text-lcov | coveralls",
@@ -43,6 +46,7 @@
     "express": "^4.16.4",
     "express-validator": "^5.3.1",
     "jsonwebtoken": "^8.5.1",
+    "make-runnable": "^1.3.6",
     "pg": "^7.9.0",
     "swagger-jsdoc": "^3.2.7"
   },
