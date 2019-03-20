@@ -111,7 +111,6 @@ exports.getReceivedMessages = (req, res) => {
         });
       }
       if (!message.rows[0]) {
-      console.log('########## you are right')
         return res.status(200).json({
           status: 'success',
           data: {
