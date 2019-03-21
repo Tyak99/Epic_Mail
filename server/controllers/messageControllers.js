@@ -1,21 +1,18 @@
-import MessageService from '../services/messageServices';
-import db from '../database/index';
 import { validationResult } from 'express-validator/check';
-
-const messageServices = new MessageService();
+import db from '../database/index';
 
 exports.postMessage = (req, res) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
       status: 'failed',
       error: errors.array()[0].msg,
-    })
+    });
   }
   const { subject, message } = req.body;
   if (!subject || !message) {
-    return res.send({
-      status: 400,
+    return res.status(400).json({
+      status: 'failed',
       error: 'Please input the required data, subject and message',
     });
   }
@@ -34,7 +31,7 @@ exports.postMessage = (req, res) => {
         const values = [
           subject,
           message,
-          'sent',
+          'unread',
           req.decoded.sub,
           user.rows[0].id,
         ];
@@ -101,55 +98,131 @@ exports.postMessage = (req, res) => {
 };
 
 exports.getReceivedMessages = (req, res) => {
-  const messages = messageServices.getReceivedMessage();
-  res.send({
-    status: 200,
-    data: messages,
-  });
+  // search the message db table by the users id
+  db.query(
+    'SELECT * FROM messages WHERE receiverid = $1 AND receiverdeleted = $2',
+    [req.decoded.sub, 0],
+    (err, message) => {
+      if (err) {
+        return res.status(500).json({
+          status: 'failed',
+          error: 'Internal server error',
+        });
+      }
+      if (!message.rows[0]) {
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'No received messages found',
+          },
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: message.rows,
+      });
+    }
+  );
 };
 
 exports.getSentMessages = (req, res) => {
-  const messages = messageServices.getSentMessages();
-  res.send({
-    status: 200,
-    data: messages,
-  });
+  // search the message db table by the users id
+  db.query(
+    'SELECT * FROM messages WHERE senderid = $1',
+    [req.decoded.sub],
+    (err, message) => {
+      if (err) {
+        return res.status(500).json({
+          status: 'failed',
+          error: 'Internal server error',
+        });
+      }
+      if (!message.rows[0]) {
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'No sent messages found',
+          },
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: message.rows,
+      });
+    }
+  );
 };
 
 exports.getMessageById = (req, res) => {
-  const message = messageServices.getMessageById(req.params.id);
-  if (message === 'error') {
-    return res.send({
-      status: 400,
-      error: 'No message with that id found',
-    });
-  }
-  return res.send({
-    status: 200,
-    data: message,
-  });
-};
-
-exports.deleteById = (req, res) => {
-  const message = messageServices.deleteMessage(req.params.id);
-  if (message === 'error') {
-    return res.send({
-      status: 400,
-      error: 'No message with that id found',
-    });
-  }
-  return res.send({
-    status: 200,
-    data: {
-      message: 'Message deleted successfully',
-    },
-  });
+  const { sub } = req.decoded;
+  // check the db for the id passed in the parameter
+  db.query(
+    'SELECT * FROM messages WHERE id = $1',
+    [req.params.id],
+    (err, message) => {
+      if (err) {
+        return res.status(500).json({
+          status: 'failed',
+          error: 'Internal server error',
+        });
+      }
+      if (!message.rows[0]) {
+        return res.status(404).json({
+          status: 'failed',
+          error: 'No message with that id found',
+        });
+      }
+      if (
+        message.rows[0].senderid !== sub &&
+        message.rows[0].receiverid !== sub
+      ) {
+        return res.status(403).json({
+          status: 'failed',
+          error:
+            'Sorry, you can request a message only when you are the sender or receiver',
+        });
+      }
+      if (
+        sub == message.rows[0].receiverid &&
+        message.rows[0].receiverdeleted == 1
+      ) {
+        return res.status(404).json({
+          status: 'failed',
+          error: 'Sorry, the requested message has been deleted from inbox',
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: message.rows[0],
+      });
+    }
+  );
 };
 
 exports.getUnreadMessages = (req, res) => {
-  const messages = messageServices.getUnreadMessages();
-  return res.send({
-    status: 200,
-    data: messages,
-  });
+  // check the db for messages that the user is the receiver
+  db.query(
+    'SELECT * FROM messages WHERE receiverid = $1 AND status = $2 AND receiverdeleted = $3',
+    [req.decoded.sub, 'unread', 0],
+    (err, messages) => {
+      if (err) {
+        return res.status(500).json({
+          status: 'failed',
+          error: 'Internal server error',
+        });
+      }
+      if (!messages.rows[0]) {
+        return res.status(200).json({
+          status: 'failed',
+          data: {
+            message: 'No unread messages found',
+          },
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: messages.rows,
+      });
+    }
+  );
 };

@@ -115,7 +115,8 @@ const createMessageTable = async () => {
     senderid INT REFERENCES users(id) ON DELETE CASCADE,
     receiverid INT REFERENCES users(id) ON DELETE CASCADE,
     parentmessageid INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    receiverdeleted INT DEFAULT 0
   )`;
   try {
     await pool.query(queryText);

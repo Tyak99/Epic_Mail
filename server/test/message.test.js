@@ -3,11 +3,8 @@ import chaiHttp from 'chai-http';
 import server from '../app';
 import db from '../database/index';
 
-import MessageService from '../services/messageServices';
-
 const { expect } = chai;
 chai.use(chaiHttp);
-const messageServices = new MessageService();
 
 before((done) => {
   db.query('DROP TABLE IF EXISTS messages', (err, res) => {
@@ -25,7 +22,8 @@ before((done) => {
       senderid INT REFERENCES users(id) ON DELETE CASCADE,
       receiverid INT REFERENCES users(id) ON DELETE CASCADE,
       parentmessageid INT,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      receiverdeleted iNT DEFAULT 0
     )`,
     (err, res) => {
       done();
@@ -35,6 +33,7 @@ before((done) => {
 
 let userToken = '';
 let secondToken = '';
+let thirdToken = '';
 
 describe('Login a user in the message test', () => {
   it('should return success and token when correct details so that token can be used', (done) => {
@@ -68,18 +67,23 @@ describe('Login a user in the message test', () => {
         done();
       });
   });
-});
-
-describe('Test that an array exists in all message service method', () => {
-  it('should return an array when allmessage methis is called', (done) => {
-    const GetAllMessage = messageServices.AllMessage();
-    expect(GetAllMessage).to.be.an('array');
-    expect(GetAllMessage[0]).to.have.property('id');
-    expect(GetAllMessage[0]).to.have.property('subject');
-    expect(GetAllMessage[0]).to.have.property('message');
-    expect(GetAllMessage[0]).to.have.property('createdOn');
-    expect(GetAllMessage[0]).to.have.property('status');
-    done();
+  it('should return success and token when correct details so that token can be used', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send({
+        email: 'john@mail.com',
+        password: 'secret',
+        firstName: 'John',
+        lastName: 'Champion',
+      })
+      .end((err, res) => {
+        expect(res.status).to.eql(201);
+        expect(res.body.status).to.eql('success');
+        expect(res.body.data).to.have.property('token');
+        thirdToken = res.body.data.token;
+        done();
+      });
   });
 });
 
@@ -93,13 +97,14 @@ describe('Test post a message route', () => {
         done();
       });
   });
-  it('should return error if no data is passed along', (done) => {
+  it('should return error if no message is passed along is passed along', (done) => {
     chai
       .request(server)
       .post('/api/v1/messages')
-      .set('Authorizatioin', userToken)
-      .send({})
+      .set('Authorization', userToken)
+      .send({subject: 'Hello dear'})
       .end((err, res) => {
+        expect(res.status).to.eql(400);
         expect(res.body).to.have.property('error');
         done();
       });
@@ -111,9 +116,10 @@ describe('Test post a message route', () => {
     chai
       .request(server)
       .post('/api/v1/messages')
-      .set('Authorizatioin', userToken)
+      .set('Authorization', userToken)
       .send(dummyMessage)
       .end((err, res) => {
+        expect(res.status).to.eql(422)
         expect(res.body).to.have.property('error');
         done();
       });
@@ -196,242 +202,173 @@ describe('Test post a message route', () => {
         expect(res.body.data).to.have.property('created_at');
         expect(res.body.data)
           .to.have.property('status')
-          .eql('sent');
+          .eql('unread');
         done();
       });
-  });
-});
-
-
-describe('Test get received emails method', () => {
-  it('should return all recieved emails', (done) => {
-    const receivedMessages = messageServices.getReceivedMessage();
-    expect(receivedMessages).to.be.an('array');
-    receivedMessages.forEach((message) => {
-      expect(message).to.have.property('id');
-      expect(message).to.have.property('subject');
-      expect(message).to.have.property('message');
-      expect(message).to.have.property('status');
-      expect(message).to.have.property('createdOn');
-      expect(message).to.have.property('receiverId');
-      expect(message).to.have.property('senderId');
-    });
-    done();
   });
 });
 
 describe('Test get received emails route', () => {
-  it('should return error on wrong api call', (done) => {
-    chai
-      .request(server)
-      .get('/api/v1/wrongapi')
-      .end((err, res) => {
-        expect(res.status).to.eql(404);
-        done();
-      });
-  });
-  it('should return an array of received emails', (done) => {
+  it('should return no content when no received mesage is found', (done) => {
     chai
       .request(server)
       .get('/api/v1/messages')
+      .set('Authorization', userToken)
       .end((err, res) => {
-        expect(res.body.status).to.eql(200);
-        expect(res.body.data).to.be.an('array');
-        res.body.data.forEach((message) => {
-          expect(message).to.have.property('id');
-          expect(message).to.have.property('createdOn');
-          expect(message).to.have.property('message');
-          expect(message).to.have.property('subject');
-          expect(message).to.have.property('receiverId');
-          expect(message).to.have.property('senderId');
-          expect(message).to.have.property('status');
-        });
-        done();
-      });
-  });
-});
-
-describe('Test get sent emails method', () => {
-  it('should test get sent emails method ', (done) => {
-    const sentMessages = messageServices.getSentMessages();
-    expect(sentMessages).to.be.an('array');
-    sentMessages.forEach((message) => {
-      expect(message).to.have.property('id');
-      expect(message).to.have.property('subject');
-      expect(message).to.have.property('message');
-      expect(message).to.have.property('receiverId');
-      expect(message).to.have.property('senderId');
-      expect(message).to.have.property('status');
-      done();
-    });
-  });
-});
-
-describe('Test get sent messages route', () => {
-  it('should return error 404 on wrong api call', (done) => {
-    chai
-      .request(server)
-      .get('/wrongapi')
-      .end((err, res) => {
-        expect(res.status).to.eql(404);
-        done();
-      });
-  });
-  it('should return an array of sent messages', (done) => {
-    chai
-      .request(server)
-      .get('/api/v1/messages/sent')
-      .end((err, res) => {
-        expect(res.body.status).to.eql(200);
-        expect(res.body.data).to.be.an('array');
-        done();
-      });
-  });
-});
-
-describe('Test get email by id service method', () => {
-  it('it should return an email that correspond with the given id', (done) => {
-    const message = messageServices.getMessageById(1);
-    expect(message).to.be.an('object');
-    expect(message).to.have.property('id');
-    expect(message).to.have.property('subject');
-    expect(message).to.have.property('message');
-    done();
-  });
-  it('should return error when no id is passed along the request', (done) => {
-    const message = messageServices.getMessageById();
-    expect(message).to.be.eql('error');
-    done();
-  });
-});
-
-describe('Test get email by id route', () => {
-  it('should return error when no email is found with the provided id', (done) => {
-    chai
-      .request(server)
-      .get('/api/v1/messages/:id')
-      .end((err, res) => {
-        expect(res.body.status).to.eql(400);
-        expect(res.body).to.have.property('error');
-        done();
-      });
-  });
-  it('should return a message object when message is found', (done) => {
-    chai
-      .request(server)
-      .get('/api/v1/messages/1')
-      .end((err, res) => {
-        expect(res.body.status).to.eql(200);
-        expect(res.body.data).to.be.an('object');
-        expect(res.body.data).to.has.property('id');
-        expect(res.body.data).to.has.property('message');
-        expect(res.body.data).to.has.property('subject');
-        expect(res.body.data).to.has.property('createdOn');
-        expect(res.body.data).to.has.property('senderId');
-        expect(res.body.data).to.has.property('receiverId');
-        done();
-      });
-  });
-});
-
-describe('Test delete email service method', () => {
-  it('should return error if no message with the id is found', (done) => {
-    const message = messageServices.deleteMessage(654);
-    expect(message).to.eql('error');
-    done();
-  });
-  it('shohld return error if no id is passed along at all', (done) => {
-    const message = messageServices.deleteMessage();
-    expect(message).to.eql('error');
-    done();
-  });
-  it('should return true if mesage has been found and deleted', (done) => {
-    const message = messageServices.deleteMessage(1);
-    expect(message).to.eql('true');
-    done();
-  });
-});
-
-describe('Test the delete message route', () => {
-  it('should return error if wrong id is passed', (done) => {
-    chai
-      .request(server)
-      .delete('/api/v1/messages/5678')
-      .end((err, res) => {
-        expect(res.body.status).to.eql(400);
-        expect(res.body).to.have.property('error');
-        done();
-      });
-  });
-  it('should return error if no id is passed', (done) => {
-    chai
-      .request(server)
-      .delete('/api/v1/messages')
-      .end((err, res) => {
-        expect(res.status).to.eql(404);
-        done();
-      });
-  });
-  it('should return done deleted when the right id is passed and the message is deleted', (done) => {
-    chai
-      .request(server)
-      .delete('/api/v1/messages/1')
-      .end((err, res) => {
-        expect(res.body.status).to.eql(200);
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body).to.have.property('data');
         expect(res.body.data).to.have.property('message');
         done();
       });
   });
+  it('should return the found array of received messages', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages')
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.an('array');
+        done();
+      });
+  });
 });
 
-describe('Test for unread email', () => {
-  describe('Test get unread emails service method ', () => {
-    it('should return an empty array if no data match the criteria', (done) => {
-      const unreadMessages = messageServices.getUnreadMessages();
-      expect(unreadMessages).to.be.an('array');
-      done();
-    });
-    it('should return an array of messages that match the criteria of status !== read', (done) => {
-      const dummyMessage = {
-        subject: 'Hello',
-        message: 'You are welcome',
-        emailTo: 'superuser@mail.com',
-      };
-      messageServices.postMessage(dummyMessage);
-      const unreadMessages = messageServices.getUnreadMessages();
-      expect(unreadMessages).to.be.an('array');
-      unreadMessages.forEach((message) => {
-        expect(message).to.have.property('id');
-        expect(message).to.have.property('subject');
-        expect(message).to.have.property('message');
-        expect(message).to.have.property('senderId');
-        expect(message).to.have.property('receiverId');
-        expect(message)
-          .to.have.property('status')
-          .not.eql('read');
+describe('Test get sent message route', () => {
+  it('should return no content when no sent messages is found ', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/sent')
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('message');
+        done();
       });
+  });
+  it('should return an array of found sent messages', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/sent')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.an('array');
+        done();
+      });
+  });
+});
+
+describe('Test get message by id route', () => {
+  it('should return error when no message is found by the provided id', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/999')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body.status).to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return error when the user making request is not the sender or receiver of message', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/1')
+      .set('Authorization', thirdToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(403);
+        expect(res.body.status).to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return the found message object', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/1')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.an('object');
+        done();
+      });
+  });
+});
+
+describe('Test  get all unread messages route', () => {
+  it('should return no unread messages found if none is found', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/unread')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('message');
+        done();
+      });
+  });
+  it('should return array of unread messages if they exist ', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/unread')
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.an('array');
+        done();
+      });
+  });
+});
+
+describe('Test errors returned when database is down', () => {
+  before((done) => {
+    db.query('DROP TABLE IF EXISTS messages CASCADE', (err, res) => {
       done();
     });
   });
-  describe('Test get unread messages route', () => {
-    it('should return array of messages if unread messages is found', (done) => {
-      chai
-        .request(server)
-        .get('/api/v1/messages/unread')
-        .end((err, res) => {
-          expect(res.body.data).to.be.an('array');
-          res.body.data.forEach((message) => {
-            expect(message).to.have.property('id');
-            expect(message).to.have.property('subject');
-            expect(message).to.have.property('message');
-            expect(message).to.have.property('senderId');
-            expect(message).to.have.property('receiverId');
-            expect(message)
-              .to.have.property('status')
-              .not.eql('read');
-          });
-          done();
-        });
-    });
+  it('should test for error on GET MESSAGE by id when database is down', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/1')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(500);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        expect(res.body)
+          .to.have.property('error')
+          .to.eql('Internal server error');
+        done();
+      });
+  });
+  it('should test for error on login page when database is down', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/unread')
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(500);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        expect(res.body)
+          .to.have.property('error')
+          .to.eql('Internal server error');
+        done();
+      });
   });
 });

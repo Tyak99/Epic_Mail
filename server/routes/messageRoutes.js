@@ -159,9 +159,9 @@ const router = express.Router();
  */
 
 router.post('/',validator.postMessageValidation, tokenHandler.verifyToken, messageController.postMessage);
-router.get('/', messageController.getReceivedMessages);
-router.get('/sent', messageController.getSentMessages);
-router.get('/unread', messageController.getUnreadMessages);
-router.get('/:id', messageController.getMessageById);
-router.delete('/:id', messageController.deleteById);
+router.get('/', tokenHandler.verifyToken,messageController.getReceivedMessages);
+router.get('/sent',tokenHandler.verifyToken ,messageController.getSentMessages);
+router.get('/unread', tokenHandler.verifyToken, messageController.getUnreadMessages);
+router.get('/:id', tokenHandler.verifyToken, messageController.getMessageById);
+// router.delete('/:id', messageController.deleteById);
 export default router;
