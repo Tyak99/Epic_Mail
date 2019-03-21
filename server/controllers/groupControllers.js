@@ -3,12 +3,12 @@ import db from '../database/index';
 
 const postGroup = (req, res) => {
   const { name } = req.body;
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
       status: 'failed',
       error: errors.array()[0].msg,
-    })
+    });
   }
   if (!name) {
     return res.status(400).json({
@@ -50,12 +50,12 @@ const postGroup = (req, res) => {
 const addUserToGroup = (req, res) => {
   const { groupid } = req.params;
   const userId = req.decoded.sub;
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
       status: 'failed',
       error: errors.array()[0].msg,
-    })
+    });
   }
   // search the group table if such group exists
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
@@ -88,8 +88,8 @@ const addUserToGroup = (req, res) => {
         if (memberid == req.decoded.sub) {
           return res.status(409).json({
             status: 'failed',
-            error: 'You are a already a member of this group'
-          })
+            error: 'You are a already a member of this group',
+          });
         }
         const values = [groupid, memberid, 'member'];
         db.query(
@@ -115,12 +115,12 @@ const addUserToGroup = (req, res) => {
 
 const removeMember = (req, res) => {
   const { groupid, userid } = req.params;
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
       status: 'failed',
       error: errors.array()[0].msg,
-    })
+    });
   }
   // check if group exists
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
@@ -137,12 +137,12 @@ const removeMember = (req, res) => {
         error: 'Only group admin is allowed to modify group',
       });
     }
-    if (group.rows[0].adminid == userid ) {
+    if (group.rows[0].adminid == userid) {
       return res.status(422).json({
         status: 'failed',
-        error: 'admin cannot be removed from group'
-      })
-    } 
+        error: 'admin cannot be removed from group',
+      });
+    }
     // delete user if found in groupmember table
     db.query(
       'DELETE FROM groupmembers WHERE memberid = $1 AND groupid = $2 RETURNING *',
@@ -151,8 +151,8 @@ const removeMember = (req, res) => {
         if (!member.rows[0]) {
           return res.status(404).json({
             status: 'failed',
-            error: 'user does not exist in group'
-          })
+            error: 'user does not exist in group',
+          });
         }
         if (member.rows[0]) {
           return res.status(200).json({
@@ -169,12 +169,12 @@ const removeMember = (req, res) => {
 
 const deleteGroup = (req, res) => {
   const { groupid } = req.params;
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
       status: 'failed',
       error: errors.array()[0].msg,
-    })
+    });
   }
   // check if the group exists in the db
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
@@ -208,12 +208,12 @@ const deleteGroup = (req, res) => {
 };
 
 const postGroupMessage = (req, res) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
       status: 'failed',
       error: errors.array()[0].msg,
-    })
+    });
   }
   // i will check the group table to see if the group exists
   db.query(
@@ -231,7 +231,9 @@ const postGroupMessage = (req, res) => {
         [req.params.groupid],
         (err, groupmembers) => {
           // the arrays of all the members in the group
-          const allGroupMembers = groupmembers.rows;
+          const allGroupMembers = groupmembers.rows.filter((member) => {
+            return member.memberid !== req.decoded.sub;
+          });
           // subject and message passed in the request body
           const { subject, message } = req.body;
           // getting the sender id from the token validator middleware
@@ -256,7 +258,13 @@ const postGroupMessage = (req, res) => {
           };
           const initializeSendMessage = sendMessages();
           initializeSendMessage.then((result) => {
-            const { id, message, subject, parentmessageid, created_at } = result.rows[0]
+            const {
+              id,
+              message,
+              subject,
+              parentmessageid,
+              created_at,
+            } = result.rows[0];
             return res.status(200).json({
               status: 'success',
               data: {
@@ -264,8 +272,8 @@ const postGroupMessage = (req, res) => {
                 message,
                 subject,
                 parentmessageid,
-                created_at
-              }
+                created_at,
+              },
             });
           });
         }
