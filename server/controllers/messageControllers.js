@@ -1,7 +1,21 @@
-import { validationResult } from 'express-validator/check';
+import { validationResult, check } from 'express-validator/check';
 import db from '../database/index';
 
 exports.postMessage = (req, res) => {
+  // an email check function
+  const validateEmail = (data) => {
+    const emailCheck = /\S+@\S+\.\S+/;
+    return emailCheck.test(data);
+  };
+  // check if email is present in request then run the validation function
+  if (req.body.emailTo) {
+    if (validateEmail(req.body.emailTo)  == false ) {
+      return res.status(422).json({
+        status: 'failed',
+        error: 'Invalid email input'
+      })
+    }
+  }
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -10,12 +24,6 @@ exports.postMessage = (req, res) => {
     });
   }
   const { subject, message } = req.body;
-  if (!subject || !message) {
-    return res.status(400).json({
-      status: 'failed',
-      error: 'Please input the required data, subject and message',
-    });
-  }
   // check if email to is passed along request
   if (req.body.emailTo) {
     db.query(

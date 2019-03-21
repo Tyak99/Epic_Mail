@@ -158,7 +158,7 @@ const router = express.Router();
  *         description: No id present to locate resource
  */
 
-router.post('/',validator.postMessageValidation, tokenHandler.verifyToken, messageController.postMessage);
+router.post('/', validator.postMessageValidation, tokenHandler.verifyToken, messageController.postMessage);
 router.get('/', tokenHandler.verifyToken,messageController.getReceivedMessages);
 router.get('/sent',tokenHandler.verifyToken ,messageController.getSentMessages);
 router.get('/unread', tokenHandler.verifyToken, messageController.getUnreadMessages);
