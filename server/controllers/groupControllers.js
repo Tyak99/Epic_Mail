@@ -10,12 +10,6 @@ const postGroup = (req, res) => {
       error: errors.array()[0].msg,
     });
   }
-  if (!name) {
-    return res.status(400).json({
-      status: 'failed',
-      error: 'Name is required to create a group',
-    });
-  }
   db.query('SELECT * FROM groups WHERE name = $1', [name], (err, data) => {
     if (data.rows[0]) {
       return res.status(409).json({
@@ -67,7 +61,7 @@ const addUserToGroup = (req, res) => {
     }
     // if it exists, check if the user sending the request is an admin
     if (group.rows[0].adminid !== userId) {
-      return res.status(401).json({
+      return res.status(403).json({
         status: 'failed',
         error: 'Sorry, only group admin can modify group',
       });
