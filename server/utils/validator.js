@@ -1,4 +1,4 @@
-import { check } from 'express-validator/check';
+import { check, param } from 'express-validator/check';
 
 const postMessageValidation = [
   check('subject')
@@ -13,7 +13,12 @@ const postGroupValidation = [
     .isAlphanumeric(),
 ];
 
+const postUserToGroupValidation = [
+  param('groupid', 'Invalid group id').isNumeric()
+]
+
 module.exports = {
   postMessageValidation,
   postGroupValidation,
+  postUserToGroupValidation,
 };

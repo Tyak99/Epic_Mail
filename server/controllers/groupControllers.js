@@ -50,6 +50,13 @@ const postGroup = (req, res) => {
 const addUserToGroup = (req, res) => {
   const { groupid } = req.params;
   const userId = req.decoded.sub;
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    })
+  }
   // search the group table if such group exists
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
     if (!group.rows[0]) {

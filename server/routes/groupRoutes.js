@@ -42,7 +42,7 @@ const router = express.Router();
 
 router.post('/', tokenHandler.verifyToken, validator.postGroupValidation, groupController.postGroup);
 
-router.post('/:groupid/users/', tokenHandler.verifyToken, groupController.addUserToGroup);
+router.post('/:groupid/users/', tokenHandler.verifyToken, validator.postUserToGroupValidation, groupController.addUserToGroup);
 
 router.delete('/:groupid/users/:userid', tokenHandler.verifyToken, groupController.removeMember)
 
