@@ -351,7 +351,7 @@ describe('Test DELETE message by id route', () => {
   it('should return error when the person requesting to delete the message is neither the sender nor receiver', (done) => {
     chai
       .request(server)
-      .delete('/api/v1/messages/1')
+      .delete('/api/v1/messages/2')
       .set('Authorization', thirdToken)
       .end((err, res) => {
         expect(res.status).to.eql(403);
@@ -365,7 +365,7 @@ describe('Test DELETE message by id route', () => {
   it('should return deleted successfully when the receiver is making the request', (done) => {
     chai
       .request(server)
-      .delete('/api/v1/messages/1')
+      .delete('/api/v1/messages/2')
       .set('Authorization', secondToken)
       .end((err, res) => {
         expect(res.status).to.eql(200);
@@ -380,7 +380,7 @@ describe('Test DELETE message by id route', () => {
   it('should delete message successfully when the sender is making the request', (done) => {
     chai
       .request(server)
-      .delete('/api/v1/messages/1')
+      .delete('/api/v1/messages/2')
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(200);
