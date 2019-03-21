@@ -1,6 +1,7 @@
 import express from 'express';
 import groupController from '../controllers/groupControllers';
 import tokenHandler from '../utils/tokenHandler';
+import validator from '../utils/validator';
 
 const router = express.Router();
 
@@ -39,13 +40,13 @@ const router = express.Router();
  */
 
 
-router.post('/', tokenHandler.verifyToken, groupController.postGroup);
+router.post('/', tokenHandler.verifyToken, validator.postGroupValidation, groupController.postGroup);
 
-router.post('/:groupid/users/', tokenHandler.verifyToken, groupController.addUserToGroup);
+router.post('/:groupid/users/', tokenHandler.verifyToken, validator.GroupIdValidation, groupController.addUserToGroup);
 
-router.delete('/:groupid/users/:userid', tokenHandler.verifyToken, groupController.removeMember)
+router.delete('/:groupid/users/:userid', tokenHandler.verifyToken, validator.deleteUserFromGroupValidation, groupController.removeMember)
 
-router.delete('/:groupid', tokenHandler.verifyToken, groupController.deleteGroup)
+router.delete('/:groupid', tokenHandler.verifyToken, validator.GroupIdValidation, groupController.deleteGroup)
 
-router.post('/:groupid/messages', tokenHandler.verifyToken, groupController.postGroupMessage)
+router.post('/:groupid/messages', tokenHandler.verifyToken,validator.postMessageToGroupValidation,  groupController.postGroupMessage)
 export default router;
