@@ -48,6 +48,10 @@ const updateGroupValidator = [
     .isLength({ min: 2 })
     .isAlphanumeric(),
 ];
+
+const deleteMessageValidation = [
+  param('id', 'Invalid message id').isNumeric(),
+]
 module.exports = {
   postMessageValidation,
   postGroupValidation,
@@ -55,4 +59,5 @@ module.exports = {
   deleteUserFromGroupValidation,
   postMessageToGroupValidation,
   updateGroupValidator,
+  deleteMessageValidation,
 };
