@@ -70,6 +70,45 @@ const postGroup = (req, res) => {
   });
 };
 
+const updateGroup = (req, res) => {
+  const { groupid } = req.params;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    });
+  }
+  db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
+    if (!group.rows[0]) {
+      return res.status(404).json({
+        status: 'failed',
+        error: 'No group with that id found',
+      });
+    }
+    // if group exists, check if user making the request is authorized to do so
+    if (group.rows[0].adminid !== req.decoded.sub) {
+      return res.status(403).json({
+        status: 'failed',
+        error: 'Only group admin is allowed to modify group',
+      });
+    }
+    // delete user if found in groupmember table
+    db.query(
+      'UPDATE groups SET name = $1 WHERE id = $2 RETURNING *',
+      [req.body.name, groupid],
+      (err, updatedGroup) => {
+        if (updatedGroup.rows[0]) {
+          return res.status(200).json({
+            status: 'success',
+            data: updatedGroup.rows[0],
+          });
+        }
+      }
+    );
+  });
+};
+
 const addUserToGroup = (req, res) => {
   const { groupid } = req.params;
   const userId = req.decoded.sub;
@@ -314,4 +353,5 @@ module.exports = {
   deleteGroup,
   postGroupMessage,
   getAllGroups,
+  updateGroup,
 };

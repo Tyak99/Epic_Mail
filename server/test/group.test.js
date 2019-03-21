@@ -157,6 +157,49 @@ describe('Test create a group route', () => {
   });
 });
 
+describe('Test UPDATE group name route', () => {
+  it('return error when the id is not a number', (done) => {
+    chai
+      .request(server)
+      .put('/api/v1/groups/sjsjd/name')
+      .send({ name: 'Akatsuki' })
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(422);
+        expect(res.body.status).to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return error when input name is not the allowed characters', (done) => {
+    chai
+      .request(server)
+      .put('/api/v1/groups/1/name')
+      .send({ name: '' })
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(422);
+        expect(res.body.status).to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return the updated group', (done) => {
+    chai
+      .request(server)
+      .put('/api/v1/groups/1/name')
+      .send({ name: 'Akatsuki' })
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('id');
+        expect(res.body.data).to.have.property('name');
+        done();
+      });
+  });
+});
 describe('Test GET all created groups route', () => {
   it('should return no group found when no group is found', (done) => {
     chai

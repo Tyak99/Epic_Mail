@@ -42,6 +42,8 @@ const router = express.Router();
 router.get('/', tokenHandler.verifyToken, groupController.getAllGroups);
 router.post('/', tokenHandler.verifyToken, validator.postGroupValidation, groupController.postGroup);
 
+router.put('/:groupid/name', tokenHandler.verifyToken, validator.updateGroupValidator, groupController.updateGroup);
+
 router.post('/:groupid/users/', tokenHandler.verifyToken, validator.GroupIdValidation, groupController.addUserToGroup);
 
 router.delete('/:groupid/users/:userid', tokenHandler.verifyToken, validator.deleteUserFromGroupValidation, groupController.removeMember)
