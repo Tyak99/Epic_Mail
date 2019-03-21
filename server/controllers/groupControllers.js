@@ -209,7 +209,6 @@ const postGroupMessage = (req, res) => {
           const initializeSendMessage = sendMessages();
           initializeSendMessage.then((result) => {
             const { id, message, subject, status, parentmessageid, created_at } = result.rows[0]
-            console.log('####################### result', result)
             return res.status(200).json({
               status: 'success',
               data: {
