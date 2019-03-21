@@ -1,11 +1,13 @@
+import { validationResult } from 'express-validator/check';
 import db from '../database/index';
 
 const postGroup = (req, res) => {
   const { name } = req.body;
-  if (!name) {
-    return res.status(400).json({
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
       status: 'failed',
-      error: 'Provide the neccessary details',
+      error: errors.array()[0].msg,
     });
   }
   db.query('SELECT * FROM groups WHERE name = $1', [name], (err, data) => {
@@ -42,6 +44,13 @@ const postGroup = (req, res) => {
 const addUserToGroup = (req, res) => {
   const { groupid } = req.params;
   const userId = req.decoded.sub;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    });
+  }
   // search the group table if such group exists
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
     if (!group.rows[0]) {
@@ -52,7 +61,7 @@ const addUserToGroup = (req, res) => {
     }
     // if it exists, check if the user sending the request is an admin
     if (group.rows[0].adminid !== userId) {
-      return res.status(401).json({
+      return res.status(403).json({
         status: 'failed',
         error: 'Sorry, only group admin can modify group',
       });
@@ -70,6 +79,12 @@ const addUserToGroup = (req, res) => {
           });
         }
         const memberid = user.rows[0].id;
+        if (memberid == req.decoded.sub) {
+          return res.status(409).json({
+            status: 'failed',
+            error: 'You are a already a member of this group',
+          });
+        }
         const values = [groupid, memberid, 'member'];
         db.query(
           'INSERT INTO groupmembers (groupid, memberid, userrole) VALUES ($1, $2, $3) RETURNING *',
@@ -94,6 +109,13 @@ const addUserToGroup = (req, res) => {
 
 const removeMember = (req, res) => {
   const { groupid, userid } = req.params;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    });
+  }
   // check if group exists
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
     if (!group.rows[0]) {
@@ -109,6 +131,12 @@ const removeMember = (req, res) => {
         error: 'Only group admin is allowed to modify group',
       });
     }
+    if (group.rows[0].adminid == userid) {
+      return res.status(422).json({
+        status: 'failed',
+        error: 'admin cannot be removed from group',
+      });
+    }
     // delete user if found in groupmember table
     db.query(
       'DELETE FROM groupmembers WHERE memberid = $1 AND groupid = $2 RETURNING *',
@@ -117,8 +145,8 @@ const removeMember = (req, res) => {
         if (!member.rows[0]) {
           return res.status(404).json({
             status: 'failed',
-            error: 'user does not exist in group'
-          })
+            error: 'user does not exist in group',
+          });
         }
         if (member.rows[0]) {
           return res.status(200).json({
@@ -135,6 +163,13 @@ const removeMember = (req, res) => {
 
 const deleteGroup = (req, res) => {
   const { groupid } = req.params;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    });
+  }
   // check if the group exists in the db
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
     if (!group.rows[0]) {
@@ -167,6 +202,13 @@ const deleteGroup = (req, res) => {
 };
 
 const postGroupMessage = (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    });
+  }
   // i will check the group table to see if the group exists
   db.query(
     'SELECT * FROM groups WHERE id = $1',
@@ -183,7 +225,15 @@ const postGroupMessage = (req, res) => {
         [req.params.groupid],
         (err, groupmembers) => {
           // the arrays of all the members in the group
-          const allGroupMembers = groupmembers.rows;
+          const allGroupMembers = groupmembers.rows.filter((member) => {
+            return member.memberid !== req.decoded.sub;
+          });
+          if (allGroupMembers.length < 1) {
+            return res.status(406).json({
+              status: 'failed',
+              error: 'No other member in group to send message to',
+            });
+          }
           // subject and message passed in the request body
           const { subject, message } = req.body;
           // getting the sender id from the token validator middleware
@@ -196,11 +246,7 @@ const postGroupMessage = (req, res) => {
                   'INSERT INTO messages (subject, message, status, senderid, receiverid) VALUES ($1, $2, $3, $4, $5) RETURNING *',
                   [subject, message, 'unread', senderid, member.memberid],
                   (err, postedMessages) => {
-                    if (err) {
-                      reject(err);
-                    } else {
-                      resolve(postedMessages);
-                    }
+                    resolve(postedMessages);
                   }
                 );
               });
@@ -208,18 +254,22 @@ const postGroupMessage = (req, res) => {
           };
           const initializeSendMessage = sendMessages();
           initializeSendMessage.then((result) => {
-            const { id, message, subject, status, parentmessageid, created_at } = result.rows[0]
-            console.log('####################### result', result)
+            const {
+              id,
+              message,
+              subject,
+              parentmessageid,
+              created_at,
+            } = result.rows[0];
             return res.status(200).json({
               status: 'success',
               data: {
                 id,
                 message,
                 subject,
-                status,
                 parentmessageid,
-                created_at
-              }
+                created_at,
+              },
             });
           });
         }

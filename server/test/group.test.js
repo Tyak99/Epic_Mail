@@ -116,7 +116,7 @@ describe('Test create a group route', () => {
       .send({})
       .set('Authorization', userToken)
       .end((err, res) => {
-        expect(res.status).an.eql(400);
+        expect(res.status).an.eql(422);
         expect(res.body)
           .to.have.property('status')
           .eql('failed');
@@ -158,6 +158,21 @@ describe('Test create a group route', () => {
 });
 
 describe('Test add user to group route', () => {
+  it('should return error when group id is not an integter', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/groups/hhsdj/users/')
+      .send({ email: 'jonbellion@mail.com' })
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(422);
+        expect(res.body).to.have.property('error');
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        done();
+      });
+  });
   it('should return error if group user wants to add members to doesnt exist', (done) => {
     chai
       .request(server)
@@ -180,7 +195,7 @@ describe('Test add user to group route', () => {
       .send({ email: 'jonbellion@mail.com' })
       .set('Authorization', secondToken)
       .end((err, res) => {
-        expect(res.status).to.eql(401);
+        expect(res.status).to.eql(403);
         expect(res.body).to.have.property('error');
         expect(res.body)
           .to.have.property('status')
@@ -203,6 +218,21 @@ describe('Test add user to group route', () => {
         done();
       });
   });
+  it('should return error if the admin is trying to add himeself to group', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/groups/1/users/')
+      .send({ email: 'superuser@mail.com' })
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(409);
+        expect(res.body).to.have.property('error');
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        done();
+      });
+  })
   it('should add the user to group member and return the user group details', (done) => {
     chai
       .request(server)
@@ -226,11 +256,26 @@ describe('Test add user to group route', () => {
 });
 
 describe('Test POST message to group route', () => {
+  it('should return error when the needed details is not passed along request', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/groups/1/messages')
+      .send({ subject: 'Hi there' })
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(422);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
   it('should return error when no group is found with the parameter id', (done) => {
     chai
       .request(server)
       .post('/api/v1/groups/999/messages')
-      .send({})
+      .send({ subject: 'Hi there', message: 'Hey you' })
       .set('Authorization', secondToken)
       .end((err, res) => {
         expect(res.status).to.eql(404);
@@ -262,13 +307,40 @@ describe('Test POST message to group route', () => {
         expect(res.body.data).to.have.property('message');
         expect(res.body.data).to.have.property('created_at');
         expect(res.body.data).to.have.property('parentmessageid');
-        expect(res.body.data).to.have.property('status');
         done();
       });
   });
 });
 
 describe('Test delete user from a group route', () => {
+  it('should return error when the gorup is invalid', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/groups/hjshsdj/users/6')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(422);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should retur error when an admin is tried to be removed from group', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/groups/1/users/1')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(422);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  })
   it('should return error when group isnt found by the id provided in the route parameter', (done) => {
     chai
       .request(server)
@@ -324,17 +396,17 @@ describe('Test delete user from a group route', () => {
         expect(res.body).to.have.property('error');
         done();
       });
-  })
+  });
 });
 
 describe('Test user delete group they own route', () => {
-  it('should return error when no group is found', (done) => {
+  it('should return eror when group id parameter is not an integter', (done) => {
     chai
       .request(server)
-      .delete('/api/v1/groups/5')
-      .set('Authorization', userToken)
+      .delete('/api/v1/groups/uhww')
+      .set('Authorization', secondToken)
       .end((err, res) => {
-        expect(res.status).to.eql(404);
+        expect(res.status).to.eql(422);
         expect(res.body)
           .to.have.property('status')
           .to.eql('failed');
@@ -342,13 +414,13 @@ describe('Test user delete group they own route', () => {
         done();
       });
   });
-  it('should return error when user who sends request is not the group admin', (done) => {
+  it('should return error when no group is found', (done) => {
     chai
       .request(server)
-      .delete('/api/v1/groups/1')
-      .set('Authorization', secondToken)
+      .delete('/api/v1/groups/5')
+      .set('Authorization', userToken)
       .end((err, res) => {
-        expect(res.status).to.eql(403);
+        expect(res.status).to.eql(404);
         expect(res.body)
           .to.have.property('status')
           .to.eql('failed');
