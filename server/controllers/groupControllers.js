@@ -246,11 +246,7 @@ const postGroupMessage = (req, res) => {
                   'INSERT INTO messages (subject, message, status, senderid, receiverid) VALUES ($1, $2, $3, $4, $5) RETURNING *',
                   [subject, message, 'unread', senderid, member.memberid],
                   (err, postedMessages) => {
-                    if (err) {
-                      reject(err);
-                    } else {
-                      resolve(postedMessages);
-                    }
+                    resolve(postedMessages);
                   }
                 );
               });
