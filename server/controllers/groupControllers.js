@@ -1,6 +1,35 @@
 import { validationResult } from 'express-validator/check';
 import db from '../database/index';
 
+const getAllGroups = (req, res) => {
+  const { sub } = req.decoded;
+  db.query('SELECT * FROM  groups WHERE adminid = $1', [sub], (err, groups) => {
+    if (!groups.rows[0]) {
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'You currently have no group created',
+        },
+      });
+    }
+    const result = [];
+    groups.rows.map((element) => {
+      const obj = {
+        id: element.id,
+        name: element.name,
+        role: 'admin',
+      };
+      result.push(obj);
+    });
+    if (groups.rows[0]) {
+      return res.status(200).json({
+        status: 'success',
+        data: result,
+      });
+    }
+  });
+};
+
 const postGroup = (req, res) => {
   const { name } = req.body;
   const errors = validationResult(req);
@@ -284,4 +313,5 @@ module.exports = {
   removeMember,
   deleteGroup,
   postGroupMessage,
+  getAllGroups,
 };
