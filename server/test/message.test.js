@@ -213,7 +213,7 @@ describe('Test get received emails route', () => {
     chai
       .request(server)
       .get('/api/v1/messages')
-      .set('Authorization', userToken)
+      .set('Authorization', thirdToken)
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body.status).to.eql('success');
@@ -311,7 +311,7 @@ describe('Test  get all unread messages route', () => {
     chai
       .request(server)
       .get('/api/v1/messages/unread')
-      .set('Authorization', userToken)
+      .set('Authorization', thirdToken)
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body).to.have.property('data');
@@ -380,7 +380,7 @@ describe('Test DELETE message by id route', () => {
   it('should delete message successfully when the sender is making the request', (done) => {
     chai
       .request(server)
-      .delete('/api/v1/messages/2')
+      .delete('/api/v1/messages/3')
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(200);

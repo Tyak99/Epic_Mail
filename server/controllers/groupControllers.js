@@ -166,9 +166,72 @@ const deleteGroup = (req, res) => {
   });
 };
 
+const postGroupMessage = (req, res) => {
+  // i will check the group table to see if the group exists
+  db.query(
+    'SELECT * FROM groups WHERE id = $1',
+    [req.params.groupid],
+    (err, group) => {
+      if (!group.rows[0]) {
+        return res.status(404).json({
+          status: 'failed',
+          error: 'No group with that id found',
+        });
+      }
+      db.query(
+        'SELECT * FROM groupmembers WHERE groupid = $1',
+        [req.params.groupid],
+        (err, groupmembers) => {
+          // the arrays of all the members in the group
+          const allGroupMembers = groupmembers.rows;
+          // subject and message passed in the request body
+          const { subject, message } = req.body;
+          // getting the sender id from the token validator middleware
+          const senderid = req.decoded.sub;
+          // mapping through the array of groupmembers to post them a message with an async functioin
+          const sendMessages = () => {
+            return new Promise((resolve, reject) => {
+              allGroupMembers.map((member) => {
+                db.query(
+                  'INSERT INTO messages (subject, message, status, senderid, receiverid) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+                  [subject, message, 'unread', senderid, member.memberid],
+                  (err, postedMessages) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      resolve(postedMessages);
+                    }
+                  }
+                );
+              });
+            });
+          };
+          const initializeSendMessage = sendMessages();
+          initializeSendMessage.then((result) => {
+            const { id, message, subject, status, parentmessageid, created_at } = result.rows[0]
+            console.log('####################### result', result)
+            return res.status(200).json({
+              status: 'success',
+              data: {
+                id,
+                message,
+                subject,
+                status,
+                parentmessageid,
+                created_at
+              }
+            });
+          });
+        }
+      );
+    }
+  );
+};
+
 module.exports = {
   addUserToGroup,
   postGroup,
   removeMember,
   deleteGroup,
+  postGroupMessage,
 };
