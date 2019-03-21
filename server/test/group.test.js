@@ -45,6 +45,7 @@ before((done) => {
 
 let userToken = '';
 let secondToken = '';
+let thirdToken = '';
 
 describe('Test signup a new user', () => {
   it('should return success and token when correct details so that token can be used', (done) => {
@@ -75,6 +76,24 @@ describe('Test signup a new user', () => {
         expect(res.body.status).to.eql('success');
         expect(res.body.data).to.have.property('token');
         secondToken = res.body.data.token;
+        done();
+      });
+  });
+  it('should return success and token when correct details so that token can be used', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/signup')
+      .send({
+        email: 'joe@mail.com',
+        password: 'secret',
+        firstName: 'John',
+        lastName: 'Champion',
+      })
+      .end((err, res) => {
+        expect(res.status).to.eql(201);
+        expect(res.body.status).to.eql('success');
+        expect(res.body.data).to.have.property('token');
+        thirdToken = res.body.data.token;
         done();
       });
   });
@@ -201,6 +220,49 @@ describe('Test add user to group route', () => {
         expect(res.body.data).to.have.property('id');
         expect(res.body.data).to.have.property('userId');
         expect(res.body.data).to.have.property('userRole');
+        done();
+      });
+  });
+});
+
+describe('Test POST message to group route', () => {
+  it('should return error when no group is found with the parameter id', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/groups/999/messages')
+      .send({})
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return the posted message object when it sends messages to the group members', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/groups/1/messages')
+      .send({
+        subject: 'Hi guys',
+        message: 'I just want to thank you all for coming over',
+      })
+      .set('Authorization', thirdToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.an('object');
+        expect(res.body.data).to.have.property('id');
+        expect(res.body.data).to.have.property('subject');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data).to.have.property('created_at');
+        expect(res.body.data).to.have.property('parentmessageid');
+        expect(res.body.data).to.have.property('status');
         done();
       });
   });
