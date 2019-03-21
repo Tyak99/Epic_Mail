@@ -226,3 +226,76 @@ exports.getUnreadMessages = (req, res) => {
     }
   );
 };
+
+exports.deleteById = (req, res) => {
+  // check if the message exists
+  db.query(
+    'SELECT * FROM messages WHERE id = $1',
+    [req.params.id],
+    (err, message) => {
+      if (err) {
+        return res.status(500).json({
+          status: 'failed',
+          error: 'Internal server error',
+        });
+      }
+      if (!message.rows[0]) {
+        return res.status(404)({
+          status: 'failed',
+          error: 'No message with that id found',
+        });
+      }
+      if (
+        message.rows[0].senderid !== sub &&
+        message.rows[0].receiverid !== sub
+      ) {
+        return res.status(403)({
+          status: 'failed',
+          error:
+            'Sorry, you can request a message only when you are the sender or receiver',
+        });
+      }
+      if (message.rows[0].receiverid == sub) {
+        db.query(
+          'UPDATE TABLE messages WHERE id = $1 SET receiverdeleted = 1',
+          (err, removedMessage) => {
+            if (err) {
+              return res.status(500).json({
+                status: 'failed',
+                error: 'Internal server error',
+              });
+            }
+            if (removedMessage.rows[0]) {
+              return res.status(200).json({
+                status: 'success',
+                data: {
+                  message: 'Message deleted successfully',
+                },
+              });
+            }
+          }
+        );
+      }
+      db.query(
+        'DELETE FROM messages WHERE id = $1 RETURNING *',
+        [req.params.id],
+        (err, deletedMessage) => {
+          if (err) {
+            return res.status(500).json({
+              status: 'failed',
+              error: 'Internal server error',
+            });
+          }
+          if (deletedMessage.rows[0]) {
+            return res.status(200).json({
+              status: 'success',
+              data: {
+                message: 'Message deleted successfully',
+              },
+            });
+          }
+        }
+      );
+    }
+  );
+};

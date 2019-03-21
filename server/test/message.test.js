@@ -338,7 +338,7 @@ describe('Test DELETE message by id route', () => {
     chai
       .request(server)
       .delete('/api/v1/messages/999')
-      .set('Autorization', userToken)
+      .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(404);
         expect(res.body)
@@ -352,7 +352,7 @@ describe('Test DELETE message by id route', () => {
     chai
       .request(server)
       .delete('/api/v1/messages/1')
-      .set('Autorization', thirdToken)
+      .set('Authorization', thirdToken)
       .end((err, res) => {
         expect(res.status).to.eql(403);
         expect(res.body)
@@ -366,7 +366,7 @@ describe('Test DELETE message by id route', () => {
     chai
       .request(server)
       .delete('/api/v1/messages/1')
-      .set('Autorization', secondToken)
+      .set('Authorization', secondToken)
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body)
@@ -381,7 +381,7 @@ describe('Test DELETE message by id route', () => {
     chai
       .request(server)
       .delete('/api/v1/messages/1')
-      .set('Autorization', userToken)
+      .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(200);
         expect(res.body)

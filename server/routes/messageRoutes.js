@@ -163,5 +163,5 @@ router.get('/', tokenHandler.verifyToken,messageController.getReceivedMessages);
 router.get('/sent',tokenHandler.verifyToken ,messageController.getSentMessages);
 router.get('/unread', tokenHandler.verifyToken, messageController.getUnreadMessages);
 router.get('/:id', tokenHandler.verifyToken, messageController.getMessageById);
-// router.delete('/:id', messageController.deleteById);
+router.delete('/:id',tokenHandler.verifyToken,  messageController.deleteById);
 export default router;
