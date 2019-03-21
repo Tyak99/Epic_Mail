@@ -137,6 +137,12 @@ const removeMember = (req, res) => {
         error: 'Only group admin is allowed to modify group',
       });
     }
+    if (group.rows[0].adminid == userid ) {
+      return res.status(422).json({
+        status: 'failed',
+        error: 'admin cannot be removed from group'
+      })
+    } 
     // delete user if found in groupmember table
     db.query(
       'DELETE FROM groupmembers WHERE memberid = $1 AND groupid = $2 RETURNING *',
