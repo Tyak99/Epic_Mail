@@ -116,7 +116,7 @@ describe('Test create a group route', () => {
       .send({})
       .set('Authorization', userToken)
       .end((err, res) => {
-        expect(res.status).an.eql(400);
+        expect(res.status).an.eql(422);
         expect(res.body)
           .to.have.property('status')
           .eql('failed');
@@ -180,7 +180,7 @@ describe('Test add user to group route', () => {
       .send({ email: 'jonbellion@mail.com' })
       .set('Authorization', secondToken)
       .end((err, res) => {
-        expect(res.status).to.eql(401);
+        expect(res.status).to.eql(403);
         expect(res.body).to.have.property('error');
         expect(res.body)
           .to.have.property('status')
@@ -230,7 +230,7 @@ describe('Test POST message to group route', () => {
     chai
       .request(server)
       .post('/api/v1/groups/999/messages')
-      .send({})
+      .send({subject: 'Hi there', message: 'Hey you'})
       .set('Authorization', secondToken)
       .end((err, res) => {
         expect(res.status).to.eql(404);
@@ -262,7 +262,6 @@ describe('Test POST message to group route', () => {
         expect(res.body.data).to.have.property('message');
         expect(res.body.data).to.have.property('created_at');
         expect(res.body.data).to.have.property('parentmessageid');
-        expect(res.body.data).to.have.property('status');
         done();
       });
   });
