@@ -1,6 +1,6 @@
 import express from 'express';
-import { body } from 'express-validator/check';
 import userController from '../controllers/userControllers';
+import validator from '../utils/validator';
 
 const router = express.Router();
 
@@ -78,46 +78,8 @@ const router = express.Router();
  *         description: Invalid email or password
  */
 
-router.post(
-  '/signup',
-  [
-    body('email')
-      .isEmail()
-      .withMessage('A valid email is required')
-      .normalizeEmail()
-      .trim(),
-    body(
-      'password',
-      'Please enter a password with only text and numbers and at least 6 characters long'
-    )
-      .trim()
-      .isLength({ min: 6 })
-      .isAlphanumeric(),
-    body('firstName')
-      .isLength({ min: 2 })
-      .withMessage('First name with at least 2 characters long is required'),
-    body('lastName')
-      .isLength({ min: 2 })
-      .withMessage('Last name with at least 2 characters long is required'),
-  ],
-  userController.signup,
-);
+router.post('/signup', validator.signUpValidation, userController.signup);
 
-router.post(
-  '/login',
-  [
-    body('email')
-      .exists()
-      .withMessage('Please input login details email and password')
-      .isEmail()
-      .withMessage('Please enter a valid email')
-      .normalizeEmail()
-      .trim(),
-    body('password')
-      .exists()
-      .withMessage('Please input login details email and password'),
-  ],
-  userController.login,
-);
+router.post('/login', validator.loginValidation, userController.login);
 
 export default router;
