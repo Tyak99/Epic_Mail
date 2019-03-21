@@ -234,6 +234,12 @@ const postGroupMessage = (req, res) => {
           const allGroupMembers = groupmembers.rows.filter((member) => {
             return member.memberid !== req.decoded.sub;
           });
+          if (allGroupMembers.length < 1) {
+            return res.status(406).json({
+              status: 'failed',
+              error: 'No other member in group to send message to',
+            });
+          }
           // subject and message passed in the request body
           const { subject, message } = req.body;
           // getting the sender id from the token validator middleware
