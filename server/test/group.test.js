@@ -428,4 +428,19 @@ describe('Test user delete group they own route', () => {
         done();
       });
   });
+  it('should delete group and return successs when all conditions are met', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/groups/1')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('message');
+        done();
+      });
+  });
 });
