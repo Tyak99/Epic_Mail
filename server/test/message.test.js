@@ -102,7 +102,7 @@ describe('Test post a message route', () => {
       .request(server)
       .post('/api/v1/messages')
       .set('Authorization', userToken)
-      .send({subject: 'Hello dear'})
+      .send({ subject: 'Hello dear' })
       .end((err, res) => {
         expect(res.status).to.eql(400);
         expect(res.body).to.have.property('error');
@@ -119,7 +119,7 @@ describe('Test post a message route', () => {
       .set('Authorization', userToken)
       .send(dummyMessage)
       .end((err, res) => {
-        expect(res.status).to.eql(422)
+        expect(res.status).to.eql(422);
         expect(res.body).to.have.property('error');
         done();
       });
@@ -331,6 +331,67 @@ describe('Test  get all unread messages route', () => {
         done();
       });
   });
+});
+
+describe('Test DELETE message by id route', () => {
+  it('should return no message found if id is incorrect', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/messages/999')
+      .set('Autorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return error when the person requesting to delete the message is neither the sender nor receiver', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/messages/1')
+      .set('Autorization', thirdToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(403);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+  it('should return deleted successfully when the receiver is making the request', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/messages/1')
+      .set('Autorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('message');
+        done();
+      });
+  });
+  it('should delete message successfully when the sender is making the request', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/messages/1')
+      .set('Autorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('success');
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('message');
+        done();
+      });
+  })
 });
 
 describe('Test errors returned when database is down', () => {
