@@ -97,13 +97,14 @@ describe('Test post a message route', () => {
         done();
       });
   });
-  it('should return error if no data is passed along', (done) => {
+  it('should return error if no message is passed along is passed along', (done) => {
     chai
       .request(server)
       .post('/api/v1/messages')
-      .set('Authorizatioin', userToken)
-      .send({})
+      .set('Authorization', userToken)
+      .send({subject: 'Hello dear'})
       .end((err, res) => {
+        expect(res.status).to.eql(400);
         expect(res.body).to.have.property('error');
         done();
       });
@@ -115,9 +116,10 @@ describe('Test post a message route', () => {
     chai
       .request(server)
       .post('/api/v1/messages')
-      .set('Authorizatioin', userToken)
+      .set('Authorization', userToken)
       .send(dummyMessage)
       .end((err, res) => {
+        expect(res.status).to.eql(422)
         expect(res.body).to.have.property('error');
         done();
       });
@@ -328,5 +330,45 @@ describe('Test  get all unread messages route', () => {
         expect(res.body.data).to.be.an('array');
         done();
       });
-  })
+  });
+});
+
+describe('Test errors returned when database is down', () => {
+  before((done) => {
+    db.query('DROP TABLE IF EXISTS messages CASCADE', (err, res) => {
+      done();
+    });
+  });
+  it('should test for error on GET MESSAGE by id when database is down', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/1')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(500);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        expect(res.body)
+          .to.have.property('error')
+          .to.eql('Internal server error');
+        done();
+      });
+  });
+  it('should test for error on login page when database is down', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/unread')
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(500);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        expect(res.body)
+          .to.have.property('error')
+          .to.eql('Internal server error');
+        done();
+      });
+  });
 });

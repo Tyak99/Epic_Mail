@@ -11,7 +11,7 @@ exports.postMessage = (req, res) => {
   }
   const { subject, message } = req.body;
   if (!subject || !message) {
-    return res.status(400)({
+    return res.status(400).json({
       status: 'failed',
       error: 'Please input the required data, subject and message',
     });
