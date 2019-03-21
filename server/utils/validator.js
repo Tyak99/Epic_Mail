@@ -7,18 +7,26 @@ const postMessageValidation = [
 ];
 
 const postGroupValidation = [
-  check('name', 'Name is required to be only number and letters with 2 minimum characters')
+  check(
+    'name',
+    'Name is required to be only number and letters with 2 minimum characters'
+  )
     .trim()
     .isLength({ min: 2 })
     .isAlphanumeric(),
 ];
 
 const postUserToGroupValidation = [
-  param('groupid', 'Invalid group id').isNumeric()
-]
+  param('groupid', 'Invalid group id').isNumeric(),
+];
 
+const deleteUserFromGroupValidation = [
+  param('groupid', 'Invalid group id').isNumeric(),
+  param('userid', 'Invalid user id').isNumeric(),
+];
 module.exports = {
   postMessageValidation,
   postGroupValidation,
   postUserToGroupValidation,
+  deleteUserFromGroupValidation,
 };

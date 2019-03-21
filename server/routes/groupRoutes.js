@@ -44,7 +44,7 @@ router.post('/', tokenHandler.verifyToken, validator.postGroupValidation, groupC
 
 router.post('/:groupid/users/', tokenHandler.verifyToken, validator.postUserToGroupValidation, groupController.addUserToGroup);
 
-router.delete('/:groupid/users/:userid', tokenHandler.verifyToken, groupController.removeMember)
+router.delete('/:groupid/users/:userid', tokenHandler.verifyToken, validator.deleteUserFromGroupValidation, groupController.removeMember)
 
 router.delete('/:groupid', tokenHandler.verifyToken, groupController.deleteGroup)
 

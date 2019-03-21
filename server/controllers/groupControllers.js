@@ -109,6 +109,13 @@ const addUserToGroup = (req, res) => {
 
 const removeMember = (req, res) => {
   const { groupid, userid } = req.params;
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    })
+  }
   // check if group exists
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
     if (!group.rows[0]) {
