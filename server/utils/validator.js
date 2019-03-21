@@ -27,10 +27,22 @@ const postMessageToGroupValidation = [
   check('subject', 'Subject is required with minimun length of 2 characters').isLength({ min: 2 }),
   check('message', 'Message is required with minimu length of 2 characters').isLength({ min: 2 }),
 ];
+
+const updateGroupValidator = [
+  param('groupid', 'Invalid group id').isNumeric(),
+  check(
+    'name',
+    'Name is required to be only number and letters with 2 minimum characters'
+  )
+    .trim()
+    .isLength({ min: 2 })
+    .isAlphanumeric(),
+]
 module.exports = {
   postMessageValidation,
   postGroupValidation,
   GroupIdValidation,
   deleteUserFromGroupValidation,
   postMessageToGroupValidation,
+  updateGroupValidator,
 };
