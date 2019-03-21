@@ -1,9 +1,13 @@
-import { check, param } from 'express-validator/check';
+import { check, param, body } from 'express-validator/check';
 
 const postMessageValidation = [
   check('subject')
     .isLength({ min: 2 })
     .withMessage('Subject is required with minimun length of 2 characters'),
+  check('message')
+    .isLength({ min: 2 })
+    .withMessage('Message is required with minimum length of 2 characters')
+    .trim(),
 ];
 
 const postGroupValidation = [
@@ -24,8 +28,14 @@ const deleteUserFromGroupValidation = [
 ];
 const postMessageToGroupValidation = [
   param('groupid', 'Invalid group id').isNumeric(),
-  check('subject', 'Subject is required with minimun length of 2 characters').isLength({ min: 2 }),
-  check('message', 'Message is required with minimu length of 2 characters').isLength({ min: 2 }),
+  check(
+    'subject',
+    'Subject is required with minimun length of 2 characters'
+  ).isLength({ min: 2 }),
+  check(
+    'message',
+    'Message is required with minimu length of 2 characters'
+  ).isLength({ min: 2 }),
 ];
 
 const updateGroupValidator = [
@@ -37,7 +47,12 @@ const updateGroupValidator = [
     .trim()
     .isLength({ min: 2 })
     .isAlphanumeric(),
+];
+
+const messageIdValidation = [
+  param('id', 'Invalid message id').isNumeric(),
 ]
+
 module.exports = {
   postMessageValidation,
   postGroupValidation,
@@ -45,4 +60,5 @@ module.exports = {
   deleteUserFromGroupValidation,
   postMessageToGroupValidation,
   updateGroupValidator,
+  messageIdValidation,
 };
