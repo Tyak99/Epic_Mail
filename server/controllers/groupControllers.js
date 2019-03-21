@@ -196,6 +196,13 @@ const deleteGroup = (req, res) => {
 };
 
 const postGroupMessage = (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    })
+  }
   // i will check the group table to see if the group exists
   db.query(
     'SELECT * FROM groups WHERE id = $1',

@@ -16,17 +16,21 @@ const postGroupValidation = [
     .isAlphanumeric(),
 ];
 
-const GroupIdValidation = [
-  param('groupid', 'Invalid group id').isNumeric(),
-];
+const GroupIdValidation = [param('groupid', 'Invalid group id').isNumeric()];
 
 const deleteUserFromGroupValidation = [
   param('groupid', 'Invalid group id').isNumeric(),
   param('userid', 'Invalid user id').isNumeric(),
+];
+const postMessageToGroupValidation = [
+  param('groupid', 'Invalid group id').isNumeric(),
+  check('subject', 'Subject is required with minimun length of 2 characters').isLength({ min: 2 }),
+  check('message', 'Message is required with minimu length of 2 characters').isLength({ min: 2 }),
 ];
 module.exports = {
   postMessageValidation,
   postGroupValidation,
   GroupIdValidation,
   deleteUserFromGroupValidation,
+  postMessageToGroupValidation,
 };

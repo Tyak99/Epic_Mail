@@ -48,5 +48,5 @@ router.delete('/:groupid/users/:userid', tokenHandler.verifyToken, validator.del
 
 router.delete('/:groupid', tokenHandler.verifyToken, validator.GroupIdValidation, groupController.deleteGroup)
 
-router.post('/:groupid/messages', tokenHandler.verifyToken, groupController.postGroupMessage)
+router.post('/:groupid/messages', tokenHandler.verifyToken,validator.postMessageToGroupValidation,  groupController.postGroupMessage)
 export default router;
