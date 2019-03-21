@@ -85,6 +85,12 @@ const addUserToGroup = (req, res) => {
           });
         }
         const memberid = user.rows[0].id;
+        if (memberid == req.decoded.sub) {
+          return res.status(409).json({
+            status: 'failed',
+            error: 'You are a already a member of this group'
+          })
+        }
         const values = [groupid, memberid, 'member'];
         db.query(
           'INSERT INTO groupmembers (groupid, memberid, userrole) VALUES ($1, $2, $3) RETURNING *',
@@ -244,14 +250,13 @@ const postGroupMessage = (req, res) => {
           };
           const initializeSendMessage = sendMessages();
           initializeSendMessage.then((result) => {
-            const { id, message, subject, status, parentmessageid, created_at } = result.rows[0]
+            const { id, message, subject, parentmessageid, created_at } = result.rows[0]
             return res.status(200).json({
               status: 'success',
               data: {
                 id,
                 message,
                 subject,
-                status,
                 parentmessageid,
                 created_at
               }
