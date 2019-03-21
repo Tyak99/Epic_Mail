@@ -52,7 +52,6 @@ exports.postMessage = (req, res) => {
                 id,
                 subject,
                 message,
-                status,
                 parentmessageid,
                 created_at,
               } = createdMessage.rows[0];
@@ -62,7 +61,7 @@ exports.postMessage = (req, res) => {
                   id,
                   subject,
                   message,
-                  status,
+                  status: 'sent',
                   parentmessageid,
                   created_at,
                 },
@@ -119,9 +118,22 @@ exports.getReceivedMessages = (req, res) => {
           },
         });
       }
+      const result = [];
+      message.rows.map((element) => {
+        const obj = {
+          id: element.id,
+          subject: element.subject,
+          message: element.message,
+          senderid: element.senderid,
+          receiverid: element.receiverid,
+          created_at: element.created_at,
+          parentmessageid: element.parentmessageid,
+        };
+        result.push(obj);
+      });
       return res.status(200).json({
         status: 'success',
-        data: message.rows,
+        data: result,
       });
     }
   );
@@ -141,9 +153,22 @@ exports.getSentMessages = (req, res) => {
           },
         });
       }
+      const result = [];
+      message.rows.map((element) => {
+        const obj = {
+          id: element.id,
+          subject: element.subject,
+          message: element.message,
+          senderid: element.senderid,
+          receiverid: element.receiverid,
+          created_at: element.created_at,
+          parentmessageid: element.parentmessageid,
+        };
+        result.push(obj);
+      });
       return res.status(200).json({
         status: 'success',
-        data: message.rows,
+        data: result,
       });
     }
   );
@@ -188,6 +213,8 @@ exports.getMessageById = (req, res) => {
           error: 'Sorry, the requested message has been deleted from inbox',
         });
       }
+      delete message.rows[0].status;
+      delete message.rows[0].receiverdeleted;
       return res.status(200).json({
         status: 'success',
         data: message.rows[0],
@@ -204,7 +231,7 @@ exports.getUnreadMessages = (req, res) => {
     (err, messages) => {
       if (!messages.rows[0]) {
         return res.status(200).json({
-          status: 'failed',
+          status: 'success',
           data: {
             message: 'No unread messages found',
           },
