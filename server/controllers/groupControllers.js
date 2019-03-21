@@ -1,11 +1,19 @@
+import { validationResult } from 'express-validator/check';
 import db from '../database/index';
 
 const postGroup = (req, res) => {
   const { name } = req.body;
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    })
+  }
   if (!name) {
     return res.status(400).json({
       status: 'failed',
-      error: 'Provide the neccessary details',
+      error: 'Name is required to create a group',
     });
   }
   db.query('SELECT * FROM groups WHERE name = $1', [name], (err, data) => {

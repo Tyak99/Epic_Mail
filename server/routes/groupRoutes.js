@@ -1,6 +1,7 @@
 import express from 'express';
 import groupController from '../controllers/groupControllers';
 import tokenHandler from '../utils/tokenHandler';
+import validator from '../utils/validator';
 
 const router = express.Router();
 
@@ -39,7 +40,7 @@ const router = express.Router();
  */
 
 
-router.post('/', tokenHandler.verifyToken, groupController.postGroup);
+router.post('/', tokenHandler.verifyToken, validator.postGroupValidation, groupController.postGroup);
 
 router.post('/:groupid/users/', tokenHandler.verifyToken, groupController.addUserToGroup);
 
