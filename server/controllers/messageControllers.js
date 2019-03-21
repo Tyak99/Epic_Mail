@@ -256,46 +256,6 @@ exports.deleteById = (req, res) => {
             'Sorry, you can request a message only when you are the sender or receiver',
         });
       }
-      // const deleteMessage = () => {
-      //   return new Promise((resolve, reject) => {
-      //     if (message.rows[0].receiverid == sub) {
-      //       db.query(
-      //         'UPDATE messages SET receiverdeleted = $1 WHERE id = $2',
-      //         [1, req.params.id],
-      //         (err, removedMessage) => {
-      //           if (err) {
-      //             reject(err);
-      //           }
-      //           if (removedMessage.rows[0]) {
-      //             resolve(removedMessage);
-      //           }
-      //         }
-      //       );
-      //     } else if (message.rows[0].senderid == sub) {
-      //       db.query(
-      //         'DELETE FROM messages WHERE id = $1 RETURNING *',
-      //         [req.params.id],
-      //         (err, deletedMessage) => {
-      //           if (err) {
-      //             reject(err);
-      //           }
-      //           if (deletedMessage.rows[0]) {
-      //             resolve(deletedMessage);
-      //           }
-      //         }
-      //       );
-      //     }
-      //   });
-      // };
-      // const initializeDeleteMessage = deleteMessage();
-      // initializeDeleteMessage.then((result) => {
-      //   return res.status(200).json({
-      //     status: 'success',
-      //     data: {
-      //       message: 'Message deleted successfully',
-      //     },
-      //   });
-      // });
       if (message.rows[0].receiverid == sub) {
         db.query(
           'UPDATE messages SET receiverdeleted = $1 WHERE id = $2 RETURNING *',

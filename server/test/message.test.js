@@ -391,7 +391,7 @@ describe('Test DELETE message by id route', () => {
         expect(res.body.data).to.have.property('message');
         done();
       });
-  })
+  });
 });
 
 describe('Test errors returned when database is down', () => {
@@ -416,7 +416,7 @@ describe('Test errors returned when database is down', () => {
         done();
       });
   });
-  it('should test for error on login page when database is down', (done) => {
+  it('should test for error on get unread message route when database is down', (done) => {
     chai
       .request(server)
       .get('/api/v1/messages/unread')
