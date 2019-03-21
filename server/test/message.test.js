@@ -296,18 +296,6 @@ describe('Test get sent message route', () => {
 });
 
 describe('Test get message by id route', () => {
-  it('should return error when id is not valid', (done) => {
-    chai
-      .request(server)
-      .get('/api/v1/messages/jshsjd')
-      .set('Authorization', userToken)
-      .end((err, res) => {
-        expect(res.status).to.eql(422);
-        expect(res.body.status).to.eql('failed');
-        expect(res.body).to.have.property('error');
-        done();
-      });
-  })
   it('should return error when no message is found by the provided id', (done) => {
     chai
       .request(server)
