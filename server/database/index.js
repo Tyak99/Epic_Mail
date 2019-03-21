@@ -7,6 +7,9 @@ let db = process.env.DEV_DATABASE_URL;
 if (process.env.NODE_ENV == 'test') {
   db = process.env.TEST_DATABASE_URL;
 }
+if (process.env.NODE_ENV == 'production') {
+  db = process.env.DATABASE_URL;
+}
 
 const pool = new Pool({
   connectionString: db,
