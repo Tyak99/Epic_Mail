@@ -16,7 +16,7 @@ const postGroupValidation = [
     .isAlphanumeric(),
 ];
 
-const postUserToGroupValidation = [
+const GroupIdValidation = [
   param('groupid', 'Invalid group id').isNumeric(),
 ];
 
@@ -27,6 +27,6 @@ const deleteUserFromGroupValidation = [
 module.exports = {
   postMessageValidation,
   postGroupValidation,
-  postUserToGroupValidation,
+  GroupIdValidation,
   deleteUserFromGroupValidation,
 };

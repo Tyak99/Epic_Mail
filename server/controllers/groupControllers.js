@@ -157,6 +157,13 @@ const removeMember = (req, res) => {
 
 const deleteGroup = (req, res) => {
   const { groupid } = req.params;
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    })
+  }
   // check if the group exists in the db
   db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
     if (!group.rows[0]) {

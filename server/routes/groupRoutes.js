@@ -42,11 +42,11 @@ const router = express.Router();
 
 router.post('/', tokenHandler.verifyToken, validator.postGroupValidation, groupController.postGroup);
 
-router.post('/:groupid/users/', tokenHandler.verifyToken, validator.postUserToGroupValidation, groupController.addUserToGroup);
+router.post('/:groupid/users/', tokenHandler.verifyToken, validator.GroupIdValidation, groupController.addUserToGroup);
 
 router.delete('/:groupid/users/:userid', tokenHandler.verifyToken, validator.deleteUserFromGroupValidation, groupController.removeMember)
 
-router.delete('/:groupid', tokenHandler.verifyToken, groupController.deleteGroup)
+router.delete('/:groupid', tokenHandler.verifyToken, validator.GroupIdValidation, groupController.deleteGroup)
 
 router.post('/:groupid/messages', tokenHandler.verifyToken, groupController.postGroupMessage)
 export default router;
