@@ -279,7 +279,6 @@ exports.deleteById = (req, res) => {
         );
       }
       if (message.rows[0].senderid == sub) {
-        console.log('#################### i am not supposed to get here, but i am')
         db.query(
           'DELETE FROM messages WHERE id = $1 RETURNING *',
           [req.params.id],
