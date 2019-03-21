@@ -432,4 +432,20 @@ describe('Test errors returned when database is down', () => {
         done();
       });
   });
+  it('should test for error on delete message by id route when server is down', (done) => {
+    chai
+      .request(server)
+      .delete('/api/v1/messages/1')
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(500);
+        expect(res.body)
+          .to.have.property('status')
+          .to.eql('failed');
+        expect(res.body)
+          .to.have.property('error')
+          .to.eql('Internal server error');
+        done();
+      });
+  });
 });
