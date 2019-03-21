@@ -39,7 +39,7 @@ const router = express.Router();
  *         description: Provide the necessary details
  */
 
-
+router.get('/', tokenHandler.verifyToken, groupController.getAllGroups);
 router.post('/', tokenHandler.verifyToken, validator.postGroupValidation, groupController.postGroup);
 
 router.post('/:groupid/users/', tokenHandler.verifyToken, validator.GroupIdValidation, groupController.addUserToGroup);

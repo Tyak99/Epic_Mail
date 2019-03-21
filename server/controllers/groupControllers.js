@@ -1,6 +1,77 @@
 import { validationResult } from 'express-validator/check';
 import db from '../database/index';
 
+// const getAllGroups = (req, res) => {
+//   const { sub } = req.decoded;
+//   db.query(
+//     'SELECT * FROM  groupmembers WHERE memberid = $1',
+//     [sub],
+//     (err, groupmember) => {
+//       if (!groupmember.rows[0]) {
+//         return res.status(200).json({
+//           status: 'success',
+//           data: {
+//             message: 'You are currently in no group',
+//           },
+//         });
+//       }
+//       const arr = [
+//         {
+//           id: 2,
+//         },
+//       ];
+//       // const getData = () => {
+//       //   const newArray = [];
+//       //   return new Promise((resolve, reject) => {
+//       //     groupmember.rows.forEach((element) => {
+//       //       // console.log(arr);
+//       //       db.query(
+//       //         'SELECT name FROM groups WHERE id = $1',
+//       //         [element.groupid],
+//       //         (err, group) => {
+//       //           console.log(group.rows);
+//       //           const obj = {
+//       //             id: element.groupid,
+//       //             name: group.rows[0].name,
+//       //             userrole: element.userrole,
+//       //           };
+//       //           newArray.push(obj);
+//       //           arr.push(obj);
+//       //           // console.log(arr)
+//       //           // console.log(newArray);
+//       //         }
+//       //       );
+//       //       console.log(arr)
+//       //     });
+//       //     resolve(newArray);
+//       //   });
+//       // };
+//       // const initializeGetData = getData();
+//       // initializeGetData.then((result) => {
+//       //   return res.status(200).json({
+//       //     status: 'success',
+//       //     data: result,
+//       //   });
+//       // });
+//       groupmember.rows.forEach((element) => {
+//         db.query(
+//           'SELECT name FROM groups WHERE id = $1',
+//           [element.groupid],
+//           (err, group) => {
+//             console.log(group.rows);
+//             const obj = {
+//               id: element.groupid,
+//               name: group.rows[0].name,
+//               userrole: element.userrole,
+//             };
+//             arr.push(obj);
+//           }
+//         );
+//       });
+//     }
+//   );
+// };
+
 const postGroup = (req, res) => {
   const { name } = req.body;
   const errors = validationResult(req);
@@ -284,4 +355,5 @@ module.exports = {
   removeMember,
   deleteGroup,
   postGroupMessage,
+  getAllGroups,
 };

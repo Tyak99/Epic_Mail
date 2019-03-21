@@ -157,6 +157,32 @@ describe('Test create a group route', () => {
   });
 });
 
+describe('Test GET all created groups route', () => {
+  it('should return no group found when no group is found', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/groups')
+      .set('Authorization', thirdToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('message');
+        done();
+      });
+  });
+  it('should return found groups as an array when group is found', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/groups')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.be.an('array');
+        done();
+      });
+  });
+});
 describe('Test add user to group route', () => {
   it('should return error when group id is not an integter', (done) => {
     chai
@@ -232,7 +258,7 @@ describe('Test add user to group route', () => {
           .to.eql('failed');
         done();
       });
-  })
+  });
   it('should add the user to group member and return the user group details', (done) => {
     chai
       .request(server)
@@ -340,7 +366,7 @@ describe('Test delete user from a group route', () => {
         expect(res.body).to.have.property('error');
         done();
       });
-  })
+  });
   it('should return error when group isnt found by the id provided in the route parameter', (done) => {
     chai
       .request(server)
