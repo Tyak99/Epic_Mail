@@ -162,6 +162,13 @@ exports.getSentMessages = (req, res) => {
 };
 
 exports.getMessageById = (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    });
+  }
   const { sub } = req.decoded;
   // check the db for the id passed in the parameter
   db.query(

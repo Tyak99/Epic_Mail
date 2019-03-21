@@ -162,6 +162,6 @@ router.post('/', validator.postMessageValidation, tokenHandler.verifyToken, mess
 router.get('/', tokenHandler.verifyToken,messageController.getReceivedMessages);
 router.get('/sent',tokenHandler.verifyToken ,messageController.getSentMessages);
 router.get('/unread', tokenHandler.verifyToken, messageController.getUnreadMessages);
-router.get('/:id', tokenHandler.verifyToken, messageController.getMessageById);
-router.delete('/:id',tokenHandler.verifyToken, validator.deleteMessageValidation, messageController.deleteById);
+router.get('/:id', tokenHandler.verifyToken, validator.messageIdValidation, messageController.getMessageById);
+router.delete('/:id',tokenHandler.verifyToken, validator.messageIdValidation, messageController.deleteById);
 export default router;
