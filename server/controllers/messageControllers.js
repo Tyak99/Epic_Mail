@@ -111,12 +111,6 @@ exports.getReceivedMessages = (req, res) => {
     'SELECT * FROM messages WHERE receiverid = $1 AND receiverdeleted = $2',
     [req.decoded.sub, 0],
     (err, message) => {
-      if (err) {
-        return res.status(500).json({
-          status: 'failed',
-          error: 'Internal server error',
-        });
-      }
       if (!message.rows[0]) {
         return res.status(200).json({
           status: 'success',
@@ -139,12 +133,6 @@ exports.getSentMessages = (req, res) => {
     'SELECT * FROM messages WHERE senderid = $1',
     [req.decoded.sub],
     (err, message) => {
-      if (err) {
-        return res.status(500).json({
-          status: 'failed',
-          error: 'Internal server error',
-        });
-      }
       if (!message.rows[0]) {
         return res.status(200).json({
           status: 'success',
@@ -175,12 +163,6 @@ exports.getMessageById = (req, res) => {
     'SELECT * FROM messages WHERE id = $1',
     [req.params.id],
     (err, message) => {
-      if (err) {
-        return res.status(500).json({
-          status: 'failed',
-          error: 'Internal server error',
-        });
-      }
       if (!message.rows[0]) {
         return res.status(404).json({
           status: 'failed',
@@ -220,12 +202,6 @@ exports.getUnreadMessages = (req, res) => {
     'SELECT * FROM messages WHERE receiverid = $1 AND status = $2 AND receiverdeleted = $3',
     [req.decoded.sub, 'unread', 0],
     (err, messages) => {
-      if (err) {
-        return res.status(500).json({
-          status: 'failed',
-          error: 'Internal server error',
-        });
-      }
       if (!messages.rows[0]) {
         return res.status(200).json({
           status: 'failed',
@@ -256,12 +232,6 @@ exports.deleteById = (req, res) => {
     'SELECT * FROM messages WHERE id = $1',
     [req.params.id],
     (err, message) => {
-      if (err) {
-        return res.status(500).json({
-          status: 'failed',
-          error: 'Internal server error',
-        });
-      }
       if (!message.rows[0]) {
         return res.status(404).json({
           status: 'failed',
@@ -283,12 +253,6 @@ exports.deleteById = (req, res) => {
           'UPDATE messages SET receiverdeleted = $1 WHERE id = $2 RETURNING *',
           [1, req.params.id],
           (err, removedMessage) => {
-            if (err) {
-              return res.status(500).json({
-                status: 'failed',
-                error: 'Internal server error',
-              });
-            }
             if (removedMessage.rows[0]) {
               return res.status(200).json({
                 status: 'success',
@@ -305,12 +269,6 @@ exports.deleteById = (req, res) => {
           'DELETE FROM messages WHERE id = $1 RETURNING *',
           [req.params.id],
           (err, deletedMessage) => {
-            if (err) {
-              return res.status(500).json({
-                status: 'failed',
-                error: 'Internal server error',
-              });
-            }
             if (deletedMessage.rows[0]) {
               return res.status(200).json({
                 status: 'success',
