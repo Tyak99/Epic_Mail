@@ -226,3 +226,80 @@ exports.getUnreadMessages = (req, res) => {
     }
   );
 };
+
+exports.deleteById = (req, res) => {
+  const { sub } = req.decoded;
+  // check if the message exists
+  db.query(
+    'SELECT * FROM messages WHERE id = $1',
+    [req.params.id],
+    (err, message) => {
+      if (err) {
+        return res.status(500).json({
+          status: 'failed',
+          error: 'Internal server error',
+        });
+      }
+      if (!message.rows[0]) {
+        return res.status(404).json({
+          status: 'failed',
+          error: 'No message with that id found',
+        });
+      }
+      if (
+        message.rows[0].receiverid !== sub &&
+        message.rows[0].senderid !== sub
+      ) {
+        return res.status(403).json({
+          status: 'failed',
+          error:
+            'Sorry, you can request a message only when you are the sender or receiver',
+        });
+      }
+      if (message.rows[0].receiverid == sub) {
+        db.query(
+          'UPDATE messages SET receiverdeleted = $1 WHERE id = $2 RETURNING *',
+          [1, req.params.id],
+          (err, removedMessage) => {
+            if (err) {
+              return res.status(500).json({
+                status: 'failed',
+                error: 'Internal server error',
+              });
+            }
+            if (removedMessage.rows[0]) {
+              return res.status(200).json({
+                status: 'success',
+                data: {
+                  message: 'Message deleted successfully',
+                },
+              });
+            }
+          }
+        );
+      }
+      if (message.rows[0].senderid == sub) {
+        db.query(
+          'DELETE FROM messages WHERE id = $1 RETURNING *',
+          [req.params.id],
+          (err, deletedMessage) => {
+            if (err) {
+              return res.status(500).json({
+                status: 'failed',
+                error: 'Internal server error',
+              });
+            }
+            if (deletedMessage.rows[0]) {
+              return res.status(200).json({
+                status: 'success',
+                data: {
+                  message: 'Message deleted successfully',
+                },
+              });
+            }
+          }
+        );
+      }
+    }
+  );
+};
