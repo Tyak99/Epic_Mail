@@ -7,7 +7,7 @@ exports.signup = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
-      status: 'Failed',
+      status: 'failed',
       error: errors.array()[0].msg,
     })
   }
@@ -18,13 +18,13 @@ exports.signup = (req, res) => {
     (err, user) => {
       if (err) {
         return res.status(500).json({
-          status: 'Failed',
+          status: 'failed',
           error: 'Internal server error',
         });
       }
       if (user.rows[0]) {
         return res.status(404).json({
-          status: 'Failed',
+          status: 'failed',
           error: 'Email already in use',
         });
       }
@@ -55,7 +55,7 @@ exports.login = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({
-      status: 'Failed',
+      status: 'failed',
       error: errors.array()[0].msg,
     })
   }
@@ -63,13 +63,13 @@ exports.login = (req, res) => {
   db.query('SELECT * FROM users WHERE email = $1', [email], (err, user) => {
     if (err) {
       return res.status(500).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'Internal server error',
       })
     }
     if (!user.rows[0]) {
       return res.status(400).json({
-        status: 'Failed',
+        status: 'failed',
         error: 'Invalid email or password',
       });
     }
@@ -77,7 +77,7 @@ exports.login = (req, res) => {
     bcrypt.compare(password, hash, (err, response) => {
       if (response === false) {
         return res.status(400).json({
-          status: 'Failed',
+          status: 'failed',
           error: 'Invalid email or password',
         });
       }

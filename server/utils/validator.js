@@ -1,5 +1,39 @@
 import { check, param, body } from 'express-validator/check';
 
+const loginValidation = [
+  body('email')
+    .isEmail()
+    .withMessage('A valid email is required')
+    .normalizeEmail()
+    .trim(),
+  body(
+    'password',
+    'Please enter a password with only text and numbers and at least 6 characters long'
+  ).trim(),
+];
+
+const signUpValidation = [
+  body('email')
+    .isEmail()
+    .withMessage('A valid email is required')
+    .normalizeEmail()
+    .trim(),
+  body(
+    'password',
+    'Please enter a password with only text and numbers and at least 6 characters long'
+  )
+    .trim()
+    .isLength({ min: 6 })
+    .isAlphanumeric(),
+  body('firstName', 'First name that contains only text and numbers with minimum of 2 characters long is required')
+    .isLength({ min: 2 })
+    .isAlphanumeric()
+    .trim(),
+  body('lastName', 'Last name that contains only text and numbers with minimum of 2 characters long is required')
+    .isLength({ min: 2 })
+    .isAlphanumeric()
+    .trim(),
+];
 const postMessageValidation = [
   check('subject')
     .isLength({ min: 2 })
@@ -49,9 +83,7 @@ const updateGroupValidator = [
     .isAlphanumeric(),
 ];
 
-const messageIdValidation = [
-  param('id', 'Invalid message id').isNumeric(),
-]
+const messageIdValidation = [param('id', 'Invalid message id').isNumeric()];
 
 module.exports = {
   postMessageValidation,
@@ -61,4 +93,6 @@ module.exports = {
   postMessageToGroupValidation,
   updateGroupValidator,
   messageIdValidation,
+  signUpValidation,
+  loginValidation,
 };

@@ -30,6 +30,47 @@ const getAllGroups = (req, res) => {
   });
 };
 
+const getGroupMembers = (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    });
+  }
+  const { groupid } = req.params;
+  db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
+    if (!group.rows[0]) {
+      return res.status(404).json({
+        status: 'success',
+        error: 'Group not found',
+      });
+    }
+    db.query(
+      'SELECT * FROM groupmembers WHERE memberid = $1',
+      [req.decoded.sub],
+      (err, isMember) => {
+        if (!isMember.rows[0]) {
+          return res.status(403).json({
+            status: 'failed',
+            error:
+              'You can only get group members of groups you are a member of',
+          });
+        }
+        db.query(
+          'SELECT firstname, lastname FROM users, groupmembers WHERE groupid = $1 AND id = memberid',
+          [groupid],
+          (err, user) => {
+            return res.status(200).json({
+              status: 'success',
+              data: user.rows,
+            });
+          }
+        );
+      }
+    );
+  });
+};
 const postGroup = (req, res) => {
   const { name } = req.body;
   const errors = validationResult(req);
@@ -153,21 +194,35 @@ const addUserToGroup = (req, res) => {
             error: 'You are a already a member of this group',
           });
         }
-        const values = [groupid, memberid, 'member'];
         db.query(
-          'INSERT INTO groupmembers (groupid, memberid, userrole) VALUES ($1, $2, $3) RETURNING *',
-          values,
-          (err, groupmember) => {
-            if (groupmember.rows[0]) {
-              return res.status(201).json({
-                status: 'success',
+          'SELECT * FROM groupmembers WHERE memberid = $1',
+          [memberid],
+          (err, groupCheck) => {
+            if (groupCheck.rows[0]) {
+              return res.status(409).json({
+                status: 'failed',
                 data: {
-                  id: groupmember.rows[0].groupid,
-                  userId: memberid,
-                  userRole: groupmember.rows[0].userrole,
+                  message: 'User slready exists in group',
                 },
               });
             }
+            const values = [groupid, memberid, 'member'];
+            db.query(
+              'INSERT INTO groupmembers (groupid, memberid, userrole) VALUES ($1, $2, $3) RETURNING *',
+              values,
+              (err, groupmember) => {
+                if (groupmember.rows[0]) {
+                  return res.status(201).json({
+                    status: 'success',
+                    data: {
+                      id: groupmember.rows[0].groupid,
+                      userId: memberid,
+                      userRole: groupmember.rows[0].userrole,
+                    },
+                  });
+                }
+              }
+            );
           }
         );
       }
@@ -302,8 +357,11 @@ const postGroupMessage = (req, res) => {
               error: 'No other member in group to send message to',
             });
           }
+          const membersSentTo = allGroupMembers.length;
           // subject and message passed in the request body
           const { subject, message } = req.body;
+          const newSubject = subject.replace(/\s+/g, '');
+          const newMessage = message.replace(/\s+/g, '');
           // getting the sender id from the token validator middleware
           const senderid = req.decoded.sub;
           // mapping through the array of groupmembers to post them a message with an async functioin
@@ -312,7 +370,7 @@ const postGroupMessage = (req, res) => {
               allGroupMembers.map((member) => {
                 db.query(
                   'INSERT INTO messages (subject, message, status, senderid, receiverid) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-                  [subject, message, 'unread', senderid, member.memberid],
+                  [newSubject, newMessage, 'unread', senderid, member.memberid],
                   (err, postedMessages) => {
                     resolve(postedMessages);
                   }
@@ -337,6 +395,7 @@ const postGroupMessage = (req, res) => {
                 subject,
                 parentmessageid,
                 created_at,
+                members_sent_to: membersSentTo,
               },
             });
           });
@@ -354,4 +413,5 @@ module.exports = {
   postGroupMessage,
   getAllGroups,
   updateGroup,
+  getGroupMembers,
 };

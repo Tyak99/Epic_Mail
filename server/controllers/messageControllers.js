@@ -24,6 +24,8 @@ exports.postMessage = (req, res) => {
     });
   }
   const { subject, message } = req.body;
+  const newSubject = subject.replace(/\s+/g, '')
+  const newMessage = message.replace(/\s+/g, '')
   // check if email to is passed along request
   if (req.body.emailTo) {
     db.query(
@@ -37,8 +39,8 @@ exports.postMessage = (req, res) => {
           });
         }
         const values = [
-          subject,
-          message,
+          newSubject,
+          newMessage,
           'unread',
           req.decoded.sub,
           user.rows[0].id,
@@ -73,7 +75,7 @@ exports.postMessage = (req, res) => {
     );
   } else {
     //post a message without a receiver id making it a draft
-    const values = [subject, message, 'draft', req.decoded.sub];
+    const values = [newSubject, newMessage, 'draft', req.decoded.sub];
     db.query(
       'INSERT INTO messages (subject, message, status, senderid) VALUES ($1, $2, $3, $4) RETURNING *',
       values,
