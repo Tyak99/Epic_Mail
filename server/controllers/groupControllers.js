@@ -30,6 +30,47 @@ const getAllGroups = (req, res) => {
   });
 };
 
+const getGroupMembers = (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: 'failed',
+      error: errors.array()[0].msg,
+    });
+  }
+  const { groupid } = req.params;
+  db.query('SELECT * FROM groups WHERE id = $1', [groupid], (err, group) => {
+    if (!group.rows[0]) {
+      return res.status(404).json({
+        status: 'success',
+        error: 'Group not found',
+      });
+    }
+    db.query(
+      'SELECT * FROM groupmembers WHERE memberid = $1',
+      [req.decoded.sub],
+      (err, isMember) => {
+        if (!isMember.rows[0]) {
+          return res.status(403).json({
+            status: 'failed',
+            error:
+              'You can only get group members of groups you are a member of',
+          });
+        }
+        db.query(
+          'SELECT firstname, lastname FROM users, groupmembers WHERE groupid = $1 AND id = memberid',
+          [groupid],
+          (err, user) => {
+            return res.status(200).json({
+              status: 'success',
+              data: user.rows,
+            });
+          }
+        );
+      }
+    );
+  });
+};
 const postGroup = (req, res) => {
   const { name } = req.body;
   const errors = validationResult(req);
@@ -372,4 +413,5 @@ module.exports = {
   postGroupMessage,
   getAllGroups,
   updateGroup,
+  getGroupMembers,
 };
