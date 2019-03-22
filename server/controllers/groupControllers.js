@@ -153,21 +153,35 @@ const addUserToGroup = (req, res) => {
             error: 'You are a already a member of this group',
           });
         }
-        const values = [groupid, memberid, 'member'];
         db.query(
-          'INSERT INTO groupmembers (groupid, memberid, userrole) VALUES ($1, $2, $3) RETURNING *',
-          values,
-          (err, groupmember) => {
-            if (groupmember.rows[0]) {
-              return res.status(201).json({
-                status: 'success',
+          'SELECT * FROM groupmembers WHERE memberid = $1',
+          [memberid],
+          (err, groupCheck) => {
+            if (groupCheck.rows[0]) {
+              return res.status(409).json({
+                status: 'failed',
                 data: {
-                  id: groupmember.rows[0].groupid,
-                  userId: memberid,
-                  userRole: groupmember.rows[0].userrole,
+                  message: 'User slready exists in group',
                 },
               });
             }
+            const values = [groupid, memberid, 'member'];
+            db.query(
+              'INSERT INTO groupmembers (groupid, memberid, userrole) VALUES ($1, $2, $3) RETURNING *',
+              values,
+              (err, groupmember) => {
+                if (groupmember.rows[0]) {
+                  return res.status(201).json({
+                    status: 'success',
+                    data: {
+                      id: groupmember.rows[0].groupid,
+                      userId: memberid,
+                      userRole: groupmember.rows[0].userrole,
+                    },
+                  });
+                }
+              }
+            );
           }
         );
       }
