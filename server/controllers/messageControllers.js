@@ -144,8 +144,8 @@ exports.getReceivedMessages = (req, res) => {
 exports.getSentMessages = (req, res) => {
   // search the message db table by the users id
   db.query(
-    'SELECT * FROM messages WHERE senderid = $1',
-    [req.decoded.sub],
+    'SELECT * FROM messages WHERE senderid = $1 AND status != $2',
+    [req.decoded.sub, 'draft'],
     (err, message) => {
       if (!message.rows[0]) {
         return res.status(200).json({
