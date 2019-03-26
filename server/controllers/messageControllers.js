@@ -9,11 +9,11 @@ exports.postMessage = (req, res) => {
   };
   // check if email is present in request then run the validation function
   if (req.body.emailTo) {
-    if (validateEmail(req.body.emailTo)  == false ) {
+    if (validateEmail(req.body.emailTo) == false) {
       return res.status(422).json({
         status: 'failed',
-        error: 'Invalid email input'
-      })
+        error: 'Invalid email input',
+      });
     }
   }
   const errors = validationResult(req);
@@ -24,8 +24,8 @@ exports.postMessage = (req, res) => {
     });
   }
   const { subject, message } = req.body;
-  const newSubject = subject.replace(/\s+/g, '')
-  const newMessage = message.replace(/\s+/g, '')
+  const newSubject = subject.replace(/\s+/g, ' ');
+  const newMessage = message.replace(/\s+/g, ' ');
   // check if email to is passed along request
   if (req.body.emailTo) {
     db.query(
@@ -144,8 +144,8 @@ exports.getReceivedMessages = (req, res) => {
 exports.getSentMessages = (req, res) => {
   // search the message db table by the users id
   db.query(
-    'SELECT * FROM messages WHERE senderid = $1',
-    [req.decoded.sub],
+    'SELECT * FROM messages WHERE senderid = $1 AND status != $2',
+    [req.decoded.sub, 'draft'],
     (err, message) => {
       if (!message.rows[0]) {
         return res.status(200).json({
@@ -165,6 +165,40 @@ exports.getSentMessages = (req, res) => {
           receiverid: element.receiverid,
           created_at: element.created_at,
           parentmessageid: element.parentmessageid,
+        };
+        result.push(obj);
+      });
+      return res.status(200).json({
+        status: 'success',
+        data: result,
+      });
+    }
+  );
+};
+
+exports.getDrafts = (req, res) => {
+  const { sub } = req.decoded;
+  db.query(
+    'SELECT * FROM messages WHERE senderid = $1 AND status = $2',
+    [sub, 'draft'],
+    (err, messages) => {
+      if (!messages.rows[0]) {
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'No draft messages found',
+          },
+        });
+      }
+      const result = [];
+      messages.rows.map((element) => {
+        const obj = {
+          id: element.id,
+          subject: element.subject,
+          message: element.message,
+          senderid: element.senderid,
+          status: element.status,
+          created_at: element.created_at,
         };
         result.push(obj);
       });

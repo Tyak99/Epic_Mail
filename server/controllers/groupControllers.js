@@ -360,8 +360,8 @@ const postGroupMessage = (req, res) => {
           const membersSentTo = allGroupMembers.length;
           // subject and message passed in the request body
           const { subject, message } = req.body;
-          const newSubject = subject.replace(/\s+/g, '');
-          const newMessage = message.replace(/\s+/g, '');
+          const newSubject = subject.replace(/\s+/g, ' ');
+          const newMessage = message.replace(/\s+/g, ' ');
           // getting the sender id from the token validator middleware
           const senderid = req.decoded.sub;
           // mapping through the array of groupmembers to post them a message with an async functioin
