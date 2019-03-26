@@ -24,8 +24,8 @@ exports.postMessage = (req, res) => {
     });
   }
   const { subject, message } = req.body;
-  const newSubject = subject.replace(/\s+/g, '');
-  const newMessage = message.replace(/\s+/g, '');
+  const newSubject = subject.replace(/\s+/g, ' ');
+  const newMessage = message.replace(/\s+/g, ' ');
   // check if email to is passed along request
   if (req.body.emailTo) {
     db.query(
