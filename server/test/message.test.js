@@ -199,8 +199,8 @@ describe('Test post a message route', () => {
     const dummyMessage = {
       subject: 'Hey',
       message: 'Hello',
-      emailTo: 'hahsas'
-    }
+      emailTo: 'hahsas',
+    };
     chai
       .request(server)
       .post('/api/v1/messages')
@@ -295,6 +295,32 @@ describe('Test get sent message route', () => {
   });
 });
 
+describe('Test get draft messages route', () => {
+  it('should return no found draft messages', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/draft')
+      .set('Authorization', secondToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.have.property('message');
+        done();
+      });
+  });
+  it('should return found draft messages', (done) => {
+    chai
+      .request(server)
+      .get('/api/v1/messages/draft')
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body).to.have.property('data');
+        expect(res.body.data).to.be.an('array');
+        done();
+      });
+  });
+});
 describe('Test get message by id route', () => {
   it('should return error when no message is found by the provided id', (done) => {
     chai
@@ -374,7 +400,7 @@ describe('Test DELETE message by id route', () => {
         expect(res.body).to.have.property('error');
         done();
       });
-  })
+  });
   it('should return no message found if id is incorrect', (done) => {
     chai
       .request(server)

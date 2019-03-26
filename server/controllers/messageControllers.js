@@ -186,7 +186,7 @@ exports.getDrafts = (req, res) => {
         return res.status(200).json({
           status: 'success',
           data: {
-            messages: 'No draft messages found',
+            message: 'No draft messages found',
           },
         });
       }
