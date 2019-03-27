@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable arrow-parens */
 const submitButton = document.getElementById('submit');
 const alert = document.getElementById('alert');
@@ -47,6 +46,7 @@ const signup = (e) => {
       }
       if (response.status == 'success') {
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('name', response.data.name);
         window.setTimeout(() => {
           location.href = './inbox.html';
         }, 3000);
