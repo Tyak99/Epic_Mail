@@ -13,7 +13,6 @@ const login = (e) => {
   const password = document.getElementById('password').value;
 
   if (email.length == 0 || password.length == 0) {
-    console.log('Please input login details');
     setAlert('Please input log in details', 'fail');
     return false;
   }
@@ -32,12 +31,10 @@ const login = (e) => {
     .then((res) => res.json())
     .then((response) => {
       if (response.status == 'failed') {
-        console.log('oops');
         setAlert(response.error, 'fail');
         return false;
       }
       if (response.status == 'success') {
-        console.log('o set');
         localStorage.removeItem('token');
         localStorage.removeItem('name');
         localStorage.setItem('token', response.data.token);
