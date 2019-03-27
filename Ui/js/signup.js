@@ -23,7 +23,7 @@ const signup = (e) => {
     return false;
   }
 
-  const url = 'http://localhost:3000/api/v1/auth/signup';
+  const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/auth/signup';
   const data = JSON.stringify({
     email,
     password,
