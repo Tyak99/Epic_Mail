@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" href="./css/main.css">
     <!-- awsome font icons -->
     <link
       rel="stylesheet"
@@ -34,7 +35,8 @@
         </a>
       </div>
       <div class="section-2">
-        <form action="./inbox.html">
+        <form action=''>
+          <p id="alert"></p>
           <h2 class="form-title">
             Sign In
           </h2>
@@ -44,6 +46,7 @@
               type="email"
               class="form-control"
               placeholder="Email Address"
+              id="email"
             />
           </div>
           <div class="form-group">
@@ -52,12 +55,11 @@
               type="password"
               class="form-control"
               placeholder="Password"
+              id="password"
             />
           </div>
           <div style="text-align: center">
-            <a href="./inbox.html">
-              <button type="submit" class="submit-btn">Sign In</button>
-            </a>
+              <button type="submit" class="submit-btn" id="signin">Sign In</button>
           </div>
         </form>
       </div>
@@ -71,4 +73,5 @@
       </div>
     </div>
   </body>
+  <script src="./js/login.js"></script>
 </html>
