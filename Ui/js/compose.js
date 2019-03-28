@@ -26,7 +26,7 @@ const sendMessage = (e) => {
     return false;
   }
   if (validateEmail(emailTo.value) == false) {
-    toggleModal('Invalid email address')
+    toggleModal('Invalid email address');
     return false;
   }
   const data = JSON.stringify({
@@ -49,9 +49,9 @@ const sendMessage = (e) => {
     .then((response) => response.json())
     .then((res) => {
       if (res.status === 'failed') {
-        toggleModal(`Error! ${res.error}`)
+        toggleModal(`Error! ${res.error}`);
       }
-      if(res.status === 'success') {
+      if (res.status === 'success') {
         toggleModal('Sent successfully');
       }
     })
@@ -78,9 +78,16 @@ const saveDraft = (e) => {
     headers,
   })
     .then((response) => response.json())
-    .then((res) => console.log(res))
+    .then((res) => {
+      if (res.status == 'failed') {
+        toggleModal(`Error! ${res.error}`);
+      }
+      if (res.status === 'success') {
+        toggleModal('Saved to draft');
+      }
+    })
     .catch((error) => {
-      console.log(error);
+      toggleModal(`Error! ${error}`);
     });
 };
 
