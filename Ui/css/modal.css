@@ -12,6 +12,10 @@
   transform: scale(1.1);
 }
 
+#modal-message {
+  color: white
+}
+
 .modal-content {
   position: absolute;
   top: 50%;
