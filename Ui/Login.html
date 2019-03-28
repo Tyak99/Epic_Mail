@@ -31,6 +31,7 @@
     <!-- End of Naviagtion -->
     <div class="container">
       <form action="">
+        <p id="alert"></p>
         <h2 class="form-title">
           Sign In
         </h2>
@@ -41,17 +42,19 @@
             class="form-control"
             placeholder="Email Address"
             required
+            id="email"
           />
         </div>
         <div class="form-group">
           <label for=""> Password</label>
-          <input type="password" class="form-control" placeholder="Password"  required/>
+          <input type="password" class="form-control" placeholder="Password"  required id="password"/>
         </div>
         <div style="text-align: center">
-          <button type="submit" class="submit-btn">Sign in</button>
+          <button type="submit" class="submit-btn" id ='signin'>Sign in</button>
         </div>
       </form>
     </div>
   </body>
   <script src="./js/main.js"></script>
+  <script src="./js/login.js"></script>
 </html>
