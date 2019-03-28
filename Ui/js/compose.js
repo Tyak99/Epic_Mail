@@ -4,7 +4,7 @@ const sendButton = document.querySelector('.btn-send');
 const draftButton = document.querySelector('.btn-draft');
 const closeModalButton = document.querySelector('.close-button');
 const okayModalButton = document.querySelector('.yes-modal');
-const emailTo = document.querySelector('.email-to');
+const receiver = document.querySelector('.email-to');
 const messageBody = document.getElementById('message-body');
 const messageSubject = document.getElementById('message-subject');
 const modalMessage = document.getElementById('modal-message');
@@ -22,20 +22,15 @@ const validateEmail = (data) => {
   return emailCheck.test(data);
 };
 
-const sendMessage = (e) => {
-  e.preventDefault();
-  if (emailTo.value == '') {
-    toggleModal('Error! Add a receiver', 'failed');
-    return false;
-  }
-  if (validateEmail(emailTo.value) == false) {
-    toggleModal('Invalid email address', 'failed');
+const sendMessage = () => {
+  if (validateEmail(receiver.value) == false) {
+    toggleModal('Invalid email address or group name! To send to group use format @groupname', 'failed');
     return false;
   }
   const data = JSON.stringify({
     subject: messageSubject.value,
     message: messageBody.value,
-    emailTo: emailTo.value,
+    emailTo: receiver.value,
   });
 
   const url = 'http://localhost:3000/api/v1/messages';
@@ -51,9 +46,6 @@ const sendMessage = (e) => {
   })
     .then((response) => response.json())
     .then((res) => {
-      if (!res.ok) {
-        throw Error(`${res.error}`)
-      }
       if (res.status === 'failed') {
         toggleModal(`Error! ${res.error}`, 'failed');
       }
@@ -67,6 +59,41 @@ const sendMessage = (e) => {
       toggleModal(error, 'failed');
     });
 };
+
+const sendMessageToGroup = () => {
+  const data = JSON.stringify({
+    subject: messageSubject.value,
+    message: messageBody.value,
+    groupTo: receiver.value.replace('@', ''),
+  });
+
+  const url = 'http://localhost:3000/api/v1/groups/messages';
+
+  const headers = new Headers();
+  headers.append('Content-Type', 'application/json');
+  headers.append('authorization', localStorage.getItem('token'));
+
+  fetch(url, {
+    method: 'POST',
+    body: data,
+    headers,
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.status === 'failed') {
+        toggleModal(`Error! ${res.error}`, 'failed');
+      }
+      if (res.status === 'success') {
+        messageSubject.value = '';
+        messageBody.value = '';
+        toggleModal('Sent successfully', 'success');
+      }
+    })
+    .catch((error) => {
+      toggleModal(error, 'failed');
+    });
+};
+
 
 const saveDraft = (e) => {
   e.preventDefault();
@@ -102,7 +129,21 @@ const saveDraft = (e) => {
     });
 };
 
-sendButton.addEventListener('click', sendMessage);
+
+const initializeSendMessage = (e) => {
+  e.preventDefault();
+  if (receiver.value == '') {
+    toggleModal('Error! Add a receiver with a valid email or a group with format @groupname', 'failed');
+    return false;
+  }
+  if (receiver.value[0] == '@') {
+    sendMessageToGroup();
+    // console.log('To group')
+  } else {
+    sendMessage();
+  }
+}
+sendButton.addEventListener('click', initializeSendMessage);
 draftButton.addEventListener('click', saveDraft);
 closeModalButton.addEventListener('click', toggleModal);
 okayModalButton.addEventListener('click', toggleModal);
