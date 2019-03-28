@@ -7,15 +7,12 @@
         const token = localStorage.getItem('token');
         try {
           const decoded = jwt_decode(token);
-          console.log(decoded);
           const expiryTime = new Date(decoded.exp * 1000).getTime();
           if (new Date().getTime() > expiryTime) {
-            console.log('time has expired')
           } else {
             window.location.replace('./inbox.html');
           }
         } catch (e) {
-          console.log(e.message);
         }
       </script>
     <meta charset="UTF-8" />
