@@ -11,9 +11,10 @@ const modalMessage = document.getElementById('modal-message');
 
 const toggleModal = (message, result) => {
   modalMessage.innerHTML = message;
-  modalContent.style.backgroundColor = result === 'success' ? '#388438' : '#d25353'
+  modalContent.style.backgroundColor =
+    result === 'success' ? '#388438' : '#d25353';
   modal.classList.toggle('show-modal');
-}
+};
 
 // validate if user input email adress is an email format
 const validateEmail = (data) => {
@@ -50,6 +51,9 @@ const sendMessage = (e) => {
   })
     .then((response) => response.json())
     .then((res) => {
+      if (!res.ok) {
+        throw Error(`${res.error}`)
+      }
       if (res.status === 'failed') {
         toggleModal(`Error! ${res.error}`, 'failed');
       }
@@ -57,7 +61,6 @@ const sendMessage = (e) => {
         messageSubject.value = '';
         messageBody.value = '';
         toggleModal('Sent successfully', 'success');
-        
       }
     })
     .catch((error) => {
@@ -84,6 +87,9 @@ const saveDraft = (e) => {
   })
     .then((response) => response.json())
     .then((res) => {
+      if (!res.ok) {
+        throw Error(`${res.error}`)
+      }
       if (res.status == 'failed') {
         toggleModal(`Error! ${res.error}`, 'failed');
       }
@@ -92,7 +98,7 @@ const saveDraft = (e) => {
       }
     })
     .catch((error) => {
-      toggleModal(`Error! ${error}`, 'failed');
+      toggleModal(`${error}`, 'failed');
     });
 };
 
