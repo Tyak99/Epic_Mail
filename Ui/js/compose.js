@@ -52,7 +52,10 @@ const sendMessage = (e) => {
         toggleModal(`Error! ${res.error}`);
       }
       if (res.status === 'success') {
+        messageSubject.value = '';
+        messageBody.value = '';
         toggleModal('Sent successfully');
+        
       }
     })
     .catch((error) => {
