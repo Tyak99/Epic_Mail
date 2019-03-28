@@ -6,18 +6,26 @@ const okayModalButton = document.querySelector('.yes-modal');
 const emailTo = document.querySelector('.email-to');
 const messageBody = document.getElementById('message-body');
 const messageSubject = document.getElementById('message-subject');
+const modalMessage = document.getElementById('modal-message');
 
-function toggleModal(e) {
-  if (emailTo.value == '') {
-    e.preventDefault();
-    modal.classList.toggle('show-modal');
-  }
+function toggleModal(e, message) {
+  modal.classList.toggle('show-modal');
 }
+
+const validateEmail = (data) => {
+  const emailCheck = /\S+@\S+\.\S+/;
+  return emailCheck.test(data);
+};
 
 const sendMessage = (e) => {
   e.preventDefault();
   if (emailTo.value == '') {
-    modal.classList.toggle('show-modal');
+    toggleModal()
+    return false;
+  }
+  if (validateEmail(emailTo.value) == false) {
+    modalMessage.innerHTML = 'Invalid email address';
+    toggleModal()
     return false;
   }
   const data = JSON.stringify({
@@ -38,7 +46,12 @@ const sendMessage = (e) => {
     headers,
   })
     .then((response) => response.json())
-    .then((res) => console.log(res))
+    .then((res) => {
+      if (res.status === 'failed') {
+        modalMessage.innerHTML = res.error;
+        modal.classList.toggle('show-modal');
+      }
+    })
     .catch((error) => {
       console.log(error);
     });
@@ -67,7 +80,6 @@ const saveDraft = (e) => {
       console.log(error);
     });
 };
-
 
 sendButton.addEventListener('click', sendMessage);
 draftButton.addEventListener('click', saveDraft);
