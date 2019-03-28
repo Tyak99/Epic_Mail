@@ -1,4 +1,5 @@
 const modal = document.getElementById('id-modal');
+const modalContent = document.querySelector('.modal-content');
 const sendButton = document.querySelector('.btn-send');
 const draftButton = document.querySelector('.btn-draft');
 const closeModalButton = document.querySelector('.close-button');
@@ -8,8 +9,9 @@ const messageBody = document.getElementById('message-body');
 const messageSubject = document.getElementById('message-subject');
 const modalMessage = document.getElementById('modal-message');
 
-function toggleModal(message) {
+const toggleModal = (message, result) => {
   modalMessage.innerHTML = message;
+  modalContent.style.backgroundColor = result === 'success' ? '#388438' : '#d25353'
   modal.classList.toggle('show-modal');
 }
 
@@ -22,11 +24,11 @@ const validateEmail = (data) => {
 const sendMessage = (e) => {
   e.preventDefault();
   if (emailTo.value == '') {
-    toggleModal('Error! Add a receiver');
+    toggleModal('Error! Add a receiver', 'failed');
     return false;
   }
   if (validateEmail(emailTo.value) == false) {
-    toggleModal('Invalid email address');
+    toggleModal('Invalid email address', 'failed');
     return false;
   }
   const data = JSON.stringify({
@@ -49,17 +51,17 @@ const sendMessage = (e) => {
     .then((response) => response.json())
     .then((res) => {
       if (res.status === 'failed') {
-        toggleModal(`Error! ${res.error}`);
+        toggleModal(`Error! ${res.error}`, 'failed');
       }
       if (res.status === 'success') {
         messageSubject.value = '';
         messageBody.value = '';
-        toggleModal('Sent successfully');
+        toggleModal('Sent successfully', 'success');
         
       }
     })
     .catch((error) => {
-      toggleModal(error);
+      toggleModal(error, 'failed');
     });
 };
 
@@ -83,14 +85,14 @@ const saveDraft = (e) => {
     .then((response) => response.json())
     .then((res) => {
       if (res.status == 'failed') {
-        toggleModal(`Error! ${res.error}`);
+        toggleModal(`Error! ${res.error}`, 'failed');
       }
       if (res.status === 'success') {
-        toggleModal('Saved to draft');
+        toggleModal('Saved to draft', 'success');
       }
     })
     .catch((error) => {
-      toggleModal(`Error! ${error}`);
+      toggleModal(`Error! ${error}`, 'failed');
     });
 };
 
