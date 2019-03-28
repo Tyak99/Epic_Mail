@@ -16,7 +16,7 @@ const login = (e) => {
     setAlert('Please input log in details', 'fail');
     return false;
   }
-  const url = 'http://localhost:3000/api/v1/auth/login';
+  const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/auth/login';
   const data = JSON.stringify({
     email,
     password,
