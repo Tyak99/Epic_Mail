@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script src="./js/jwt-decode.min.js"></script>
+    <script>
+      const token = localStorage.getItem('token');
+      try {
+        const decoded = jwt_decode(token);
+        const expiryTime = new Date(decoded.exp * 1000).getTime();
+        if (new Date().getTime() > expiryTime) {
+          window.location.replace('./Index.html');
+        }
+      } catch (e) {
+        window.location.replace('./index.html');
+      }
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -17,7 +30,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./css/compose.css" />
-    <link rel="stylesheet" href="./css/modal.css">
+    <link rel="stylesheet" href="./css/modal.css" />
     <title>Compose</title>
   </head>
   <body>
@@ -31,8 +44,8 @@
         </a>
         <h2 class="nav-brand">Epic Mail</h2>
         <img src="https://avatars.io/twitter/tundenasri" alt="profile image" />
-        <div class="logout">
-          <a href="./Index.html"> <h4>Sign out</h4> </a>
+        <div class="logout" id="signout">
+          <a> <h4>Sign out</h4> </a>
         </div>
       </div>
     </header>
@@ -76,7 +89,7 @@
     <div class="modal" id="id-modal">
       <div class="modal-content">
         <span class="close-button">&times;</span>
-        <p>Error! Add at least one receiver </p>
+        <p>Error! Add at least one receiver</p>
         <button class="modal-button yes-modal">Okay</button>
       </div>
     </div>
@@ -86,7 +99,11 @@
       <h2>New Message</h2>
       <form action="">
         <div class="form-group">
-          <input type="email" placeholder="To - email / group name" class="email-to"/>
+          <input
+            type="email"
+            placeholder="To - email / group name"
+            class="email-to"
+          />
         </div>
         <div class="form-group">
           <input type="text" placeholder="Subject" />
@@ -101,4 +118,5 @@
   </body>
   <script src="./js/main.js"></script>
   <script src="./js/compose.js"></script>
+  <script src="./js/signout.js"></script>
 </html>

@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script src="./js/jwt-decode.min.js"></script>
+    <script>
+      const token = localStorage.getItem('token');
+      try {
+        const decoded = jwt_decode(token);
+        const expiryTime = new Date(decoded.exp * 1000).getTime();
+        if (new Date().getTime() > expiryTime) {
+          window.location.replace('./Index.html');
+        }
+      } catch (e) {
+        window.location.replace('./index.html');
+      }
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -34,8 +47,8 @@
                                                 "
           alt="profile image"
         />
-        <div class="logout">
-          <a href="./Index.html"> <h4>Sign out</h4> </a>
+        <div class="logout" id="signout">
+          <a> <h4>Sign out</h4> </a>
         </div>
       </div>
     </header>
@@ -82,7 +95,7 @@
         </h2>
         <div class="form-group">
           <label for=""> Group Name </label>
-          <input type="text" placeholder="Name" class="form-control" required/>
+          <input type="text" placeholder="Name" class="form-control" required />
         </div>
         <div class="form-group">
           <label for=""> Add Member </label>
@@ -106,4 +119,5 @@
     </section>
   </body>
   <script src="./js/main.js"></script>
+  <script src="./js/signout.js"></script>
 </html>

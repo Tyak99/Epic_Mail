@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+      <script src="./js/jwt-decode.min.js"></script>
+
+      <script>
+        const token = localStorage.getItem('token');
+        try {
+          const decoded = jwt_decode(token);
+          const expiryTime = new Date(decoded.exp * 1000).getTime();
+          if (new Date().getTime() > expiryTime) {
+          } else {
+            window.location.replace('./inbox.html');
+          }
+        } catch (e) {
+        }
+      </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
