@@ -8,10 +8,12 @@ const messageBody = document.getElementById('message-body');
 const messageSubject = document.getElementById('message-subject');
 const modalMessage = document.getElementById('modal-message');
 
-function toggleModal(e, message) {
+function toggleModal(message) {
+  modalMessage.innerHTML = message;
   modal.classList.toggle('show-modal');
 }
 
+// validate if user input email adress is an email format
 const validateEmail = (data) => {
   const emailCheck = /\S+@\S+\.\S+/;
   return emailCheck.test(data);
@@ -20,12 +22,11 @@ const validateEmail = (data) => {
 const sendMessage = (e) => {
   e.preventDefault();
   if (emailTo.value == '') {
-    toggleModal()
+    toggleModal('Error! Add a receiver')
     return false;
   }
   if (validateEmail(emailTo.value) == false) {
-    modalMessage.innerHTML = 'Invalid email address';
-    toggleModal()
+    toggleModal('Invalid email address')
     return false;
   }
   const data = JSON.stringify({
