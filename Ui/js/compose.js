@@ -13,6 +13,37 @@ function toggleModal(e) {
     modal.classList.toggle('show-modal');
   }
 }
+
+const sendMessage = (e) => {
+  e.preventDefault();
+  if (emailTo.value == '') {
+    modal.classList.toggle('show-modal');
+    return false;
+  }
+  const data = JSON.stringify({
+    subject: messageSubject.value,
+    message: messageBody.value,
+    emailTo: emailTo.value,
+  });
+
+  const url = 'http://localhost:3000/api/v1/messages';
+
+  const headers = new Headers();
+  headers.append('Content-Type', 'application/json');
+  headers.append('authorization', localStorage.getItem('token'));
+
+  fetch(url, {
+    method: 'POST',
+    body: data,
+    headers,
+  })
+    .then((response) => response.json())
+    .then((res) => console.log(res))
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 const saveDraft = (e) => {
   e.preventDefault();
   const data = JSON.stringify({
@@ -38,7 +69,7 @@ const saveDraft = (e) => {
 };
 
 
-sendButton.addEventListener('click', toggleModal);
+sendButton.addEventListener('click', sendMessage);
 draftButton.addEventListener('click', saveDraft);
 closeModalButton.addEventListener('click', toggleModal);
 okayModalButton.addEventListener('click', toggleModal);
