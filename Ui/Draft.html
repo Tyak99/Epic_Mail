@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-      <script src="./js/jwt-decode.min.js"></script>
-      <script>
-        const token = localStorage.getItem('token');
-        try {
-          const decoded = jwt_decode(token);
-          console.log(decoded);
-          const expiryTime = new Date(decoded.exp * 1000).getTime();
-          if (new Date().getTime() > expiryTime) {
-            console.log('time has expired')
-            window.location.replace('./Index.html');
-          }
-        } catch (e) {
-          console.log(e.message);
-          window.location.replace('./index.html');
+    <script src="./js/jwt-decode.min.js"></script>
+    <script>
+      const token = localStorage.getItem('token');
+      try {
+        const decoded = jwt_decode(token);
+        console.log(decoded);
+        const expiryTime = new Date(decoded.exp * 1000).getTime();
+        if (new Date().getTime() > expiryTime) {
+          console.log('time has expired');
+          window.location.replace('./Index.html');
         }
-      </script>
+      } catch (e) {
+        console.log(e.message);
+        window.location.replace('./index.html');
+      }
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -33,7 +33,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./css/draft.css" />
-    <link rel="stylesheet" href="./css/modal.css">
+    <link rel="stylesheet" href="./css/modal.css" />
     <title>Drafts</title>
   </head>
   <body>
@@ -51,8 +51,8 @@
                                           "
           alt="profile image"
         />
-        <div class="logout">
-          <a href="./Index.html"> <h4>Sign out</h4> </a>
+        <div class="logout" id="signout">
+          <a> <h4>Sign out</h4> </a>
         </div>
       </div>
     </header>
@@ -91,12 +91,12 @@
       </div>
     </aside>
     <!-- end of aside section -->
-     <!-- Modal -->
-     <div class="modal" id="id-modal">
+    <!-- Modal -->
+    <div class="modal" id="id-modal">
       <div class="modal-content">
         <span class="close-button">&times;</span>
         <p>Are you sure to delete draft?</p>
-        <button class="modal-button yes-modal"> Yes </button>
+        <button class="modal-button yes-modal">Yes</button>
       </div>
     </div>
     <!-- main section -->
@@ -153,4 +153,5 @@
   </body>
   <script src="./js/main.js"></script>
   <script src="./js/modal.js"></script>
+  <script src="./js/signout.js"></script>
 </html>
