@@ -24,7 +24,10 @@ const validateEmail = (data) => {
 
 const sendMessage = () => {
   if (validateEmail(receiver.value) == false) {
-    toggleModal('Invalid email address or group name! To send to group use format @groupname', 'failed');
+    toggleModal(
+      'Invalid email address or group name! To send to group use format @groupname',
+      'failed'
+    );
     return false;
   }
   const data = JSON.stringify({
@@ -33,7 +36,7 @@ const sendMessage = () => {
     emailTo: receiver.value,
   });
 
-  const url = 'http://localhost:3000/api/v1/messages';
+  const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/messages';
 
   const headers = new Headers();
   headers.append('Content-Type', 'application/json');
@@ -67,7 +70,8 @@ const sendMessageToGroup = () => {
     groupTo: receiver.value.replace('@', ''),
   });
 
-  const url = 'http://localhost:3000/api/v1/groups/messages';
+  const url =
+    'https://intense-thicket-60071.herokuapp.com/api/v1/groups/messages';
 
   const headers = new Headers();
   headers.append('Content-Type', 'application/json');
@@ -94,14 +98,13 @@ const sendMessageToGroup = () => {
     });
 };
 
-
 const saveDraft = (e) => {
   e.preventDefault();
   const data = JSON.stringify({
     subject: messageSubject.value,
     message: messageBody.value,
   });
-  const url = 'http://localhost:3000/api/v1/messages';
+  const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/messages';
 
   const headers = new Headers();
   headers.append('Content-Type', 'application/json');
@@ -115,7 +118,7 @@ const saveDraft = (e) => {
     .then((response) => response.json())
     .then((res) => {
       if (!res.ok) {
-        throw Error(`${res.error}`)
+        throw Error(`${res.error}`);
       }
       if (res.status == 'failed') {
         toggleModal(`Error! ${res.error}`, 'failed');
@@ -129,20 +132,21 @@ const saveDraft = (e) => {
     });
 };
 
-
 const initializeSendMessage = (e) => {
   e.preventDefault();
   if (receiver.value == '') {
-    toggleModal('Error! Add a receiver with a valid email or a group with format @groupname', 'failed');
+    toggleModal(
+      'Error! Add a receiver with a valid email or a group with format @groupname',
+      'failed'
+    );
     return false;
   }
   if (receiver.value[0] == '@') {
     sendMessageToGroup();
-    // console.log('To group')
   } else {
     sendMessage();
   }
-}
+};
 sendButton.addEventListener('click', initializeSendMessage);
 draftButton.addEventListener('click', saveDraft);
 closeModalButton.addEventListener('click', toggleModal);
