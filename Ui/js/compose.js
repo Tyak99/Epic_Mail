@@ -22,7 +22,7 @@ const validateEmail = (data) => {
 const sendMessage = (e) => {
   e.preventDefault();
   if (emailTo.value == '') {
-    toggleModal('Error! Add a receiver')
+    toggleModal('Error! Add a receiver');
     return false;
   }
   if (validateEmail(emailTo.value) == false) {
@@ -49,12 +49,14 @@ const sendMessage = (e) => {
     .then((response) => response.json())
     .then((res) => {
       if (res.status === 'failed') {
-        modalMessage.innerHTML = res.error;
-        modal.classList.toggle('show-modal');
+        toggleModal(`Error! ${res.error}`)
+      }
+      if(res.status === 'success') {
+        toggleModal('Sent successfully');
       }
     })
     .catch((error) => {
-      console.log(error);
+      toggleModal(error);
     });
 };
 
