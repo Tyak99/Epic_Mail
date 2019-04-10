@@ -9,18 +9,17 @@ fetch(url, {
   method: 'GET',
   headers,
 })
-  .then((res) => res.json())
-  .then((data) => {
-    console.log(data);
-    if (data.data.message) {
+  .then((response) => response.json())
+  .then((res) => {
+    console.log(res);
+    if (res.data.message) {
       const h2 = document.createElement('h2');
       h2.setAttribute('class', 'empty-inbox');
       h2.textContent = 'No Received Messages';
       mainSection.appendChild(h2);
     }
     const ul = document.createElement('ul');
-    console.log(data.data);
-    data.data.forEach((message) => {
+    res.data.forEach((message) => {
       const li = document.createElement('li');
       const span1 = document.createElement('span');
       const span2 = document.createElement('span');
