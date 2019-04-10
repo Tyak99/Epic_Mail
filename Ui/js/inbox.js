@@ -19,8 +19,9 @@ fetch(url, {
       mainSection.appendChild(h2);
     }
     const ul = document.createElement('ul');
-    res.data.forEach((message) => {
+    res.data.forEach((data) => {
       const li = document.createElement('li');
+      li.dataset.id = data.id;
       const span1 = document.createElement('span');
       const span2 = document.createElement('span');
       const span3 = document.createElement('span');
@@ -28,9 +29,9 @@ fetch(url, {
       span2.setAttribute('class', 'subject');
       span3.setAttribute('class', 'body');
       span1.textContent = 'tunde@mail.com';
-      span2.textContent = `${message.subject} -`
+      span2.textContent = `${data.subject} -`
       // shorten message to 100 characters
-      const shortendMessage = message.message.substring(0, 50);
+      const shortendMessage = data.message.substring(0, 50);
       span3.textContent = `${shortendMessage}...`;
       li.appendChild(span1);
       li.appendChild(span2);
