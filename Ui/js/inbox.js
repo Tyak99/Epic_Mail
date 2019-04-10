@@ -1,6 +1,6 @@
 const mainSection = document.querySelector('.main-section');
 
-const url = 'http://localhost:3000/api/v1/messages/';
+const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/messages/';
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('authorization', localStorage.getItem('token'));
@@ -11,7 +11,6 @@ fetch(url, {
 })
   .then((response) => response.json())
   .then((res) => {
-    console.log(res);
     if (res.data.message) {
       const h2 = document.createElement('h2');
       h2.setAttribute('class', 'empty-inbox');
@@ -29,7 +28,7 @@ fetch(url, {
       span2.setAttribute('class', 'subject');
       span3.setAttribute('class', 'body');
       span1.textContent = 'tunde@mail.com';
-      span2.textContent = `${data.subject} -`
+      span2.textContent = `${data.subject} -`;
       // shorten message to 100 characters
       const shortendMessage = data.message.substring(0, 50);
       span3.textContent = `${shortendMessage}...`;

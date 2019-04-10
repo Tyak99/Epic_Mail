@@ -112,6 +112,10 @@ header .nav .logout a:hover {
   color: maroon;
   padding-right: 30px;
 }
+.main-section li span.body {
+  margin-left: 5px;
+  color: grey;
+}
 .main-section li span.status {
   padding-left: 50px;
   font-style: italic;
