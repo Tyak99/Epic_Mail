@@ -263,7 +263,7 @@ exports.getUnreadMessages = (req, res) => {
   // check the db for messages that the user is the receiver
   db.query(
     'SELECT * FROM messages WHERE receiverid = $1 AND status = $2 AND receiverdeleted = $3',
-    [req.decoded.sub, 'unread', 0],
+    [req.userEmail, 'unread', 0],
     (err, messages) => {
       if (!messages.rows[0]) {
         return res.status(200).json({
@@ -289,7 +289,7 @@ exports.deleteById = (req, res) => {
       error: errors.array()[0].msg,
     });
   }
-  const { sub } = req.decoded;
+  const { userEmail } = req;
   // check if the message exists
   db.query(
     'SELECT * FROM messages WHERE id = $1',
@@ -302,8 +302,8 @@ exports.deleteById = (req, res) => {
         });
       }
       if (
-        message.rows[0].receiverid !== sub &&
-        message.rows[0].senderid !== sub
+        message.rows[0].receiverid !== userEmail &&
+        message.rows[0].senderid !== userEmail
       ) {
         return res.status(403).json({
           status: 'failed',
@@ -311,7 +311,7 @@ exports.deleteById = (req, res) => {
             'Sorry, you can request a message only when you are the sender or receiver',
         });
       }
-      if (message.rows[0].receiverid == sub) {
+      if (message.rows[0].receiverid == userEmail) {
         db.query(
           'UPDATE messages SET receiverdeleted = $1 WHERE id = $2 RETURNING *',
           [1, req.params.id],
@@ -327,7 +327,7 @@ exports.deleteById = (req, res) => {
           }
         );
       }
-      if (message.rows[0].senderid == sub) {
+      if (message.rows[0].senderid == userEmail) {
         db.query(
           'DELETE FROM messages WHERE id = $1 RETURNING *',
           [req.params.id],
