@@ -218,7 +218,7 @@ exports.getMessageById = (req, res) => {
       error: errors.array()[0].msg,
     });
   }
-  const { sub } = req.decoded;
+  const { userEmail } = req;
   // check the db for the id passed in the parameter
   db.query(
     'SELECT * FROM messages WHERE id = $1',
@@ -231,8 +231,8 @@ exports.getMessageById = (req, res) => {
         });
       }
       if (
-        message.rows[0].senderid !== sub &&
-        message.rows[0].receiverid !== sub
+        message.rows[0].senderid !== userEmail &&
+        message.rows[0].receiverid !== userEmail
       ) {
         return res.status(403).json({
           status: 'failed',
@@ -241,7 +241,7 @@ exports.getMessageById = (req, res) => {
         });
       }
       if (
-        sub == message.rows[0].receiverid &&
+        userEmail == message.rows[0].receiverid &&
         message.rows[0].receiverdeleted == 1
       ) {
         return res.status(404).json({
