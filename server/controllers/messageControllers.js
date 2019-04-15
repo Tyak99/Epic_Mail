@@ -177,10 +177,10 @@ exports.getSentMessages = (req, res) => {
 };
 
 exports.getDrafts = (req, res) => {
-  const { sub } = req.decoded;
+  const { userEmail } = req;
   db.query(
     'SELECT * FROM messages WHERE senderid = $1 AND status = $2',
-    [sub, 'draft'],
+    [userEmail, 'draft'],
     (err, messages) => {
       if (!messages.rows[0]) {
         return res.status(200).json({
