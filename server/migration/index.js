@@ -116,8 +116,8 @@ const createMessageTable = async () => {
     message TEXT NOT NULL,
     subject TEXT NOT NULL,
     status VARCHAR(255) NOT NULL,
-    senderid INT REFERENCES users(id) ON DELETE CASCADE,
-    receiverid INT REFERENCES users(id) ON DELETE CASCADE,
+    senderid VARCHAR(255),
+    receiverid VARCHAR(255),
     parentmessageid INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     receiverdeleted INT DEFAULT 0

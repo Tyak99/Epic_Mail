@@ -30,6 +30,7 @@ const verifyToken = (req, res, next) => {
           });
         }
         req.decoded = decoded;
+        req.userEmail = user.rows[0].email;
         next();
       }
     );

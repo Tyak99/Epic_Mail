@@ -19,8 +19,8 @@ before((done) => {
       message TEXT NOT NULL,
       subject TEXT NOT NULL,
       status VARCHAR(255) NOT NULL,
-      senderid INT REFERENCES users(id) ON DELETE CASCADE,
-      receiverid INT REFERENCES users(id) ON DELETE CASCADE,
+      senderid VARCHAR(255),
+      receiverid VARCHAR(255),
       parentmessageid INT,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       receiverdeleted iNT DEFAULT 0
@@ -97,7 +97,7 @@ describe('Test post a message route', () => {
         done();
       });
   });
-  it('should return error if no message is passed along is passed along', (done) => {
+  it('should return error if no message is passed along', (done) => {
     chai
       .request(server)
       .post('/api/v1/messages')

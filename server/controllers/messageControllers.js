@@ -42,8 +42,8 @@ exports.postMessage = (req, res) => {
           newSubject,
           newMessage,
           'unread',
-          req.decoded.sub,
-          user.rows[0].id,
+          req.userEmail,
+          user.rows[0].email,
         ];
         db.query(
           'INSERT INTO messages (subject, message, status, senderid, receiverid) VALUES ($1, $2, $3, $4, $5) RETURNING *',
@@ -75,7 +75,7 @@ exports.postMessage = (req, res) => {
     );
   } else {
     //post a message without a receiver id making it a draft
-    const values = [newSubject, newMessage, 'draft', req.decoded.sub];
+    const values = [newSubject, newMessage, 'draft', req.userEmail];
     db.query(
       'INSERT INTO messages (subject, message, status, senderid) VALUES ($1, $2, $3, $4) RETURNING *',
       values,
@@ -110,7 +110,7 @@ exports.getReceivedMessages = (req, res) => {
   // search the message db table by the users id
   db.query(
     'SELECT * FROM messages WHERE receiverid = $1 AND receiverdeleted = $2',
-    [req.decoded.sub, 0],
+    [req.userEmail, 0],
     (err, message) => {
       if (!message.rows[0]) {
         return res.status(200).json({
@@ -145,7 +145,7 @@ exports.getSentMessages = (req, res) => {
   // search the message db table by the users id
   db.query(
     'SELECT * FROM messages WHERE senderid = $1 AND status != $2',
-    [req.decoded.sub, 'draft'],
+    [req.userEmail, 'draft'],
     (err, message) => {
       if (!message.rows[0]) {
         return res.status(200).json({
@@ -177,10 +177,10 @@ exports.getSentMessages = (req, res) => {
 };
 
 exports.getDrafts = (req, res) => {
-  const { sub } = req.decoded;
+  const { userEmail } = req;
   db.query(
     'SELECT * FROM messages WHERE senderid = $1 AND status = $2',
-    [sub, 'draft'],
+    [userEmail, 'draft'],
     (err, messages) => {
       if (!messages.rows[0]) {
         return res.status(200).json({
@@ -218,7 +218,7 @@ exports.getMessageById = (req, res) => {
       error: errors.array()[0].msg,
     });
   }
-  const { sub } = req.decoded;
+  const { userEmail } = req;
   // check the db for the id passed in the parameter
   db.query(
     'SELECT * FROM messages WHERE id = $1',
@@ -231,8 +231,8 @@ exports.getMessageById = (req, res) => {
         });
       }
       if (
-        message.rows[0].senderid !== sub &&
-        message.rows[0].receiverid !== sub
+        message.rows[0].senderid !== userEmail &&
+        message.rows[0].receiverid !== userEmail
       ) {
         return res.status(403).json({
           status: 'failed',
@@ -241,7 +241,7 @@ exports.getMessageById = (req, res) => {
         });
       }
       if (
-        sub == message.rows[0].receiverid &&
+        userEmail == message.rows[0].receiverid &&
         message.rows[0].receiverdeleted == 1
       ) {
         return res.status(404).json({
@@ -263,7 +263,7 @@ exports.getUnreadMessages = (req, res) => {
   // check the db for messages that the user is the receiver
   db.query(
     'SELECT * FROM messages WHERE receiverid = $1 AND status = $2 AND receiverdeleted = $3',
-    [req.decoded.sub, 'unread', 0],
+    [req.userEmail, 'unread', 0],
     (err, messages) => {
       if (!messages.rows[0]) {
         return res.status(200).json({
@@ -289,7 +289,7 @@ exports.deleteById = (req, res) => {
       error: errors.array()[0].msg,
     });
   }
-  const { sub } = req.decoded;
+  const { userEmail } = req;
   // check if the message exists
   db.query(
     'SELECT * FROM messages WHERE id = $1',
@@ -302,8 +302,8 @@ exports.deleteById = (req, res) => {
         });
       }
       if (
-        message.rows[0].receiverid !== sub &&
-        message.rows[0].senderid !== sub
+        message.rows[0].receiverid !== userEmail &&
+        message.rows[0].senderid !== userEmail
       ) {
         return res.status(403).json({
           status: 'failed',
@@ -311,7 +311,7 @@ exports.deleteById = (req, res) => {
             'Sorry, you can request a message only when you are the sender or receiver',
         });
       }
-      if (message.rows[0].receiverid == sub) {
+      if (message.rows[0].receiverid == userEmail) {
         db.query(
           'UPDATE messages SET receiverdeleted = $1 WHERE id = $2 RETURNING *',
           [1, req.params.id],
@@ -327,7 +327,7 @@ exports.deleteById = (req, res) => {
           }
         );
       }
-      if (message.rows[0].senderid == sub) {
+      if (message.rows[0].senderid == userEmail) {
         db.query(
           'DELETE FROM messages WHERE id = $1 RETURNING *',
           [req.params.id],
