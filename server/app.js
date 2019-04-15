@@ -1,6 +1,7 @@
 import express from 'express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import path from 'path';
+import cors from 'cors';
 import userRoutes from './routes/userRoutes';
 import messageRoutes from './routes/messageRoutes';
 import groupRoutes from './routes/groupRoutes';
@@ -34,6 +35,7 @@ app.get('/docs', (req, res) => {
   res.sendFile(path.join(__dirname, 'redoc.html'));
 });
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
