@@ -42,8 +42,8 @@ exports.postMessage = (req, res) => {
           newSubject,
           newMessage,
           'unread',
-          req.decoded.sub,
-          user.rows[0].id,
+          req.userEmail,
+          user.rows[0].email,
         ];
         db.query(
           'INSERT INTO messages (subject, message, status, senderid, receiverid) VALUES ($1, $2, $3, $4, $5) RETURNING *',
@@ -75,7 +75,7 @@ exports.postMessage = (req, res) => {
     );
   } else {
     //post a message without a receiver id making it a draft
-    const values = [newSubject, newMessage, 'draft', req.decoded.sub];
+    const values = [newSubject, newMessage, 'draft', req.userEmail];
     db.query(
       'INSERT INTO messages (subject, message, status, senderid) VALUES ($1, $2, $3, $4) RETURNING *',
       values,
