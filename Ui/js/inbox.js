@@ -27,7 +27,7 @@ fetch(url, {
       span1.setAttribute('class', 'sender');
       span2.setAttribute('class', 'subject');
       span3.setAttribute('class', 'body');
-      span1.textContent = 'tunde@mail.com';
+      span1.textContent = data.senderid;
       span2.textContent = `${data.subject} -`;
       // shorten message to 100 characters
       const shortendMessage = data.message.substring(0, 50);
