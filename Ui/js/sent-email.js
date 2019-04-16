@@ -1,5 +1,6 @@
 const modal = document.getElementById('id-modal');
 const modalCloseButton = document.querySelector('.close-button');
+const mainSection = document.querySelector('.main-section');
 
 const toggleModal = () => {
   modal.classList.toggle('show-modal');
@@ -26,6 +27,17 @@ const handleClick = (event) => {
     element = element.parentNode;
   }
 };
+
+
+const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/messages/sent';
+const headers = new Headers();
+headers.append('Content-Type', 'application/json');
+headers.append('authorization', localStorage.getItem('token'));
+
+fetch(url, {
+  method: 'GET',
+  headers,
+}).then(response => response.json()).then(res => console.log(res))
 
 document.addEventListener('click', handleClick);
 modalCloseButton.addEventListener('click', toggleModal);
