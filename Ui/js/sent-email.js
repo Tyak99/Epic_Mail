@@ -17,8 +17,8 @@ const handleClick = (event) => {
 
   while (element) {
     if (
-      element.nodeName === 'BUTTON'
-      && /btn-retract/.test(element.className)
+      element.nodeName === 'BUTTON' &&
+      /btn-retract/.test(element.className)
     ) {
       toggleModal();
       break;
@@ -28,7 +28,6 @@ const handleClick = (event) => {
   }
 };
 
-
 const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/messages/sent';
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
@@ -37,7 +36,16 @@ headers.append('authorization', localStorage.getItem('token'));
 fetch(url, {
   method: 'GET',
   headers,
-}).then(response => response.json()).then(res => console.log(res))
+})
+  .then((response) => response.json())
+  .then((res) => {
+    if (res.data.message) {
+      const h2 = document.createElement('h2');
+      h2.setAttribute('class', 'empty-inbox');
+      h2.textContent = 'No Sent Messages';
+      mainSection.appendChild(h2);
+    }
+  });
 
 document.addEventListener('click', handleClick);
 modalCloseButton.addEventListener('click', toggleModal);
