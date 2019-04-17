@@ -113,11 +113,15 @@ header .logout a:hover {
   text-decoration: none;
 }
 
-.main-section li span.sender {
+.main-section li span.receiver {
   color: maroon;
   padding-right: 30px;
 }
-.main-section li span.status {
+.main-section li span.body {
+  margin-left: 5px;
+  color: grey;
+}
+.main-section li span.retract {
   padding-left: 50px;
   font-style: italic;
   color: grey;

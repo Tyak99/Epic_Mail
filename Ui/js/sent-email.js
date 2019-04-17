@@ -45,6 +45,34 @@ fetch(url, {
       h2.textContent = 'No Sent Messages';
       mainSection.appendChild(h2);
     }
+    const ul = document.createElement('ul');
+    res.data.forEach((data) => {
+      const li = document.createElement('li');
+      li.dataset.id = data.id;
+      const span1 = document.createElement('span');
+      const span2 = document.createElement('span');
+      const span3 = document.createElement('span');
+      const span4 = document.createElement('span');
+      const button = document.createElement('button');
+      span1.setAttribute('class', 'receiver');
+      span2.setAttribute('class', 'subject');
+      span3.setAttribute('class', 'body');
+      span4.setAttribute('class', 'retract');
+      button.setAttribute('class', 'btn-retract');
+      span1.textContent = `To: ${data.receiverid}`;
+      span2.textContent = `${data.subject} -`;
+      // shorten message to 100 characters
+      const shortendMessage = data.message.substring(0, 50);
+      span3.textContent = `${shortendMessage}...`;
+      button.textContent = 'Retract';
+      span4.appendChild(button);
+      li.appendChild(span1);
+      li.appendChild(span2);
+      li.appendChild(span3);
+      li.appendChild(span4)
+      ul.appendChild(li);
+    });
+    mainSection.appendChild(ul);
   });
 
 document.addEventListener('click', handleClick);
