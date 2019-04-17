@@ -14,7 +14,7 @@ fetch(url, {
   .then((res) => {
     if (res.data.message) {
       const h2 = document.createElement('h2');
-      h2.setAttribute('class', 'empty-inbox');
+      h2.setAttribute('class', 'empty-outbox');
       h2.textContent = 'No Sent Messages';
       mainSection.appendChild(h2);
     }
