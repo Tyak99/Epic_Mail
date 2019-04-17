@@ -22,6 +22,12 @@ fetch(url, {
     res.data.forEach((data) => {
       const li = document.createElement('li');
       li.dataset.id = data.id;
+      // a function to save the id to localstroge on click
+      const saveIdToLocalStorage = () => {
+        localStorage.setItem('messageId', li.dataset.id);
+        location.href = './view-email.html';
+      };
+      li.addEventListener('click', saveIdToLocalStorage);
       const span1 = document.createElement('span');
       const span2 = document.createElement('span');
       const span3 = document.createElement('span');
