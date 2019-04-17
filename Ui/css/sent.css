@@ -85,6 +85,12 @@ header .logout a:hover {
   height: 85vh;
 }
 
+.main-section .empty-outbox {
+  text-align: center;
+  color: grey;
+  margin-top: 31%
+}
+
 .main-section ul {
   list-style-type: none;
   height: 80vh;
@@ -107,44 +113,15 @@ header .logout a:hover {
   text-decoration: none;
 }
 
-.main-section li span.sender {
+.main-section li span.receiver {
   color: maroon;
   padding-right: 30px;
 }
-.main-section li span.status {
-  padding-left: 50px;
-  font-style: italic;
+.main-section li span.body {
+  margin-left: 5px;
   color: grey;
-  text-align: right;
 }
 
-.btn-retract {
-  padding: 7px;
-  background-color: #49738c;
-  color: white;
-  cursor: pointer;
-  border-radius: 0.5em;
-}
-.btn-retract:hover {
-  background-color: #db5756;
-}
-/* modal styles  */
-.modal-button {
-  padding: 6px 20px;
-  color: white;
-  border-radius: 6px;
-  margin-right: 5px;
-  cursor: pointer;
-}
-.yes-modal {
-  background-color: #3f96cf;
-}
-.yes-modal:hover {
-  background-color: dodgerblue
-}
-.no-modal {
-  background-color: maroon;
-}
 /* media queries */
 @media screen and (max-width: 750px) {
   .aside-section {
