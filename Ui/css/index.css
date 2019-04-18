@@ -97,12 +97,13 @@ label {
 @media screen and (max-width: 750px) {
     .section {
         width: unset;
+        float: none
     }
     .section .sub-headers {
         font-size: 50px;
     }
     .section-2 {
         float: none;
-        width: unset;
+        width: 80%;
     }
 }
