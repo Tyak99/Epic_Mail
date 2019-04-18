@@ -30,6 +30,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./css/create-group.css" />
+    <link rel="stylesheet" href="./css/modal.css" />
     <title>Create Group</title>
   </head>
   <body>
@@ -41,7 +42,7 @@
             <i class="fa fa-bars" style="color: black"></i>
           </div>
         </a>
-        <h2 class="nav-brand">Nasri</h2>
+        <h2 class="nav-brand">EPIC MAIL</h2>
         <img
           src="https://avatars.io/twitter/tundenasri
                                                 "
@@ -79,7 +80,7 @@
               <i class="fa fa-th-large" style="padding-right: 10px"></i> Drafts
             </li>
           </a>
-          <a href="./Create-Group.html">
+          <a href="./create-group.html">
             <li class="active">
               <i class="fa fa-box" style="padding-right: 10px"></i> Create group
             </li>
@@ -88,6 +89,15 @@
       </div>
     </aside>
     <!-- end of aside section -->
+     <!-- Modal -->
+     <div class="modal" id="id-modal">
+        <div class="modal-content">
+          <span class="close-button">&times;</span>
+          <p id="modal-message">Error! Add at least one receiver</p>
+          <button class="modal-button yes-modal">Okay</button>
+        </div>
+      </div>
+      <!-- end of modal -->
     <section class="section-1">
       <form action="">
         <h2 class="form-title">
@@ -95,29 +105,17 @@
         </h2>
         <div class="form-group">
           <label for=""> Group Name </label>
-          <input type="text" placeholder="Name" class="form-control" required />
+          <input type="text" placeholder="Name" class="form-control" id='groupname' required />
         </div>
-        <div class="form-group">
-          <label for=""> Add Member </label>
-          <input
-            type="email"
-            placeholder="Enter Email"
-            class="form-control"
-            id="member-input"
-          />
-        </div>
-        <input type="submit" value="Submit" class="submit-btn" />
+        <input type="submit" value="Create" class="submit-btn" />
       </form>
       <hr />
       <div class="list-groups">
-        <h2>Groups you are in</h2>
-        <ul>
-          <li>Akasuki</li>
-          <li>Team 7</li>
-        </ul>
+        <h2>Groups</h2>
       </div>
     </section>
   </body>
   <script src="./js/main.js"></script>
   <script src="./js/signout.js"></script>
+  <script src='./js/group.js'></script>
 </html>
