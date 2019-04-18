@@ -128,7 +128,7 @@ header .logout a:hover {
     display: none;
   }
   .main-section {
-    width: unset;
+    width: 100%;
   }
   header .nav a.icon {
     display: block;
@@ -137,7 +137,7 @@ header .logout a:hover {
 @media screen and (max-width: 750px) {
   .aside-section.responsive {
     position: absolute;
-    width: 32%;
+    width: 39%;
     display: block;
     height: 85vh;
     background-color: #f1f1f1;

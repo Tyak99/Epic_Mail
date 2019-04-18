@@ -8,7 +8,7 @@
         const decoded = jwt_decode(token);
         const expiryTime = new Date(decoded.exp * 1000).getTime();
         if (new Date().getTime() > expiryTime) {
-          window.location.replace('./Index.html');
+          window.location.replace('./index.html');
         }
       } catch (e) {
         window.location.replace('./index.html');
@@ -31,7 +31,7 @@
     />
     <link rel="stylesheet" href="./css/create-group.css" />
     <link rel="stylesheet" href="./css/modal.css" />
-    <title>Create Group</title>
+    <title>Groups</title>
   </head>
   <body>
     <!-- Navigation -->
@@ -82,7 +82,7 @@
           </a>
           <a href="./create-group.html">
             <li class="active">
-              <i class="fa fa-box" style="padding-right: 10px"></i> Create group
+              <i class="fa fa-box" style="padding-right: 10px"></i> Groups
             </li>
           </a>
         </ul>

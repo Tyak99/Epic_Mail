@@ -8,7 +8,7 @@
           const decoded = jwt_decode(token);
           const expiryTime = new Date(decoded.exp * 1000).getTime();
           if (new Date().getTime() > expiryTime) {
-            window.location.replace('./Index.html');
+            window.location.replace('./index.html');
           }
         } catch (e) {
           window.location.replace('./index.html');

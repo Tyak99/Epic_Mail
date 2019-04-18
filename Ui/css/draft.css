@@ -148,7 +148,7 @@ header .nav .logout a:hover {
   cursor: pointer;
 }
 .yes-modal {
-  background-color: #3f96cf;
+  background-color: indianred;
 }
 .yes-modal:hover {
   background-color: dodgerblue;
@@ -160,7 +160,7 @@ header .nav .logout a:hover {
     display: none;
   }
   .main-section {
-    width: unset;
+    width: 100%;
   }
   header .nav a.icon {
     display: block;
