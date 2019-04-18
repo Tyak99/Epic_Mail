@@ -40,7 +40,6 @@ const createGroup = (e) => {
         toggleModal(`Error! ${res.error}`, 'failed');
       }
       if (res.status === 'success') {
-        // toggleModal('Group successfully created', 'success');
         document.getElementById('groupname').value = '';
         window.location.reload();
       }
@@ -64,7 +63,7 @@ fetch(url, {
       const ul = document.createElement('ul');
       res.data.forEach((group) => {
         const li = document.createElement('li');
-        li.textContent = group.name;
+        li.textContent = `@${group.name}`;
         li.dataset.id = group.id;
         ul.appendChild(li);
       });
