@@ -142,7 +142,7 @@ header .nav .logout a:hover {
 @media screen and (max-width: 750px) {
   .aside-section.responsive {
     position: absolute;
-    width: 32%;
+    width: 39%;
     display: block;
     background-color: #f1f1f1;
 
