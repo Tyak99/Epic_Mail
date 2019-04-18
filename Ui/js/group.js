@@ -4,6 +4,7 @@ const modalContent = document.querySelector('.modal-content');
 const modalMessage = document.getElementById('modal-message');
 const closeModalButton = document.querySelector('.close-button');
 const okayModalButton = document.querySelector('.yes-modal');
+const listGroups = document.querySelector('.list-groups');
 
 // modal for displaying feedback
 const toggleModal = (message, result) => {
@@ -50,10 +51,26 @@ fetch(url, {
   headers,
 })
   .then((response) => response.json())
-  .then((res) => console.log(res))
+  .then((res) => {
+    if (res.data.message) {
+      const h2 = document.createElement('h2');
+      h2.setAttribute('class', 'no-groups');
+      h2.textContent = 'No Groups';
+      listGroups.appendChild(h2);
+    }
+    if (res.data.constructor === Array) {
+      const ul = document.createElement('ul');
+      res.data.forEach((group) => {
+        const li = document.createElement('li');
+        li.textContent = group.name;
+        li.dataset.id = group.id;
+        ul.appendChild(li);
+      });
+      listGroups.appendChild(ul);
+    }
+  })
   .catch((error) => console.log(error));
 
-  
 submitButton.addEventListener('click', createGroup);
 closeModalButton.addEventListener('click', toggleModal);
 okayModalButton.addEventListener('click', toggleModal);
