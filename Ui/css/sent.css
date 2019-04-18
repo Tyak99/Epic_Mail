@@ -128,7 +128,7 @@ header .logout a:hover {
     display: none;
   }
   .main-section {
-    width: unset;
+    width: 100%;
   }
   header .nav a.icon {
     display: block;
