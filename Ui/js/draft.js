@@ -1,5 +1,8 @@
 const mainSection = document.querySelector('.main-section');
 const modalYesButton = document.querySelector('.yes-modal');
+// remove messageId and recepeient in localstorage if exists
+localStorage.removeItem('recepient');
+localStorage.removeItem('messageId');
 
 const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/messages/draft';
 // const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/messages/draft';

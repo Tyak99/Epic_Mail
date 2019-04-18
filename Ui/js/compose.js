@@ -22,8 +22,14 @@ const toggleModal = (message, result) => {
   modal.classList.toggle('show-modal');
 };
 
+
+if (localStorage.getItem('recepient')) {
+  const messageTo = localStorage.getItem('recepient');
+  document.querySelector('.email-to').value = messageTo;
+}
+
 // check if there is a message to display as value in the compose inputs
-if (localStorage.getItem('messageId')) {
+if ((!window.localStorage.getItem('recepient')) && (window.localStorage.getItem('messageId'))) {
   const id = localStorage.getItem('messageId')
   fetch(`https://intense-thicket-60071.herokuapp.com/api/v1/messages/${id}`, {
     method: 'GET',
@@ -36,6 +42,7 @@ if (localStorage.getItem('messageId')) {
     });
   localStorage.removeItem('messageId');
 }
+
 
 // validate if user input email adress is an email format
 const validateEmail = (data) => {
@@ -89,7 +96,7 @@ const sendMessageToGroup = () => {
 
   const url =
     'https://intense-thicket-60071.herokuapp.com/api/v1/groups/messages';
-    
+
   fetch(url, {
     method: 'POST',
     body: data,
@@ -157,6 +164,8 @@ const initializeSendMessage = (e) => {
     sendMessage();
   }
 };
+
+// localStorage.removeItem('recepient');
 sendButton.addEventListener('click', initializeSendMessage);
 draftButton.addEventListener('click', saveDraft);
 closeModalButton.addEventListener('click', toggleModal);
