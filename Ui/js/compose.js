@@ -25,7 +25,10 @@ const toggleModal = (message, result) => {
 
 if (localStorage.getItem('recepient')) {
   const messageTo = localStorage.getItem('recepient');
+  const subject = localStorage.getItem('subject');
   document.querySelector('.email-to').value = messageTo;
+  document.getElementById('message-subject').value = subject;
+
 }
 
 // check if there is a message to display as value in the compose inputs
