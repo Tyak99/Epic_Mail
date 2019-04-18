@@ -71,6 +71,14 @@ const getMessageId = (e) => {
     const messageId = element.parentNode.dataset.id;
     modalYesButton.addEventListener('click', () => deleteMessage(messageId));
   }
+  if (
+    (element.nodeName === 'BUTTON' || element.nodeName === 'SPAN') &&
+    /btn-send/.test(element.className)
+  ) {
+    localStorage.setItem('messageId', element.parentNode.dataset.id);
+    window.location.href = './compose.html';
+
+  }
 };
 
 document.addEventListener('click', getMessageId);
