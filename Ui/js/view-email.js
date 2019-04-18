@@ -1,4 +1,5 @@
 const threadGroup = document.querySelector('.thread-group');
+const modalYesButton = document.querySelector('.yes-modal');
 const messageId = localStorage.getItem('messageId');
 
 const url = `https://intense-thicket-60071.herokuapp.com/api/v1/messages/${messageId}`;
@@ -78,7 +79,20 @@ fetch(url, {
           <div class="thread-body"> ${res.data.message}</div>`;
 
     threadGroup.innerHTML = tags;
-
-    
   })
   .catch((error) => console.log(error));
+
+const deleteMessage = () => {
+  fetch(url, {
+    method: 'DELETE',
+    headers,
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      window.history.back();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+modalYesButton.addEventListener('click', deleteMessage);

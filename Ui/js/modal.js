@@ -12,6 +12,7 @@ const onClickWindow = (event) => {
 };
 
 const handleClick = (event) => {
+  event.preventDefault();
   let element = event.target;
 
   while (element) {
