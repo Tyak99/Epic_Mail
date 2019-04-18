@@ -40,7 +40,9 @@ const createGroup = (e) => {
         toggleModal(`Error! ${res.error}`, 'failed');
       }
       if (res.status === 'success') {
-        toggleModal('Group successfully created', 'success');
+        // toggleModal('Group successfully created', 'success');
+        document.getElementById('groupname').value = '';
+        window.location.reload();
       }
     })
     .catch((error) => console.log(error));
