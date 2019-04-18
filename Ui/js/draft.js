@@ -13,19 +13,19 @@ fetch(url, {
 })
   .then((response) => response.json())
   .then((res) => {
-    console.log(res);
     if (res.data.message) {
       const h2 = document.createElement('h2');
       h2.setAttribute('class', 'empty-inbox');
       h2.textContent = 'No Draft Messages';
       mainSection.appendChild(h2);
     }
-    const ul = document.createElement('ul');
-    res.data.forEach((message) => {
-      const shortendMessage = message.message.substring(0, 150);
-      const li = document.createElement('li');
-      li.dataset.id = message.id;
-      const tags = `<div class="message-header">
+    if (res.data.constructor === Array) {
+      const ul = document.createElement('ul');
+      res.data.forEach((message) => {
+        const shortendMessage = message.message.substring(0, 150);
+        const li = document.createElement('li');
+        li.dataset.id = message.id;
+        const tags = `<div class="message-header">
           <span class="status">Drafted at ${message.created_at}</span>
           <span class="subject"> ${message.subject} </span>
         </div>
@@ -35,10 +35,11 @@ fetch(url, {
         </p>
         <button class="btn btn-send">View</button>
         <button class="btn btn-delete">Delete</button>`;
-      li.innerHTML = tags;
-      ul.appendChild(li);
-      mainSection.appendChild(ul);
-    });
+        li.innerHTML = tags;
+        ul.appendChild(li);
+        mainSection.appendChild(ul);
+      });
+    }
   });
 
 const deleteMessage = (messageId) => {
@@ -49,9 +50,7 @@ const deleteMessage = (messageId) => {
       headers,
     }
   )
-    .then((response) => {
-      response.json();
-    })
+    .then((response) => response.json())
     .then((res) => {
       if (res.status === 'success') {
         window.location.reload();
@@ -69,7 +68,6 @@ const getMessageId = (e) => {
     (element.nodeName === 'BUTTON' || element.nodeName === 'SPAN') &&
     /btn-delete/.test(element.className)
   ) {
-    console.log(element.parentNode.dataset.id);
     const messageId = element.parentNode.dataset.id;
     modalYesButton.addEventListener('click', () => deleteMessage(messageId));
   }
