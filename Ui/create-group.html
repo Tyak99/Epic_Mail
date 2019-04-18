@@ -29,9 +29,8 @@
       href="https://fonts.googleapis.com/css?family=Ubuntu"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./css/draft.css" />
-    <link rel="stylesheet" href="./css/modal.css" />
-    <title>Drafts</title>
+    <link rel="stylesheet" href="./css/create-group.css" />
+    <title>Create Group</title>
   </head>
   <body>
     <!-- Navigation -->
@@ -42,10 +41,10 @@
             <i class="fa fa-bars" style="color: black"></i>
           </div>
         </a>
-        <h2 class="nav-brand">Epic Mail</h2>
+        <h2 class="nav-brand">Nasri</h2>
         <img
           src="https://avatars.io/twitter/tundenasri
-                                          "
+                                                "
           alt="profile image"
         />
         <div class="logout" id="signout">
@@ -54,6 +53,7 @@
       </div>
     </header>
     <!-- End of Navigation -->
+
     <!-- aside section -->
     <aside class="aside-section" id="mySidebar">
       <div class="pages">
@@ -74,13 +74,13 @@
               Sent
             </li>
           </a>
-          <a href="./Draft.html">
-            <li class="active">
+          <a href="./draft.html">
+            <li>
               <i class="fa fa-th-large" style="padding-right: 10px"></i> Drafts
             </li>
           </a>
-          <a href="./Create-Group.html">
-            <li>
+          <a href="./create-group.html">
+            <li class="active">
               <i class="fa fa-box" style="padding-right: 10px"></i> Create group
             </li>
           </a>
@@ -88,21 +88,36 @@
       </div>
     </aside>
     <!-- end of aside section -->
-    <!-- Modal -->
-    <div class="modal" id="id-modal">
-      <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <p>Are you sure to delete draft?</p>
-        <button class="modal-button yes-modal">Yes</button>
+    <section class="section-1">
+      <form action="">
+        <h2 class="form-title">
+          Create group
+        </h2>
+        <div class="form-group">
+          <label for=""> Group Name </label>
+          <input type="text" placeholder="Name" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label for=""> Add Member </label>
+          <input
+            type="email"
+            placeholder="Enter Email"
+            class="form-control"
+            id="member-input"
+          />
+        </div>
+        <input type="submit" value="Submit" class="submit-btn" />
+      </form>
+      <hr />
+      <div class="list-groups">
+        <h2>Groups you are in</h2>
+        <ul>
+          <li>Akasuki</li>
+          <li>Team 7</li>
+        </ul>
       </div>
-    </div>
-    <!-- main section -->
-    <div class="main-section">
-    </div>
-    <!-- end of main section -->
+    </section>
   </body>
   <script src="./js/main.js"></script>
-  <script src="./js/modal.js"></script>
   <script src="./js/signout.js"></script>
-  <script src="./js/draft.js"></script>
 </html>
