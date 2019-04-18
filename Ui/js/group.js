@@ -25,7 +25,7 @@ const createGroup = (e) => {
   });
   e.preventDefault();
   if (groupName.length < 2) {
-    toggleModal('Group name should be at least 2 characters long', 'failed');
+    toggleModal('group name should be at least 2 characters long', 'failed');
     return;
   }
   fetch(url, {
@@ -45,6 +45,15 @@ const createGroup = (e) => {
     .catch((error) => console.log(error));
 };
 
+fetch(url, {
+  method: 'GET',
+  headers,
+})
+  .then((response) => response.json())
+  .then((res) => console.log(res))
+  .catch((error) => console.log(error));
+
+  
 submitButton.addEventListener('click', createGroup);
 closeModalButton.addEventListener('click', toggleModal);
 okayModalButton.addEventListener('click', toggleModal);
