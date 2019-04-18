@@ -22,7 +22,7 @@ headers.append('authorization', localStorage.getItem('token'));
 const createGroup = (e) => {
   const groupName = document.getElementById('groupname').value;
   const data = JSON.stringify({
-    name: groupName,
+    name: groupName.toLowerCase(),
   });
   e.preventDefault();
   if (groupName.length < 2) {
