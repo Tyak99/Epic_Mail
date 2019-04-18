@@ -9,12 +9,43 @@ const messageBody = document.getElementById('message-body');
 const messageSubject = document.getElementById('message-subject');
 const modalMessage = document.getElementById('modal-message');
 
+// headers for sending requests
+const headers = new Headers();
+headers.append('Content-Type', 'application/json');
+headers.append('authorization', localStorage.getItem('token'));
+
+// modal for displaying feedback
 const toggleModal = (message, result) => {
   modalMessage.innerHTML = message;
   modalContent.style.backgroundColor =
     result === 'success' ? '#388438' : '#d25353';
   modal.classList.toggle('show-modal');
 };
+
+
+if (localStorage.getItem('recepient')) {
+  const messageTo = localStorage.getItem('recepient');
+  const subject = localStorage.getItem('subject');
+  document.querySelector('.email-to').value = messageTo;
+  document.getElementById('message-subject').value = subject;
+
+}
+
+// check if there is a message to display as value in the compose inputs
+if ((!window.localStorage.getItem('recepient')) && (window.localStorage.getItem('messageId'))) {
+  const id = localStorage.getItem('messageId')
+  fetch(`https://intense-thicket-60071.herokuapp.com/api/v1/messages/${id}`, {
+    method: 'GET',
+    headers,
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      document.getElementById('message-subject').value = res.data.subject;
+      document.getElementById('message-body').value = res.data.message;
+    });
+  localStorage.removeItem('messageId');
+}
+
 
 // validate if user input email adress is an email format
 const validateEmail = (data) => {
@@ -37,10 +68,6 @@ const sendMessage = () => {
   });
 
   const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/messages';
-
-  const headers = new Headers();
-  headers.append('Content-Type', 'application/json');
-  headers.append('authorization', localStorage.getItem('token'));
 
   fetch(url, {
     method: 'POST',
@@ -72,10 +99,6 @@ const sendMessageToGroup = () => {
 
   const url =
     'https://intense-thicket-60071.herokuapp.com/api/v1/groups/messages';
-
-  const headers = new Headers();
-  headers.append('Content-Type', 'application/json');
-  headers.append('authorization', localStorage.getItem('token'));
 
   fetch(url, {
     method: 'POST',
@@ -117,9 +140,6 @@ const saveDraft = (e) => {
   })
     .then((response) => response.json())
     .then((res) => {
-      if (!res.ok) {
-        throw Error(`${res.error}`);
-      }
       if (res.status == 'failed') {
         toggleModal(`Error! ${res.error}`, 'failed');
       }
@@ -147,6 +167,8 @@ const initializeSendMessage = (e) => {
     sendMessage();
   }
 };
+
+// localStorage.removeItem('recepient');
 sendButton.addEventListener('click', initializeSendMessage);
 draftButton.addEventListener('click', saveDraft);
 closeModalButton.addEventListener('click', toggleModal);

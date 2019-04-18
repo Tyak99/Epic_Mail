@@ -24,6 +24,8 @@ fetch(url, {
       // a function to save the id to localstroge on click
       const saveIdToLocalStorage = () => {
         localStorage.setItem('messageId', li.dataset.id);
+        localStorage.setItem('recepient', data.senderid)
+        localStorage.setItem('subject', data.subject)
         window.location.href = './view-email.html';
       };
       li.addEventListener('click', saveIdToLocalStorage);

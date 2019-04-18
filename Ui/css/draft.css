@@ -106,6 +106,11 @@ header .nav .logout a:hover {
   text-decoration: none;
 }
 
+.main-section .empty-inbox {
+  text-align: center;
+  color: grey;
+  margin-top: 31%
+}
 .main-section li span.subject {
   font-size: 1.2rem;
   font-weight: 600;
