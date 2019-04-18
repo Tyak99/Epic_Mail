@@ -126,6 +126,21 @@ label {
   background-color: #3f96cf;
 }
 
+/* modal styles  */
+.modal-button {
+  padding: 6px 20px;
+  color: white;
+  border-radius: 6px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.yes-modal {
+  background-color: #3f96cf;
+}
+.yes-modal:hover {
+  background-color: dodgerblue;
+}
+
 hr {
   height: 10px;
   border: 0;
