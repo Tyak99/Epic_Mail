@@ -117,9 +117,6 @@ const saveDraft = (e) => {
   })
     .then((response) => response.json())
     .then((res) => {
-      if (!res.ok) {
-        throw Error(`${res.error}`);
-      }
       if (res.status == 'failed') {
         toggleModal(`Error! ${res.error}`, 'failed');
       }
