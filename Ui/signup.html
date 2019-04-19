@@ -1,108 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <script src="./js/jwt-decode.min.js"></script>
 
-      <script>
-        const token = localStorage.getItem('token');
-        try {
-          const decoded = jwt_decode(token);
-          const expiryTime = new Date(decoded.exp * 1000).getTime();
-          if (new Date().getTime() > expiryTime) {
-          } else {
-            window.location.replace('./inbox.html');
-          }
-        } catch (e) {
-        }
-      </script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <!-- google fonts -->
-    <link
-      href="https://fonts.googleapis.com/css?family=Ubuntu"
-      rel="stylesheet"
-    />
-    <!-- font awesome icon -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link rel="stylesheet" href="./css/main.css" />
-    <link rel="stylesheet" href="./css/signup.css" />
-    <title>Sign Up</title>
-  </head>
-  <body>
-    <!-- Navigation -->
-    <div class="nav" id="myNav">
-      <h2 class="nav-brand">Epic Mail</h2>
-      <a href="./login.html">Sign In</a>
-      <a href="#" class="active"> Sign Up </a>
-      <a href="javascript:void(0);" class="icon" onclick="navbarFunction()">
-        <i class="fa fa-bars"></i>
-      </a>
+<head>
+  <script src="./js/jwt-decode.min.js"></script>
+
+  <script>
+    const token = localStorage.getItem('token');
+    try {
+      const decoded = jwt_decode(token);
+      const expiryTime = new Date(decoded.exp * 1000).getTime();
+      if (new Date().getTime() > expiryTime) {
+      } else {
+        window.location.replace('./inbox.html');
+      }
+    } catch (e) {
+    }
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <!-- google fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet" />
+  <!-- font awesome icon -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <link rel="stylesheet" href="./css/signup.css" />
+  <title>Sign Up</title>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <div class="nav" id="myNav">
+    <a href="./index.html"> <h2 class="nav-brand">  Epic Mail</h2> </a> 
+  </div>
+  <!-- End of Naviagtion -->
+  <div class="container">
+    <div class="background-login">
+      <img src="https://directlinedev.com/media/services/service/background/background_11.wide.jpeg" alt="">
     </div>
-    <!-- End of Naviagtion -->
-    <div class="container">
+    <div class="form-section">
       <form action="">
         <p id="alert"></p>
         <h2 class="form-title">Sign Up</h2>
         <div class="form-group">
-          <label for=""> First Name </label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="First Name"
-            required
-            id = 'firstname'
-          />
+          <!-- <label for=""> First Name </label> -->
+          <input type="text" class="form-control" placeholder="First Name" required id='firstname' />
         </div>
         <div class="form-group">
-          <label for=""> Last Name </label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Last Name"
-            required
-            id = 'lastname'
-          />
+          <!-- <label for=""> Last Name </label> -->
+          <input type="text" class="form-control" placeholder="Last Name" required id='lastname' />
         </div>
         <div class="form-group">
-          <label for=""> Email </label>
-          <input
-            type="email"
-            class="form-control"
-            placeholder="Email Address"
-            required
-            id = 'email'
-          />
+          <!-- <label for=""> Email </label> -->
+          <input type="email" class="form-control" placeholder="Email Address" required id='email' />
         </div>
         <div class="form-group">
-          <label for=""> Password</label>
-          <input
-            type="password"
-            class="form-control"
-            placeholder="Password"
-            required
-            id = 'password'
-          />
+          <!-- <label for=""> Password</label> -->
+          <input type="password" class="form-control" placeholder="Password" required id='password' />
         </div>
         <div class="form-group">
-          <label for=""> Confirm Password</label>
-          <input
-            type="password"
-            class="form-control"
-            placeholder="Confirm Password"
-            required
-            id = 'confirmPassword'
-          />
+          <!-- <label for=""> Confirm Password</label> -->
+          <input type="password" class="form-control" placeholder="Confirm Password" required id='confirmPassword' />
         </div>
         <div style="text-align: center">
-          <button type="submit" id ='submit' class="submit-btn">Sign up</button>
+          <button type="submit" id='submit' class="submit-btn">Sign up</button>
         </div>
+        <p  class="sign-in-link">Already have an account? <a href="./index.html">Sign In</a></p>
       </form>
     </div>
-  </body>
-  <script src="./js/main.js"></script>
-  <script src="./js/signup.js"></script>
+
+  </div>
+</body>
+<script src="./js/signup.js"></script>
+
 </html>

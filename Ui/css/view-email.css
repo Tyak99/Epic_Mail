@@ -9,7 +9,6 @@ header {
   width: 100%;
   color: white;
   min-height: 70px;
-  border-bottom: 2px solid blueviolet;
   overflow: hidden;
 }
 
@@ -24,7 +23,7 @@ header {
 header .nav-brand {
   float: left;
   margin: 22px 10px;
-  color: #061324;
+  color: white;
   text-transform: uppercase;
 }
 
