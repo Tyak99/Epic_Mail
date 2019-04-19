@@ -6,6 +6,12 @@ const closeModalButton = document.querySelector('.close-button');
 const okayModalButton = document.querySelector('.yes-modal');
 const listGroups = document.querySelector('.list-groups');
 
+// header for sending requests
+const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/groups';
+const headers = new Headers();
+headers.append('Content-Type', 'application/json');
+headers.append('authorization', localStorage.getItem('token'));
+
 // modal for displaying feedback
 const toggleModal = (message, result) => {
   modalMessage.innerHTML = message;
@@ -14,10 +20,17 @@ const toggleModal = (message, result) => {
   modal.classList.toggle('show-modal');
 };
 
-const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/groups';
-const headers = new Headers();
-headers.append('Content-Type', 'application/json');
-headers.append('authorization', localStorage.getItem('token'));
+const getGroupMemebers = (e) => {
+  const groupid = e.target.dataset.id;
+  // toggleModal('This will be the lists of members', 'success');
+  fetch(`${url}/${groupid}/members`, {
+    method: 'GET',
+    headers,
+  })
+    .then((response) => response.json())
+    .then((res) => console.log(res)).catch(error => console.log(error));
+};
+
 
 const createGroup = (e) => {
   const groupName = document.getElementById('groupname').value;
@@ -65,6 +78,7 @@ fetch(url, {
         const li = document.createElement('li');
         li.textContent = `@${group.name}`;
         li.dataset.id = group.id;
+        li.addEventListener('click', getGroupMemebers);
         ul.appendChild(li);
       });
       listGroups.appendChild(ul);
