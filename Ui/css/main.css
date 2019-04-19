@@ -26,6 +26,10 @@ body {
   font-size: 17px;
 }
 
+.nav a:first-child {
+  padding: 0;
+}
+
 .nav a:hover {
   color: #061324;
 }
