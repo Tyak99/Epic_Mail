@@ -16,7 +16,6 @@
 form {
     max-width: 290px;
     padding: 30px;
-    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
     margin: 10% auto;
 }
 
@@ -66,4 +65,12 @@ label {
 }
 .submit-btn:hover {
     background-color: #DB5756;
+}
+
+.sign-in-link {
+    text-align: center;
+
+}
+.sign-in-link a {
+    text-decoration: none;
 }

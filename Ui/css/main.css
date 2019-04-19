@@ -7,13 +7,12 @@ body {
 .nav {
   overflow: hidden;
   background-color: #3C91E6;
-  border-bottom: 2px solid blueviolet;
 }
 
 .nav-brand {
   float: left;
   margin: 12px 21px 13px 12px;
-  color: #111;
+  color: white;
   text-transform: uppercase;
 }
 
