@@ -161,6 +161,20 @@ hr {
   padding: 10px;
 }
 
+#ul-members {
+  padding: 0;
+  margin: 0;
+}
+.members-list {
+  list-style-type: none;
+  width: 40%;
+  padding: 6px;
+  border-radius: 20px;
+  background: aqua;
+}
+.members-list p{
+  margin: 0;
+}
 @media screen and (max-width: 750px) {
   .aside-section {
     display: none;

@@ -25,9 +25,26 @@ const getGroupMemebers = (e) => {
     headers,
   })
     .then((response) => response.json())
-    .then((res) => console.log(res)).catch(error => console.log(error));
+    .then((res) => {
+      console.log(res);
+      // remove previous list 
+      if (document.getElementById('ul-members')) {
+        document.getElementById('ul-members').remove()
+      }
+      const ul = document.createElement('ul');
+      ul.setAttribute('id', 'ul-members');
+      res.data.forEach((member) => {
+        const li = document.createElement('li');
+        // li.dataset.id = member.id;
+        li.setAttribute('class', 'members-list');
+        li.textContent = member.firstname;
+        ul.appendChild(li)
+      });
+      modalContent.appendChild(ul)
+      toggleModal();
+    })
+    .catch((error) => console.log(error));
 };
-
 
 const createGroup = (e) => {
   const groupName = document.getElementById('groupname').value;
@@ -37,7 +54,7 @@ const createGroup = (e) => {
   e.preventDefault();
   if (groupName.length < 2) {
     // toggleModal('group name should be at least 2 characters long', 'failed');
-    console.log('group name should be at least 2 characters long')
+    console.log('group name should be at least 2 characters long');
     return;
   }
   fetch(url, {
@@ -49,7 +66,7 @@ const createGroup = (e) => {
     .then((res) => {
       if (res.status == 'failed') {
         // toggleModal(`Error! ${res.error}`, 'failed');
-        console.log('failed')
+        console.log('failed');
       }
       if (res.status === 'success') {
         document.getElementById('groupname').value = '';
