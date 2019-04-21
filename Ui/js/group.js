@@ -42,8 +42,6 @@ const getGroupMemebers = (e) => {
         li.setAttribute('class', 'members-list');
         li.textContent = member.firstname;
         ul.appendChild(li);
-        // add event listener to remove group on click
-        li.addEventListener('click', removeMember);
       });
       modalContent.appendChild(ul);
       toggleModal();
