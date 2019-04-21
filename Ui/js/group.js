@@ -1,11 +1,14 @@
 const submitButton = document.querySelector('.submit-btn');
 const modal = document.getElementById('id-modal');
 const modalContent = document.querySelector('.modal-content');
-const modalMessage = document.getElementById('modal-message');
+// const modalMessage = document.getElementById('modal-message');
 const closeModalButton = document.querySelector('.close-button');
 // const okayModalButton = document.querySelector('.yes-modal');
 const listGroups = document.querySelector('.list-groups');
 
+//add member
+const newMemberEmail = document.getElementById('add-member-input');
+const addNewMemberButton = document.querySelector('.submit-button');
 // header for sending requests
 const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/groups';
 const headers = new Headers();
@@ -19,6 +22,7 @@ const toggleModal = () => {
 
 const getGroupMemebers = (e) => {
   const groupid = e.target.dataset.id;
+  localStorage.setItem('groupid', groupid);
   // toggleModal('This will be the lists of members', 'success');
   fetch(`${url}/${groupid}/members`, {
     method: 'GET',
@@ -27,9 +31,9 @@ const getGroupMemebers = (e) => {
     .then((response) => response.json())
     .then((res) => {
       console.log(res);
-      // remove previous list 
+      // remove previous list
       if (document.getElementById('ul-members')) {
-        document.getElementById('ul-members').remove()
+        document.getElementById('ul-members').remove();
       }
       const ul = document.createElement('ul');
       ul.setAttribute('id', 'ul-members');
@@ -38,9 +42,9 @@ const getGroupMemebers = (e) => {
         // li.dataset.id = member.id;
         li.setAttribute('class', 'members-list');
         li.textContent = member.firstname;
-        ul.appendChild(li)
+        ul.appendChild(li);
       });
-      modalContent.appendChild(ul)
+      modalContent.appendChild(ul);
       toggleModal();
     })
     .catch((error) => console.log(error));
@@ -76,6 +80,28 @@ const createGroup = (e) => {
     .catch((error) => console.log(error));
 };
 
+const addMember = (e) => {
+  e.preventDefault();
+  const groupid = localStorage.getItem('groupid');
+  console.log(groupid);
+  console.log(newMemberEmail.value);
+  fetch(`${url}/${groupid}/users`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      email: newMemberEmail.value,
+    }),
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      console.log(res)
+      if(res.status == 'success') {
+        window.location.reload();
+      }
+    })
+    .catch((error) => console.log(error));
+};
+
 fetch(url, {
   method: 'GET',
   headers,
@@ -103,5 +129,6 @@ fetch(url, {
   .catch((error) => console.log(error));
 
 submitButton.addEventListener('click', createGroup);
+addNewMemberButton.addEventListener('click', addMember);
 closeModalButton.addEventListener('click', toggleModal);
 // okayModalButton.addEventListener('click', toggleModal);

@@ -82,7 +82,7 @@ header .nav .logout a:hover {
   width: 74%;
   float: right;
 }
-form {
+.section-1 form {
   max-width: 500px;
   margin: 10px auto;
   padding: 30px;
