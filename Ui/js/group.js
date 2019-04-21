@@ -3,10 +3,20 @@ const modal = document.getElementById('id-modal');
 const modalContent = document.querySelector('.modal-content');
 const closeModalButton = document.querySelector('.close-button');
 const listGroups = document.querySelector('.list-groups');
-
 // add member
 const newMemberEmail = document.getElementById('add-member-input');
 const addNewMemberButton = document.querySelector('.submit-button');
+// modal notification
+const modalNotification = document.querySelector('.modal-notification');
+const Notification = (message, status) => {
+  modalNotification.textContent = message;
+  modalNotification.style.color = status == 'pass' ? 'green' : 'indianred';
+  modalNotification.style.display = 'block';
+  setTimeout(() => {
+    modalNotification.style.display = 'none';
+  }, 3000);
+};
+
 // header for sending requests
 const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/groups';
 const headers = new Headers();
@@ -82,9 +92,13 @@ const createGroup = (e) => {
 // add member to a group
 const addMember = (e) => {
   e.preventDefault();
+  const emailCheck = /\S+@\S+\.\S+/;
+
+  if (emailCheck.test(newMemberEmail.value) == false) {
+    Notification('Add a valid user email to the form', 'failed');
+    return;
+  }
   const groupid = localStorage.getItem('groupid');
-  console.log(groupid);
-  console.log(newMemberEmail.value);
   fetch(`${url}/${groupid}/users`, {
     method: 'POST',
     headers,
@@ -95,7 +109,11 @@ const addMember = (e) => {
     .then((response) => response.json())
     .then((res) => {
       console.log(res);
+      if (res.status == 'failed') {
+        Notification(res.error, 'failed');
+      }
       if (res.status == 'success') {
+        Notification('User added successfully', 'success');
         window.location.reload();
       }
     })

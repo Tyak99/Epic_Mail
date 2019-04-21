@@ -149,7 +149,10 @@ label {
   cursor: pointer;
   border-radius: 0.5em;
 }
-
+.modal-notification {
+  display: none;
+}
+/* end of modal style */
 hr {
   height: 10px;
   border: 0;
