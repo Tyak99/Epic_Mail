@@ -22,18 +22,19 @@ const toggleModal = (message, result) => {
   modal.classList.toggle('show-modal');
 };
 
-
 if (localStorage.getItem('recepient')) {
   const messageTo = localStorage.getItem('recepient');
   const subject = localStorage.getItem('subject');
   document.querySelector('.email-to').value = messageTo;
   document.getElementById('message-subject').value = subject;
-
 }
 
 // check if there is a message to display as value in the compose inputs
-if ((!window.localStorage.getItem('recepient')) && (window.localStorage.getItem('messageId'))) {
-  const id = localStorage.getItem('messageId')
+if (
+  !window.localStorage.getItem('recepient') &&
+  window.localStorage.getItem('messageId')
+) {
+  const id = localStorage.getItem('messageId');
   fetch(`https://intense-thicket-60071.herokuapp.com/api/v1/messages/${id}`, {
     method: 'GET',
     headers,
@@ -45,7 +46,6 @@ if ((!window.localStorage.getItem('recepient')) && (window.localStorage.getItem(
     });
   localStorage.removeItem('messageId');
 }
-
 
 // validate if user input email adress is an email format
 const validateEmail = (data) => {
@@ -64,7 +64,7 @@ const sendMessage = () => {
   const data = JSON.stringify({
     subject: messageSubject.value,
     message: messageBody.value,
-    emailTo: receiver.value,
+    emailTo: receiver.value.toLowerCase(),
   });
 
   const url = 'https://intense-thicket-60071.herokuapp.com/api/v1/messages';
@@ -91,10 +91,12 @@ const sendMessage = () => {
 };
 
 const sendMessageToGroup = () => {
+  const groupTo = receiver.value.replace('@', '');
+
   const data = JSON.stringify({
     subject: messageSubject.value,
     message: messageBody.value,
-    groupTo: receiver.value.replace('@', ''),
+    groupTo: groupTo.toLowerCase(),
   });
 
   const url =
