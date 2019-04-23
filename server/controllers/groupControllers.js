@@ -58,7 +58,7 @@ const getGroupMembers = (req, res) => {
           });
         }
         db.query(
-          'SELECT firstname, lastname FROM users, groupmembers WHERE groupid = $1 AND id = memberid',
+          'SELECT firstname, lastname, id FROM users, groupmembers WHERE groupid = $1 AND id = memberid',
           [groupid],
           (err, user) => {
             return res.status(200).json({
@@ -201,9 +201,7 @@ const addUserToGroup = (req, res) => {
             if (groupCheck.rows[0]) {
               return res.status(409).json({
                 status: 'failed',
-                data: {
-                  message: 'User slready exists in group',
-                },
+                error: 'User already exists in group',
               });
             }
             const values = [groupid, memberid, 'member'];
@@ -334,18 +332,18 @@ const postGroupMessage = (req, res) => {
   }
   // i will check the group table to see if the group exists
   db.query(
-    'SELECT * FROM groups WHERE id = $1',
-    [req.params.groupid],
+    'SELECT * FROM groups WHERE name = $1',
+    [req.body.groupname],
     (err, group) => {
       if (!group.rows[0]) {
         return res.status(404).json({
           status: 'failed',
-          error: 'No group with that id found',
+          error: 'No group with that name found',
         });
       }
       db.query(
         'SELECT * FROM groupmembers WHERE groupid = $1',
-        [req.params.groupid],
+        [group.rows[0].id],
         (err, groupmembers) => {
           // the arrays of all the members in the group
           const allGroupMembers = groupmembers.rows.filter((member) => {
