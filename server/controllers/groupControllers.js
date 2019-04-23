@@ -58,7 +58,7 @@ const getGroupMembers = (req, res) => {
           });
         }
         db.query(
-          'SELECT firstname, lastname FROM users, groupmembers WHERE groupid = $1 AND id = memberid',
+          'SELECT firstname, lastname, id FROM users, groupmembers WHERE groupid = $1 AND id = memberid',
           [groupid],
           (err, user) => {
             return res.status(200).json({
