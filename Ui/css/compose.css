@@ -120,7 +120,7 @@ textarea {
   cursor: pointer;
 }
 .btn-draft {
-  background-color: #db5756;
+  background-color: cadetblue;
   margin-right: 12px;
 }
 
@@ -128,7 +128,7 @@ textarea {
   background-color: #0e79d1;
 }
 .btn-draft:hover {
-  background-color: #fc6463;
+  background-color: #a4ced0;
 }
 
 /* modal styles  */

@@ -1,11 +1,11 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Ubuntu", sans-serif;
+  font-family: 'Ubuntu', sans-serif;
 }
 
 header {
-  background-color: #3C91E6;
+  background-color: #3c91e6;
   width: 100%;
   color: white;
   min-height: 70px;
@@ -41,7 +41,7 @@ header .nav .logout a {
   color: #061324;
 }
 header .nav .logout a:hover {
-  color: #FFACAA;
+  color: #ffacaa;
 }
 .aside-section {
   width: 20%;
@@ -67,7 +67,7 @@ header .nav .logout a:hover {
 }
 
 .aside-section li.active {
-  background-color: #3C91E6;
+  background-color: #3c91e6;
 }
 
 .aside-section li:hover:not(.active) {
@@ -82,7 +82,7 @@ header .nav .logout a:hover {
   width: 74%;
   float: right;
 }
-form {
+.section-1 form {
   max-width: 500px;
   margin: 10px auto;
   padding: 30px;
@@ -126,6 +126,15 @@ label {
 }
 
 /* modal styles  */
+#id-modal form {
+  margin-bottom: 11px;
+}
+#add-member-input {
+  padding: 4px;
+  border-radius: 0.5em;
+  font-size: 1em;
+  font-weight: 400;
+}
 .modal-button {
   padding: 6px 20px;
   color: white;
@@ -133,13 +142,21 @@ label {
   margin-right: 5px;
   cursor: pointer;
 }
-.yes-modal {
-  background-color: #3f96cf;
+.submit-button {
+  padding: 7px;
+  background-color: #49738c;
+  color: white;
+  cursor: pointer;
+  border-radius: 0.5em;
 }
-.yes-modal:hover {
-  background-color: dodgerblue;
+.modal-notification {
+  display: none;
 }
-
+.create-group-notification {
+  text-align: center;
+  display: none;
+}
+/* end of modal style */
 hr {
   height: 10px;
   border: 0;
@@ -150,8 +167,8 @@ hr {
   margin-left: 10px;
 }
 .list-groups ul {
-  margin: 1rem;
   list-style: none;
+  padding: 0;
 }
 .list-groups li {
   float: left;
@@ -159,8 +176,33 @@ hr {
   font-size: 20px;
   border: 1px solid burlywood;
   padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
 }
 
+.list-groups li:hover {
+  background-color: antiquewhite;
+}
+
+#ul-members {
+  padding: 0;
+  margin: 0;
+}
+
+.members-list {
+  list-style-type: none;
+  padding: 6px;
+  border: 1px solid grey;
+  border-top: 0;
+}
+
+.members-list:first-child {
+  border-top: 1px solid grey
+}
+
+.members-list p {
+  margin: 0;
+}
 @media screen and (max-width: 750px) {
   .aside-section {
     display: none;
