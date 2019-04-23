@@ -61,7 +61,6 @@ const deleteUserFromGroupValidation = [
   param('userid', 'Invalid user id').isNumeric(),
 ];
 const postMessageToGroupValidation = [
-  param('groupid', 'Invalid group id').isNumeric(),
   check(
     'subject',
     'Subject is required with minimun length of 2 characters'
