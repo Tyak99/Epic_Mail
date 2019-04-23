@@ -152,6 +152,10 @@ label {
 .modal-notification {
   display: none;
 }
+.create-group-notification {
+  text-align: center;
+  display: none;
+}
 /* end of modal style */
 hr {
   height: 10px;

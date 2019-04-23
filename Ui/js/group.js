@@ -6,14 +6,16 @@ const listGroups = document.querySelector('.list-groups');
 // add member
 const newMemberEmail = document.getElementById('add-member-input');
 const addNewMemberButton = document.querySelector('.submit-button');
-// modal notification
+// modal and create group notification function
+const createGroupNotification = document.querySelector('.create-group-notification');
 const modalNotification = document.querySelector('.modal-notification');
-const Notification = (message, status) => {
-  modalNotification.textContent = message;
-  modalNotification.style.color = status == 'pass' ? 'green' : 'indianred';
-  modalNotification.style.display = 'block';
+const Notification = (type, message, status) => {
+  const notify = type === 'modal' ? modalNotification : createGroupNotification;
+  notify.textContent = message;
+  notify.style.color = status == 'pass' ? 'green' : 'indianred';
+  notify.style.display = 'block';
   setTimeout(() => {
-    modalNotification.style.display = 'none';
+    notify.style.display = 'none';
   }, 3000);
 };
 
@@ -32,7 +34,6 @@ const toggleModal = () => {
 const getGroupMemebers = (e) => {
   const groupid = e.target.dataset.id;
   localStorage.setItem('groupid', groupid);
-  // toggleModal('This will be the lists of members', 'success');
   fetch(`${url}/${groupid}/members`, {
     method: 'GET',
     headers,
@@ -66,8 +67,7 @@ const createGroup = (e) => {
   });
   e.preventDefault();
   if (groupName.length < 2) {
-    // toggleModal('group name should be at least 2 characters long', 'failed');
-    console.log('group name should be at least 2 characters long');
+    Notification('group', 'Group name should be at least 2 characters long', 'failed');
     return;
   }
   fetch(url, {
@@ -78,8 +78,7 @@ const createGroup = (e) => {
     .then((response) => response.json())
     .then((res) => {
       if (res.status == 'failed') {
-        // toggleModal(`Error! ${res.error}`, 'failed');
-        console.log('failed');
+        Notification('group', `Error! ${res.error}`, 'failed');
       }
       if (res.status === 'success') {
         document.getElementById('groupname').value = '';
@@ -95,7 +94,7 @@ const addMember = (e) => {
   const emailCheck = /\S+@\S+\.\S+/;
 
   if (emailCheck.test(newMemberEmail.value) == false) {
-    Notification('Add a valid user email to the form', 'failed');
+    Notification('modal', 'Add a valid user email to the form', 'failed');
     return;
   }
   const groupid = localStorage.getItem('groupid');
@@ -110,10 +109,10 @@ const addMember = (e) => {
     .then((res) => {
       console.log(res);
       if (res.status == 'failed') {
-        Notification(res.error, 'failed');
+        Notification('modal', res.error, 'failed');
       }
       if (res.status == 'success') {
-        Notification('User added successfully', 'success');
+        Notification('modal', 'User added successfully', 'success');
         window.location.reload();
       }
     })
