@@ -201,9 +201,7 @@ const addUserToGroup = (req, res) => {
             if (groupCheck.rows[0]) {
               return res.status(409).json({
                 status: 'failed',
-                data: {
-                  message: 'User slready exists in group',
-                },
+                error: 'User already exists in group',
               });
             }
             const values = [groupid, memberid, 'member'];
