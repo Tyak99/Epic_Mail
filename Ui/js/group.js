@@ -62,7 +62,6 @@ const getGroupMemebers = (e) => {
   })
     .then((response) => response.json())
     .then((res) => {
-      console.log(res);
       // remove previous list
       if (document.getElementById('ul-members')) {
         document.getElementById('ul-members').remove();
@@ -134,7 +133,6 @@ const addMember = (e) => {
   })
     .then((response) => response.json())
     .then((res) => {
-      console.log(res);
       if (res.status == 'failed') {
         Notification('modal', res.error, 'failed');
       }
