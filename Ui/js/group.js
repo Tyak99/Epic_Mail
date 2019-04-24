@@ -49,7 +49,7 @@ const getGroupMemebers = (e) => {
       ul.setAttribute('id', 'ul-members');
       res.data.forEach((member) => {
         const li = document.createElement('li');
-        // li.dataset.id = member.id;
+        li.dataset.id = member.id;
         li.setAttribute('class', 'members-list');
         li.textContent = member.firstname;
         ul.appendChild(li);
