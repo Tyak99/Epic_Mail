@@ -52,6 +52,22 @@ const removeMember = (userId) => {
     .catch((error) => console.log(error));
 };
 
+// function to enable double click to work on mobile for javascript
+// source https://stackoverflow.com/questions/8825144/detect-double-tap-on-ipad-or-iphone-screen-using-javascript/15816496#15816496
+let clickTimer = null;
+
+const touchStart = (memberid) => {
+  if (clickTimer == null) {
+    clickTimer = setTimeout(() => {
+      clickTimer = null;
+    }, 500);
+  } else {
+    clearTimeout(clickTimer);
+    clickTimer = null;
+    removeMember(memberid);
+  }
+};
+
 // get members of a group
 const getGroupMemebers = (e) => {
   const groupid = e.target.dataset.id;
@@ -73,7 +89,7 @@ const getGroupMemebers = (e) => {
         li.dataset.id = member.id;
         li.setAttribute('class', 'members-list');
         li.textContent = `${member.firstname} ${member.lastname}`;
-        li.addEventListener('dblclick', () => removeMember(li.dataset.id));
+        li.addEventListener('click', () => touchStart(li.dataset.id));
         ul.appendChild(li);
       });
       modalContent.appendChild(ul);
