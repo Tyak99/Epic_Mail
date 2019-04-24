@@ -139,8 +139,10 @@ const addMember = (e) => {
         Notification('modal', res.error, 'failed');
       }
       if (res.status == 'success') {
-        Notification('modal', 'User added successfully', 'success');
-        window.location.reload();
+        Notification('modal', 'User addedd successfully', 'pass');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     })
     .catch((error) => console.log(error));
