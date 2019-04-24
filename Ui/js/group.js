@@ -33,7 +33,6 @@ const toggleModal = () => {
 };
 
 const removeMember = (userId) => {
-  console.log('clicked');
   fetch(`${url}/${localStorage.getItem('groupid')}/users/${userId}`, {
     method: 'DELETE',
     headers,
@@ -44,7 +43,10 @@ const removeMember = (userId) => {
         Notification('modal', res.error, 'failed');
       }
       if (res.status == 'success') {
-        window.location.reload();
+        Notification('modal', res.data.message, 'pass');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     })
     .catch((error) => console.log(error));
