@@ -7,7 +7,9 @@ const listGroups = document.querySelector('.list-groups');
 const newMemberEmail = document.getElementById('add-member-input');
 const addNewMemberButton = document.querySelector('.submit-button');
 // modal and create group notification function
-const createGroupNotification = document.querySelector('.create-group-notification');
+const createGroupNotification = document.querySelector(
+  '.create-group-notification'
+);
 const modalNotification = document.querySelector('.modal-notification');
 const Notification = (type, message, status) => {
   const notify = type === 'modal' ? modalNotification : createGroupNotification;
@@ -30,6 +32,26 @@ const toggleModal = () => {
   modal.classList.toggle('show-modal');
 };
 
+const removeMember = (userId) => {
+  fetch(`${url}/${localStorage.getItem('groupid')}/users/${userId}`, {
+    method: 'DELETE',
+    headers,
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.status == 'failed') {
+        Notification('modal', res.error, 'failed');
+      }
+      if (res.status == 'success') {
+        Notification('modal', res.data.message, 'pass');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      }
+    })
+    .catch((error) => console.log(error));
+};
+
 // get members of a group
 const getGroupMemebers = (e) => {
   const groupid = e.target.dataset.id;
@@ -40,7 +62,6 @@ const getGroupMemebers = (e) => {
   })
     .then((response) => response.json())
     .then((res) => {
-      console.log(res);
       // remove previous list
       if (document.getElementById('ul-members')) {
         document.getElementById('ul-members').remove();
@@ -49,9 +70,10 @@ const getGroupMemebers = (e) => {
       ul.setAttribute('id', 'ul-members');
       res.data.forEach((member) => {
         const li = document.createElement('li');
-        // li.dataset.id = member.id;
+        li.dataset.id = member.id;
         li.setAttribute('class', 'members-list');
-        li.textContent = member.firstname;
+        li.textContent = `${member.firstname} ${member.lastname}`;
+        li.addEventListener('dblclick', () => removeMember(li.dataset.id));
         ul.appendChild(li);
       });
       modalContent.appendChild(ul);
@@ -67,7 +89,11 @@ const createGroup = (e) => {
   });
   e.preventDefault();
   if (groupName.length < 2) {
-    Notification('group', 'Group name should be at least 2 characters long', 'failed');
+    Notification(
+      'group',
+      'Group name should be at least 2 characters long',
+      'failed'
+    );
     return;
   }
   fetch(url, {
@@ -107,13 +133,14 @@ const addMember = (e) => {
   })
     .then((response) => response.json())
     .then((res) => {
-      console.log(res);
       if (res.status == 'failed') {
         Notification('modal', res.error, 'failed');
       }
       if (res.status == 'success') {
-        Notification('modal', 'User added successfully', 'success');
-        window.location.reload();
+        Notification('modal', 'User addedd successfully', 'pass');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
     })
     .catch((error) => console.log(error));

@@ -194,8 +194,11 @@ hr {
   padding: 6px;
   border: 1px solid grey;
   border-top: 0;
+  cursor: pointer;
 }
-
+.members-list:hover {
+  background-color: grey;
+}
 .members-list:first-child {
   border-top: 1px solid grey
 }
