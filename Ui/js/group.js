@@ -7,7 +7,9 @@ const listGroups = document.querySelector('.list-groups');
 const newMemberEmail = document.getElementById('add-member-input');
 const addNewMemberButton = document.querySelector('.submit-button');
 // modal and create group notification function
-const createGroupNotification = document.querySelector('.create-group-notification');
+const createGroupNotification = document.querySelector(
+  '.create-group-notification'
+);
 const modalNotification = document.querySelector('.modal-notification');
 const Notification = (type, message, status) => {
   const notify = type === 'modal' ? modalNotification : createGroupNotification;
@@ -28,6 +30,24 @@ headers.append('authorization', localStorage.getItem('token'));
 // modal for displaying feedback
 const toggleModal = () => {
   modal.classList.toggle('show-modal');
+};
+
+const removeMember = (userId) => {
+  console.log('clicked');
+  fetch(`${url}/${localStorage.getItem('groupid')}/users/${userId}`, {
+    method: 'DELETE',
+    headers,
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.status == 'failed') {
+        Notification('modal', res.error, 'failed');
+      }
+      if (res.status == 'success') {
+        window.location.reload();
+      }
+    })
+    .catch((error) => console.log(error));
 };
 
 // get members of a group
@@ -52,6 +72,7 @@ const getGroupMemebers = (e) => {
         li.dataset.id = member.id;
         li.setAttribute('class', 'members-list');
         li.textContent = `${member.firstname} ${member.lastname}`;
+        li.addEventListener('dblclick', () => removeMember(li.dataset.id));
         ul.appendChild(li);
       });
       modalContent.appendChild(ul);
@@ -67,7 +88,11 @@ const createGroup = (e) => {
   });
   e.preventDefault();
   if (groupName.length < 2) {
-    Notification('group', 'Group name should be at least 2 characters long', 'failed');
+    Notification(
+      'group',
+      'Group name should be at least 2 characters long',
+      'failed'
+    );
     return;
   }
   fetch(url, {
