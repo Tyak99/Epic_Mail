@@ -51,7 +51,7 @@ const getGroupMemebers = (e) => {
         const li = document.createElement('li');
         li.dataset.id = member.id;
         li.setAttribute('class', 'members-list');
-        li.textContent = member.firstname;
+        li.textContent = `${member.firstname} ${member.lastname}`;
         ul.appendChild(li);
       });
       modalContent.appendChild(ul);
