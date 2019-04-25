@@ -68,6 +68,30 @@ const touchStart = (memberid) => {
   }
 };
 
+const deleteGroupButton = document.getElementById('delete-group');
+
+const TriggerRemoveGroup = () => {
+  // the text content of the delete group button wil change
+  deleteGroupButton.textContent = 'Yes';
+  // so will the id
+  deleteGroupButton.setAttribute('id', 'confirm-delete-group');
+  Notification('modal', 'Are you sure to delete group?', 'failed');
+
+  const groupid = localStorage.getItem('groupid');
+  const confirmDelete = document.getElementById('confirm-delete-group');
+
+  const removeGroup = () => {
+    fetch(`${url}/${groupid}`, {
+      method: 'DELETE',
+      headers,
+    })
+      .then((response) => response.json())
+      .then((res) => console.log(res))
+      .catch((error) => console.log(error));
+  };
+  confirmDelete.addEventListener('click', removeGroup);
+};
+
 // get members of a group
 const getGroupMemebers = (e) => {
   const groupid = e.target.dataset.id;
@@ -190,5 +214,6 @@ fetch(url, {
   .catch((error) => console.log(error));
 
 submitButton.addEventListener('click', createGroup);
+deleteGroupButton.addEventListener('click', TriggerRemoveGroup);
 addNewMemberButton.addEventListener('click', addMember);
 closeModalButton.addEventListener('click', toggleModal);
