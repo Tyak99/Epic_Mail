@@ -52,6 +52,64 @@ const removeMember = (userId) => {
     .catch((error) => console.log(error));
 };
 
+// function to enable double click to work on mobile for javascript
+// source https://stackoverflow.com/questions/8825144/detect-double-tap-on-ipad-or-iphone-screen-using-javascript/15816496#15816496
+let clickTimer = null;
+
+const touchStart = (memberid) => {
+  if (clickTimer == null) {
+    clickTimer = setTimeout(() => {
+      clickTimer = null;
+    }, 500);
+  } else {
+    clearTimeout(clickTimer);
+    clickTimer = null;
+    removeMember(memberid);
+  }
+};
+
+const deleteGroupButton = document.getElementById('delete-group');
+
+const TriggerRemoveGroup = () => {
+  // the text content of the delete group button wil change
+  deleteGroupButton.textContent = 'Yes';
+  // so will the id
+  deleteGroupButton.setAttribute('id', 'confirm-delete-group');
+  Notification('modal', 'Are you sure to delete group?', 'failed');
+  // get group id
+  const groupid = localStorage.getItem('groupid');
+  // get the yes confirmation button
+  const confirmDelete = document.getElementById('confirm-delete-group');
+
+  // if closeModalButton is clicked. then it ahould return the delete button
+  closeModalButton.addEventListener('click', () => {
+    deleteGroupButton.textContent = 'Delete group';
+    deleteGroupButton.setAttribute('id', 'delete-group');
+    confirmDelete.removeEventListener('click', removeGroup);
+  });
+  // remove group function to be triggered when yes is clicked
+  const removeGroup = () => {
+    fetch(`${url}/${groupid}`, {
+      method: 'DELETE',
+      headers,
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.status == 'failed') {
+          Notification('modal', res.error, 'failed');
+        }
+        if (res.status == 'success') {
+          Notification('modal', res.data.message, 'pass');
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+  confirmDelete.addEventListener('click', removeGroup);
+};
+
 // get members of a group
 const getGroupMemebers = (e) => {
   const groupid = e.target.dataset.id;
@@ -73,7 +131,7 @@ const getGroupMemebers = (e) => {
         li.dataset.id = member.id;
         li.setAttribute('class', 'members-list');
         li.textContent = `${member.firstname} ${member.lastname}`;
-        li.addEventListener('dblclick', () => removeMember(li.dataset.id));
+        li.addEventListener('click', () => touchStart(li.dataset.id));
         ul.appendChild(li);
       });
       modalContent.appendChild(ul);
@@ -174,5 +232,6 @@ fetch(url, {
   .catch((error) => console.log(error));
 
 submitButton.addEventListener('click', createGroup);
+deleteGroupButton.addEventListener('click', TriggerRemoveGroup);
 addNewMemberButton.addEventListener('click', addMember);
 closeModalButton.addEventListener('click', toggleModal);
