@@ -85,6 +85,7 @@ const TriggerRemoveGroup = () => {
   closeModalButton.addEventListener('click', () => {
     deleteGroupButton.textContent = 'Delete group';
     deleteGroupButton.setAttribute('id', 'delete-group');
+    confirmDelete.removeEventListener('click', removeGroup);
   });
   // remove group function to be triggered when yes is clicked
   const removeGroup = () => {
