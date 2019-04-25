@@ -76,10 +76,17 @@ const TriggerRemoveGroup = () => {
   // so will the id
   deleteGroupButton.setAttribute('id', 'confirm-delete-group');
   Notification('modal', 'Are you sure to delete group?', 'failed');
-
+  // get group id
   const groupid = localStorage.getItem('groupid');
+  // get the yes confirmation button
   const confirmDelete = document.getElementById('confirm-delete-group');
 
+  // if closeModalButton is clicked. then it ahould return the delete button
+  closeModalButton.addEventListener('click', () => {
+    deleteGroupButton.textContent = 'Delete group';
+    deleteGroupButton.setAttribute('id', 'delete-group');
+  });
+  // remove group function to be triggered when yes is clicked
   const removeGroup = () => {
     fetch(`${url}/${groupid}`, {
       method: 'DELETE',
