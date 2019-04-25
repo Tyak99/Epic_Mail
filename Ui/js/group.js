@@ -86,7 +86,17 @@ const TriggerRemoveGroup = () => {
       headers,
     })
       .then((response) => response.json())
-      .then((res) => console.log(res))
+      .then((res) => {
+        if (res.status == 'failed') {
+          Notification('modal', res.error, 'failed');
+        }
+        if (res.status == 'success') {
+          Notification('modal', res.data.message, 'pass');
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        }
+      })
       .catch((error) => console.log(error));
   };
   confirmDelete.addEventListener('click', removeGroup);
