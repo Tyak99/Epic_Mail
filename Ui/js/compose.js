@@ -96,7 +96,7 @@ const sendMessageToGroup = () => {
   const data = JSON.stringify({
     subject: messageSubject.value,
     message: messageBody.value,
-    groupTo: groupTo.toLowerCase(),
+    groupname: groupTo.toLowerCase(),
   });
 
   const url =
