@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
+import jwt from 'jsonwebtoken';
 import sgTrasport from 'nodemailer-sendgrid-transport';
 import { validationResult } from 'express-validator/check';
 import tokenHandler from '../utils/tokenHandler';
@@ -137,7 +138,12 @@ exports.resetPassword = (req, res) => {
         });
       }
       if (foundUser.rows[0]) {
-        const token = tokenHandler.generateToken(foundUser.rows[0]);
+        // token generator
+        const generateResetToken = (user) => {
+          return jwt.sign({ sub: user.id }, process.env.secret, { expiresIn: '1h' });
+        };
+        const token = generateResetToken(foundUser.rows[0]);
+        // mail sender
         transporter.sendMail(
           {
             from: 'noreply@epic-mail.com',
