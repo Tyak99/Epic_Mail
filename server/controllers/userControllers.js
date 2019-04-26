@@ -120,7 +120,8 @@ exports.login = (req, res) => {
 
 exports.resetPassword = (req, res) => {
   // receiver email
-  const userEmail = req.params.email;
+  const userEmail = req.body.email;
+  console.log(userEmail)
   // find the database if the email exists
   db.query(
     'SELECT * FROM users WHERE email = $1',
