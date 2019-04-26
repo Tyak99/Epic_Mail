@@ -117,3 +117,48 @@ exports.login = (req, res) => {
     });
   });
 };
+
+exports.resetPassword = (req, res) => {
+  // receiver email
+  const userEmail = req.params.email;
+  // find the database if the email exists
+  db.query(
+    'SELECT * FROM users WHERE email = $1',
+    [userEmail],
+    (err, foundUser) => {
+      if (err) {
+        console.log(err);
+      }
+      if (!foundUser.rows[0]) {
+        return res.status(404).json({
+          status: 'failed',
+          error: 'No user with that email found',
+        });
+      }
+      if (foundUser.rows[0]) {
+        const token = tokenHandler.generateToken(foundUser.rows[0]);
+        transporter.sendMail(
+          {
+            from: 'noreply@epic-mail.com',
+            to: foundUser.rows[0].email,
+            subject: 'Reset your password',
+            html: `<h2>  Click this <a href= https://tyak99.github.io/Epic_Mail/Ui/index.html?resetToken=${token}>link</a> to reset your password <a>  </a></h2>`,
+          },
+          (err, info) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log('Reset token sent');
+            }
+          }
+        );
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'Check your email for reset password message',
+          },
+        });
+      }
+    }
+  );
+};
