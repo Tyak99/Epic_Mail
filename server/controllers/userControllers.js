@@ -122,7 +122,7 @@ exports.login = (req, res) => {
 exports.resetPassword = (req, res) => {
   // receiver email
   const userEmail = req.body.email;
-  console.log(userEmail)
+  console.log(userEmail);
   // find the database if the email exists
   db.query(
     'SELECT * FROM users WHERE email = $1',
@@ -140,7 +140,9 @@ exports.resetPassword = (req, res) => {
       if (foundUser.rows[0]) {
         // token generator
         const generateResetToken = (user) => {
-          return jwt.sign({ sub: user.id }, process.env.secret, { expiresIn: '1h' });
+          return jwt.sign({ sub: user.id }, process.env.secret, {
+            expiresIn: '1h',
+          });
         };
         const token = generateResetToken(foundUser.rows[0]);
         // mail sender
@@ -168,4 +170,43 @@ exports.resetPassword = (req, res) => {
       }
     }
   );
+};
+
+exports.newPassword = (req, res) => {
+  const token = req.body.resetToken;
+  const newPassword = req.body.password;
+  // verify the token
+  console.log(token)
+  jwt.verify(token, process.env.secret, (err, decoded) => {
+    if (!decoded) {
+      return res.status(401).json({
+        status: 'Failed',
+        error: 'Unable to authenticate token',
+      });
+    }
+    // bycrypt the new password
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(newPassword, salt);
+
+  // search the db with the token
+  // change the password to the new password
+    db.query(
+      'UPDATE users SET password = $1 WHERE id = $2 RETURNING *',
+      [hash, decoded.sub],
+      (err, updatedUser) => {
+        if (!updatedUser.rows[0]) {
+          return res.status(400).json({
+            status: 'failed',
+            error: 'unable to change password',
+          });
+        }
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            message: 'Password updated successfully',
+          },
+        });
+      }
+    );
+  });
 };
