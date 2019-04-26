@@ -52,9 +52,9 @@ exports.signup = (req, res) => {
           console.log(createdUser.rows[0]);
           transporter.sendMail(
             {
-              from: 'noreply@epic-mail.com',
+              from: 'support@epic-mail.com',
               to: createdUser.rows[0].email,
-              subject: 'Welcome to epic mail',
+              subject: 'Welcome to EPIC MAIL',
               html: '<h1> You successfully signed up </h1>',
             },
             (err, info) => {
@@ -148,7 +148,7 @@ exports.resetPassword = (req, res) => {
         // mail sender
         transporter.sendMail(
           {
-            from: 'mail@epic-mail.com',
+            from: 'support@epic-mail.com',
             to: foundUser.rows[0].email,
             subject: 'EPIC MAIL Reset Password',
             html: ` <h2> Hi ${foundUser.rows[0].firstname}, </h2>
