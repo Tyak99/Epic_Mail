@@ -148,10 +148,13 @@ exports.resetPassword = (req, res) => {
         // mail sender
         transporter.sendMail(
           {
-            from: 'noreply@epic-mail.com',
+            from: 'mail@epic-mail.com',
             to: foundUser.rows[0].email,
-            subject: 'Reset your password',
-            html: `<h2>  Click this <a href= https://tyak99.github.io/Epic_Mail/Ui/index.html?resetToken=${token}>link</a> to reset your password <a>  </a></h2>`,
+            subject: 'EPIC MAIL Reset Password',
+            html: ` <h2> Hi ${foundUser.rows[0].firstname}, </h2>
+            <p> We have received a request to change your password </p>
+            <p>  Click this <a href= https://tyak99.github.io/Epic_Mail/Ui/index.html?resetToken=${token}>link</a> to reset your password <a>  </a></p>
+            <p> This request will expire after 1 hour </p>`,
           },
           (err, info) => {
             if (err) {
@@ -176,7 +179,6 @@ exports.newPassword = (req, res) => {
   const token = req.body.resetToken;
   const newPassword = req.body.password;
   // verify the token
-  console.log(token)
   jwt.verify(token, process.env.secret, (err, decoded) => {
     if (!decoded) {
       return res.status(401).json({
@@ -188,8 +190,8 @@ exports.newPassword = (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(newPassword, salt);
 
-  // search the db with the token
-  // change the password to the new password
+    // search the db with the token
+    // change the password to the new password
     db.query(
       'UPDATE users SET password = $1 WHERE id = $2 RETURNING *',
       [hash, decoded.sub],
