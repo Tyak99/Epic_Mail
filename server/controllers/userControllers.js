@@ -1,7 +1,17 @@
 import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer';
+import sgTrasport from 'nodemailer-sendgrid-transport';
 import { validationResult } from 'express-validator/check';
 import tokenHandler from '../utils/tokenHandler';
 import db from '../database/index';
+
+const options = {
+  auth: {
+    api_key:
+      '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',
+  },
+};
+const transporter = nodemailer.createTransport(sgTrasport(options));
 
 exports.signup = (req, res) => {
   const errors = validationResult(req);
@@ -9,7 +19,7 @@ exports.signup = (req, res) => {
     return res.status(422).json({
       status: 'failed',
       error: errors.array()[0].msg,
-    })
+    });
   }
   // first check the database if that email exists previously
   db.query(
@@ -38,6 +48,22 @@ exports.signup = (req, res) => {
         'INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING *',
         values,
         (err, createdUser) => {
+          console.log(createdUser.rows[0]);
+          transporter.sendMail(
+            {
+              from: 'noreply@epic-mail.com',
+              to: createdUser.rows[0].email,
+              subject: 'Welcome to epic mail',
+              html: '<h1> You successfully signed up </h1>',
+            },
+            (err, info) => {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log('Message sent');
+              }
+            }
+          );
           return res.status(201).json({
             status: 'success',
             data: {
@@ -57,7 +83,7 @@ exports.login = (req, res) => {
     return res.status(422).json({
       status: 'failed',
       error: errors.array()[0].msg,
-    })
+    });
   }
   const { email, password } = req.body;
   db.query('SELECT * FROM users WHERE email = $1', [email], (err, user) => {
@@ -65,7 +91,7 @@ exports.login = (req, res) => {
       return res.status(500).json({
         status: 'failed',
         error: 'Internal server error',
-      })
+      });
     }
     if (!user.rows[0]) {
       return res.status(400).json({
