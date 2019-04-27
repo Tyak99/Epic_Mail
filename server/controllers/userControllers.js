@@ -163,7 +163,7 @@ exports.resetPassword = (req, res) => {
               return res.status(200).json({
                 status: 'success',
                 data: {
-                  message: 'Check your email for reset password message',
+                  message: 'Reset password has been sent to your email',
                 },
               });
             }
@@ -198,7 +198,7 @@ exports.newPassword = (req, res) => {
         if (!updatedUser.rows[0]) {
           return res.status(400).json({
             status: 'failed',
-            error: 'unable to change password',
+            error: 'Unable to change password',
           });
         }
         return res.status(200).json({
