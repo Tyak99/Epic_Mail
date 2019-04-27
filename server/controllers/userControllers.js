@@ -122,15 +122,11 @@ exports.login = (req, res) => {
 exports.resetPassword = (req, res) => {
   // receiver email
   const userEmail = req.body.email;
-  console.log(userEmail);
   // find the database if the email exists
   db.query(
     'SELECT * FROM users WHERE email = $1',
     [userEmail],
     (err, foundUser) => {
-      if (err) {
-        console.log(err);
-      }
       if (!foundUser.rows[0]) {
         return res.status(404).json({
           status: 'failed',
@@ -153,23 +149,26 @@ exports.resetPassword = (req, res) => {
             subject: 'EPIC MAIL Reset Password',
             html: ` <h2> Hi ${foundUser.rows[0].firstname}, </h2>
             <p> We have received a request to change your password </p>
-            <p>  Click this <a href= https://tyak99.github.io/Epic_Mail/Ui/index.html?resetToken=${token}>link</a> to reset your password <a>  </a></p>
+            <p>  Click this <a href= ${req.body.newPasswordPage}?resetToken=${token}>link</a> to reset your password <a>  </a></p>
             <p> This request will expire after 1 hour </p>`,
           },
           (err, info) => {
             if (err) {
-              console.log(err);
-            } else {
-              console.log('Reset token sent');
+              return res.status(400).json({
+                status: 'failed',
+                error: 'Reset password email could not be sent',
+              });
+            }
+            if (info) {
+              return res.status(200).json({
+                status: 'success',
+                data: {
+                  message: 'Check your email for reset password message',
+                },
+              });
             }
           }
         );
-        return res.status(200).json({
-          status: 'success',
-          data: {
-            message: 'Check your email for reset password message',
-          },
-        });
       }
     }
   );
