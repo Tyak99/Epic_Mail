@@ -27,12 +27,6 @@ exports.signup = (req, res) => {
     'SELECT * FROM users WHERE email = $1',
     [req.body.email],
     (err, user) => {
-      if (err) {
-        return res.status(500).json({
-          status: 'failed',
-          error: 'Internal server error',
-        });
-      }
       if (user.rows[0]) {
         return res.status(404).json({
           status: 'failed',
@@ -88,12 +82,6 @@ exports.login = (req, res) => {
   }
   const { email, password } = req.body;
   db.query('SELECT * FROM users WHERE email = $1', [email], (err, user) => {
-    if (err) {
-      return res.status(500).json({
-        status: 'failed',
-        error: 'Internal server error',
-      });
-    }
     if (!user.rows[0]) {
       return res.status(400).json({
         status: 'failed',
