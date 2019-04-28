@@ -8,8 +8,7 @@ import db from '../database/index';
 
 const options = {
   auth: {
-    api_key:
-      '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',
+    api_key: process.env.sendGridKey,
   },
 };
 const transporter = nodemailer.createTransport(sgTrasport(options));
