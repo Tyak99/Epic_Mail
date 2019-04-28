@@ -190,7 +190,7 @@ describe('Test user signup route', () => {
         expect(res.body)
           .to.have.property('status')
           .to.eql('failed');
-        expect(res.body.error)
+        expect(res.body.error);
         done();
       });
   });
@@ -245,9 +245,7 @@ describe('Test user sign in route', () => {
         expect(res.body)
           .to.have.property('status')
           .to.eql('failed');
-        expect(res.body.error).to.eql(
-          'A valid email is required'
-        );
+        expect(res.body.error).to.eql('A valid email is required');
         done();
       });
   });
@@ -313,32 +311,17 @@ describe('Test user sign in route', () => {
   });
 });
 
-// describe('Test errors returned when database is down', () => {
-//   before((done) => {
-//     db.query('DROP TABLE IF EXISTS users', (err, res) => { done()});
-//   });
-//   it('should test for error on signup when database is down', (done) => {
-//     chai
-//       .request(server)
-//       .post('/api/v1/auth/signup')
-//       .send({ email: 'superuser@mail.com', password: 'secret', firstName: 'Tunde', lastName: 'Nasri' })
-//       .end((err, res) => {
-//         expect(res.status).to.eql(500);
-//         expect(res.body).to.have.property('status').to.eql('failed');
-//         expect(res.body).to.have.property('error').to.eql('Internal server error');
-//         done();
-//       });
-//   });
-//   it('should test for error on login page when database is down', (done) => {
-//     chai
-//       .request(server)
-//       .post('/api/v1/auth/login')
-//       .send({ email: 'superuser@mail.com', password: 'secret'})
-//       .end((err, res) => {
-//         expect(res.status).to.eql(500);
-//         expect(res.body).to.have.property('status').to.eql('failed');
-//         expect(res.body).to.have.property('error').to.eql('Internal server error');
-//         done();
-//       });
-//   })
-// });
+describe('Test reset password route', () => {
+  it('should return error if the wrong email is passed along', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/reset')
+      .send({ email: 'nouser@mail.com' })
+      .end((err, res) => {
+        expect(res.status).to.eql(404);
+        expect(res.body.status).to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      });
+  });
+}); 
