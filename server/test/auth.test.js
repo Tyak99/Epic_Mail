@@ -324,4 +324,16 @@ describe('Test reset password route', () => {
         done();
       });
   });
+  it('should send reset password link to users email when correct email is passed along requesr', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/auth/reset')
+      .send({ email: 'superuser@mail.com' })
+      .end((err, res) => {
+        expect(res.status).to.eql(200);
+        expect(res.body.status).to.eql('success');
+        expect(res.body.data).to.have.property('message');
+        done();
+      });
+  });
 }); 
