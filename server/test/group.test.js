@@ -295,7 +295,6 @@ describe('Test add user to group route', () => {
       .set('Authorization', userToken)
       .end((err, res) => {
         expect(res.status).to.eql(409);
-        expect(res.body).to.have.property('error');
         expect(res.body)
           .to.have.property('status')
           .to.eql('failed');
@@ -322,6 +321,19 @@ describe('Test add user to group route', () => {
         done();
       });
   });
+  it('should return error if the user is already present in the group', (done) => {
+    chai
+      .request(server)
+      .post('/api/v1/groups/1/users/')
+      .send({ email: 'tunde@mail.com' })
+      .set('Authorization', userToken)
+      .end((err, res) => {
+        expect(res.status).to.eql(409);
+        expect(res.body.status).to.eql('failed');
+        expect(res.body).to.have.property('error');
+        done();
+      })
+  })
 });
 
 describe('Test POST message to group route', () => {
