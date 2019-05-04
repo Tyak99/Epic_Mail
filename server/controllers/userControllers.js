@@ -42,7 +42,6 @@ exports.signup = (req, res) => {
         'INSERT INTO users (email, password, firstname, lastname) VALUES ($1, $2, $3, $4) RETURNING *',
         values,
         (err, createdUser) => {
-          console.log(createdUser.rows[0]);
           transporter.sendMail(
             {
               from: 'support@epic-mail.com',

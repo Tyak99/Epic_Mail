@@ -26,6 +26,8 @@ exports.postMessage = (req, res) => {
   const { subject, message } = req.body;
   const newSubject = subject.replace(/\s+/g, ' ');
   const newMessage = message.replace(/\s+/g, ' ');
+  // check if parent message id is passed along request
+  const parentMessageId = req.body.parentMessageId || null;
   // check if email to is passed along request
   if (req.body.emailTo) {
     db.query(
@@ -44,9 +46,10 @@ exports.postMessage = (req, res) => {
           'unread',
           req.userEmail,
           user.rows[0].email,
+          parentMessageId,
         ];
         db.query(
-          'INSERT INTO messages (subject, message, status, senderid, receiverid) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+          'INSERT INTO messages (subject, message, status, senderid, receiverid, parentmessageid) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
           values,
           (err, createdMessage) => {
             if (createdMessage.rows[0]) {
@@ -128,6 +131,7 @@ exports.getReceivedMessages = (req, res) => {
           message: element.message,
           senderid: element.senderid,
           receiverid: element.receiverid,
+          status: element.status,
           created_at: element.created_at,
           parentmessageid: element.parentmessageid,
         };
@@ -248,6 +252,11 @@ exports.getMessageById = (req, res) => {
           status: 'failed',
           error: 'Sorry, the requested message has been deleted from inbox',
         });
+      }
+      // check if the messsage status is unread and update it to read
+      if ((userEmail == message.rows[0].receiverid) && (message.rows[0].status !== 'read')) {
+        db.query('UPDATE messages SET status = $1 WHERE id = $2 RETURNING *', ['read', message.rows[0].id], (err, updatedMessage) => {
+        })
       }
       delete message.rows[0].status;
       delete message.rows[0].receiverdeleted;
