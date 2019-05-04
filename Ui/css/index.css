@@ -93,7 +93,17 @@ label {
 .btn-register {
     background-color: goldenrod;
 }
-
+.forgot-password {
+    margin-bottom: 10px;
+}
+.forgot-password a {
+    text-decoration: none;
+    color: antiquewhite;
+    font-size: medium;
+}
+.forgot-password a:hover {
+    color: maroon;
+}
 @media screen and (max-width: 750px) {
     .section {
         width: unset;
