@@ -195,8 +195,8 @@ const addUserToGroup = (req, res) => {
           });
         }
         db.query(
-          'SELECT * FROM groupmembers WHERE memberid = $1',
-          [memberid],
+          'SELECT * FROM groupmembers WHERE memberid = $1 AND groupid = $2',
+          [memberid, groupid],
           (err, groupCheck) => {
             if (groupCheck.rows[0]) {
               return res.status(409).json({
