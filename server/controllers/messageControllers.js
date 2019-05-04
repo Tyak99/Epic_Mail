@@ -256,7 +256,6 @@ exports.getMessageById = (req, res) => {
       // check if the messsage status is unread and update it to read
       if ((userEmail == message.rows[0].receiverid) && (message.rows[0].status !== 'read')) {
         db.query('UPDATE messages SET status = $1 WHERE id = $2 RETURNING *', ['read', message.rows[0].id], (err, updatedMessage) => {
-          console.log(updatedMessage.rows[0])
         })
       }
       delete message.rows[0].status;
