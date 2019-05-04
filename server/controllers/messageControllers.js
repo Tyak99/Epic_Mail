@@ -131,6 +131,7 @@ exports.getReceivedMessages = (req, res) => {
           message: element.message,
           senderid: element.senderid,
           receiverid: element.receiverid,
+          status: element.status,
           created_at: element.created_at,
           parentmessageid: element.parentmessageid,
         };
