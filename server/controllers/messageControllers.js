@@ -253,6 +253,12 @@ exports.getMessageById = (req, res) => {
           error: 'Sorry, the requested message has been deleted from inbox',
         });
       }
+      // check if the messsage status is unread and update it to read
+      if ((userEmail == message.rows[0].receiverid) && (message.rows[0].status !== 'read')) {
+        db.query('UPDATE messages SET status = $1 WHERE id = $2 RETURNING *', ['read', message.rows[0].id], (err, updatedMessage) => {
+          console.log(updatedMessage.rows[0])
+        })
+      }
       delete message.rows[0].status;
       delete message.rows[0].receiverdeleted;
       return res.status(200).json({
