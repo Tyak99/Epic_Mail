@@ -26,6 +26,8 @@ exports.postMessage = (req, res) => {
   const { subject, message } = req.body;
   const newSubject = subject.replace(/\s+/g, ' ');
   const newMessage = message.replace(/\s+/g, ' ');
+  // check if parent message id is passed along request
+  const parentMessageId = req.body.parentMessageId || null;
   // check if email to is passed along request
   if (req.body.emailTo) {
     db.query(
@@ -44,9 +46,10 @@ exports.postMessage = (req, res) => {
           'unread',
           req.userEmail,
           user.rows[0].email,
+          parentMessageId,
         ];
         db.query(
-          'INSERT INTO messages (subject, message, status, senderid, receiverid) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+          'INSERT INTO messages (subject, message, status, senderid, receiverid, parentmessageid) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
           values,
           (err, createdMessage) => {
             if (createdMessage.rows[0]) {
