@@ -1,5 +1,11 @@
 const resetButton = document.querySelector('.submit-btn');
+const DivNotify = document.getElementById('notification');
 
+const notify = (message, result) => {
+  // add notification
+  DivNotify.textContent = message;
+  DivNotify.style.color = result === 'success' ? 'green' : 'red';
+};
 // headers for sending requests
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
@@ -21,11 +27,21 @@ const resetPassword = (e) => {
   })
     .then((response) => response.json())
     .then((res) => {
-      if ((res.status === 'success')) {
-        console.log(res.data.message);
+      if (res.status === 'success') {
+        notify(
+          'Your password reset email should arrive shortly. If you do not see it, please check your spam folder, sometimes it can end up there!',
+          'success'
+        );
+      } else {
+        notify(
+          'Unable to send reset email link, kindly check that email address is correct',
+          'failed'
+        );
       }
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      notify('Unable to send reset email', 'failed');
+    });
 };
 
 resetButton.addEventListener('click', resetPassword);
