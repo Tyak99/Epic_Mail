@@ -18,12 +18,25 @@ const newPasswordUrl =
 
 const savePassword = (e) => {
   e.preventDefault();
+  // get the token from the url
+  const location = window.location.href;
+  const url = new URL(location);
+  const token = url.searchParams.get('r');
+  if (newPassword.value.length < 1) {
+    notify('Input new password', 'failed');
+    return;
+  }
   if (newPassword.value !== confirmPassword.value) {
     notify('Passwords do not match', 'failed');
     return;
   }
+  const data = JSON.stringify({
+    password: newPassword.vaule,
+    resetToken: token,
+  });
   fetch(newPasswordUrl, {
     method: 'POST',
+    body: data,
     headers,
   })
     .then((response) => response.json())
