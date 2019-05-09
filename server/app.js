@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
 });
 
 app.use((req, res, next)  => {
-  res.send('Error! Route does not exist')
+  res.status(404).json('Error! Route does not exist')
 })
 
 const PORT = process.env.PORT || 3000;
