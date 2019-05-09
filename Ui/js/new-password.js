@@ -26,7 +26,10 @@ const savePassword = (e) => {
     notify(
       'Reset Password token not available, kindly request for a password reset'
     );
-    window.location.replace('./reset-password.html');
+    setTimeout(() => {
+      window.location.replace('./reset-password.html');
+    }, 3000);
+    return;
   }
   // check if new password is not inputed
   if (newPassword.value.length < 1) {
@@ -53,10 +56,16 @@ const savePassword = (e) => {
       console.log(res);
       if (res.status == 'success') {
         notify(res.data.message, 'success');
+        setTimeout(() => {
+          window.location.replace('./index.html');
+        }, 3000);
       } else {
         notify(
-          'Invalid reset password token, Kindly request for a password request'
+          'Invalid reset password token, Kindly request for a password reset'
         );
+        setTimeout(() => {
+          window.location.replace('./reset-password.html');
+        }, 3000);
       }
     })
     .catch((error) => {
