@@ -53,6 +53,10 @@ app.get('/', (req, res) => {
   res.redirect('/docs');
 });
 
+app.use((req, res, next)  => {
+  res.send('Error! Route does not exist')
+})
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log('server has started');
