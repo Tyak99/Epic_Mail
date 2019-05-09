@@ -20,7 +20,7 @@ const savePassword = (e) => {
   // get the token from the url
   const location = window.location.href;
   const url = new URL(location);
-  const token = url.searchParams.get('r');
+  const token = url.searchParams.get('resetToken');
   // check if token doesnt exist
   if (!token) {
     notify(
