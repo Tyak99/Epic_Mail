@@ -53,7 +53,6 @@ const savePassword = (e) => {
   })
     .then((response) => response.json())
     .then((res) => {
-      console.log(res);
       if (res.status == 'success') {
         notify(res.data.message, 'success');
         setTimeout(() => {
