@@ -18,6 +18,7 @@ const resetPassword = (e) => {
   const resetEmail = document.getElementById('reset-email').value;
   const data = JSON.stringify({
     email: resetEmail,
+    newPasswordPage: 'https://tyak99.github.io/Epic_Mail/Ui/new-password.html',
   });
   e.preventDefault();
   fetch(resetPasswordUrl, {
